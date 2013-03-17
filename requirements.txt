@@ -6,3 +6,4 @@ django-tastypie
 django-tastypie-swagger
 psycopg2
 south
+sorl-thumbnail

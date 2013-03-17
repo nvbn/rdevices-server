@@ -10,7 +10,7 @@ class RedisStorage(object):
         """Laze redis pool"""
         if not hasattr(self, '_pool'):
             self._pool = redis.ConnectionPool(
-                **getattr(settings.REDIS_CREDENTIALS)
+                **settings.REDIS_CREDENTIALS
             )
         return self._pool
 
@@ -21,16 +21,27 @@ class RedisStorage(object):
             self._connection = redis.Redis(connection_pool=self.pool)
         return self._connection
 
+    def _prepare_key(self, key):
+        """Convert app key to global key"""
+        return '{prefix}_{key}'.format(
+            prefix=settings.USER_STORAGE_PREFIX,
+            key=key,
+        )
+
     def get(self, key, default):
         """Get value from redis"""
-        value = self.connection.get(key)
+        value = self.connection.get(
+            self._prepare_key(key),
+        )
         if not value:
             value = default
         return value
 
     def set(self, key, value):
         """Set value to redis"""
-        self.connection.set(key, value)
+        self.connection.set(
+            self._prepare_key(key), value,
+        )
 
 
 storage = RedisStorage()
