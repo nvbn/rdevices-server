@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.db import models
@@ -53,6 +52,7 @@ class DeviceMethod(models.Model):
     )
     device = models.ForeignKey(
         Device, verbose_name=_('device'),
+        related_name='methods',
     )
     name = models.CharField(
         max_length=300, verbose_name=_('name'),
