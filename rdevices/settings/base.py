@@ -141,3 +141,5 @@ LOGGING = {
             },
         }
 }
+
+TASTYPIE_SWAGGER_API_MODULE = 'rdevices.api_urls.api_v1'
