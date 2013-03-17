@@ -1,0 +1,38 @@
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*~
+*.sass-cache
+*.egg-info/
+*.db
+*.log
+*.pyc
+build/
+src/
+resubmit_cache/
+
+# OS or Editor folders
+.DS_Store
+._*
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+*.mo
+.idea
+
+# Totemi project ignore extensions
+rdevices/settings/local.py
+ENV/*
+logs/
+static_collected/
