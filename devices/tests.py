@@ -14,7 +14,7 @@ class DeviceTest(TestCase):
         )
         self.device = Device.objects.create(
             is_enabled=True,
-            user=self.root,
+            owner=self.root,
             name='test',
             description='test',
         )
