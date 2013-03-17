@@ -1,4 +1,6 @@
-from devices.models import Device, DeviceMethod
+from devices.models import (
+    Device, DeviceMethod, DeviceMethodCall,
+)
 from tastypie.resources import ModelResource
 from tastypie.authorization import DjangoAuthorization
 from tastypie import fields
@@ -25,6 +27,9 @@ class DeviceResource(ModelResource):
 class DeviceMethodResource(ModelResource):
     """Resource for device methods"""
     device = fields.ToOneField(DeviceResource, 'device')
+    calls = fields.ToManyField(
+        'devices.resources.DeviceMethodCallResource', 'calls',
+    )
 
     def apply_authorization_limits(self, request, object_list):
         """Only user resources"""
@@ -34,3 +39,21 @@ class DeviceMethodResource(ModelResource):
 
     class Meta:
         queryset = DeviceMethod.objects.all()
+        resource_name = 'my/device_method'
+        authorization = DjangoAuthorization()
+
+
+class DeviceMethodCallResource(ModelResource):
+    """Resource for device method calls"""
+    method = fields.ToOneField(DeviceMethodResource, 'method')
+
+    def apply_authorization_limits(self, request, object_list):
+        """Only user resources"""
+        return object_list.filter(
+            caller=request.user,
+        )
+
+    class Meta:
+        queryset = DeviceMethodCall.objects.all()
+        resource_name = 'my/device_method_call'
+        authorization = DjangoAuthorization()

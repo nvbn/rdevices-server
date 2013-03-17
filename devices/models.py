@@ -83,7 +83,10 @@ class DeviceMethodCall(models.Model):
     state = models.PositiveSmallIntegerField(
         choices=STATES, default=STATE_CREATED,
     )
-    method = models.ForeignKey(DeviceMethod, verbose_name=_('method'))
+    method = models.ForeignKey(
+        DeviceMethod, verbose_name=_('method'),
+        related_name='calls',
+    )
     request = models.TextField(verbose_name=_('request'))
     response = models.TextField(verbose_name=_('response'))
 
