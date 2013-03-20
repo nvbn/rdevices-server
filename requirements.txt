@@ -8,3 +8,4 @@ psycopg2
 south
 sorl-thumbnail
 lxml
+django-annoying

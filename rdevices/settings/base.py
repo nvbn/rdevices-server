@@ -113,9 +113,10 @@ INSTALLED_APPS = (
     'tastypie_swagger',
     'sorl.thumbnail',
     'devices',
+    'interface',
 )
 # performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
+# the interface admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
