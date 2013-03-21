@@ -10,10 +10,6 @@ class Device(models.Model):
         default=True, verbose_name=_('is enabled'),
     )
     owner = models.ForeignKey(User, verbose_name=_('owner'))
-    allowed_users = models.ManyToManyField(
-        User, verbose_name=_('allowed users'),
-        related_name='allowed_devices',
-    )
     name = models.CharField(max_length=300, verbose_name=_('name'))
     description = models.TextField(verbose_name=_('description'))
 
