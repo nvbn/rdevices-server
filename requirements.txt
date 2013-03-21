@@ -13,3 +13,4 @@ BeautifulSoup
 django-annoying
 django_compressor
 django-extensions
+django-userena

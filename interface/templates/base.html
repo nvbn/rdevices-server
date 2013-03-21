@@ -20,7 +20,21 @@
                 <a href="/">rdevic.es</a>
             </h1>
             <div class='auth'>
-                You need to <a href='#'>sign in</a> or <a href='#'>sign up</a>
+                {% if request.user.is_authenticated %}
+                    Hi, <a
+                        href="{% url "userena_profile_detail" request.user.username %}"
+                    >{{ request.user.username }}</a>!
+                    You can <a href="#">create new device</a>,
+                    <a
+                        href="{% url "userena_profile_edit" request.user.username %}"
+                    >change your profile</a> or
+                    <a
+                        href="{% url "userena_signout" %}"
+                    >sign out</a>.
+                {% else %}
+                    You need to <a href='{% url 'userena_signin' %}'>sign in</a>
+                    or <a href='{% url 'userena_signup' %}'>sign up</a>
+                {% endif %}
             </div>
         </div>
     </header>

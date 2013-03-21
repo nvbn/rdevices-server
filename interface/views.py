@@ -8,7 +8,7 @@ from tools.mixins import LoginRequiredMixin
 
 class Index(TemplateView):
     """Index page"""
-    template_name = 'site/index.html'
+    template_name = 'interface/index.html'
 
     def get(self, request, *args, **kwargs):
         """Redirect to devices if authorised"""
@@ -27,7 +27,7 @@ class Index(TemplateView):
 
 class DeviceList(LoginRequiredMixin, ListView):
     """Device list view"""
-    template_name = 'site/devices.html'
+    template_name = 'interface/devices.html'
     context_object_name = 'devices'
 
     def get_queryset(self):

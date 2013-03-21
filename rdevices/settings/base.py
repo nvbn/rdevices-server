@@ -86,6 +86,18 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    "django.core.context_processors.request",
+    "django.core.context_processors.csrf",
+    'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
+)
+
+
 ROOT_URLCONF = 'rdevices.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -98,7 +110,6 @@ TEMPLATE_DIRS = (
 )
 
 
-# A sample logging configuration. The only tangible logging
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -111,11 +122,14 @@ INSTALLED_APPS = (
     'south',
     'tastypie',
     'tastypie_swagger',
-    'sorl.thumbnail',
+    'easy_thumbnails',
+    'guardian',
     'compressor',
     'devices',
     'interface',
+    'userena',
 )
+# A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the interface admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
@@ -150,3 +164,17 @@ COMPRESS_PRECOMPILERS = (
     ('text/coffeescript', 'coffee --compile --stdio'),
     ('text/x-sass', 'sass {infile} {outfile}'),
 )
+
+AUTHENTICATION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+ANONYMOUS_USER_ID = -1
+LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
+LOGIN_URL = '/accounts/signin/'
+LOGOUT_URL = '/accounts/signout/'
+AUTH_PROFILE_MODULE = 'interface.Profile'
+USERENA_REDIRECT_ON_SIGNOUT = '/'
+USERENA_SIGNIN_REDIRECT_URL = '/devices/'
