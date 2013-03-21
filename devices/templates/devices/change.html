@@ -4,15 +4,20 @@
 
 {% block content %}
     <div class='span12 well'>
-        <h2>Create new device</h2>
+        <h2>Change device: {{ device }}</h2>
         <form method='POST'>
             {% csrf_token %}
             <div class='span4 left-side'>
+                <p>
+                    <a href="{{ device.get_absolute_url }}">Back to device page</a> /
+                    <a href="#">delete</a>
+                </p>
+                {{ form.is_enabled|bootstrap }}
                 {{ form.name|bootstrap }}
                 {{ form.description|bootstrap }}
                 <div class="control-group">
                     <div class="controls">
-                        <button class='btn' type="submit">Create</button>
+                        <button class='btn' type="submit">Save</button>
                     </div>
                 </div>
             </div>
