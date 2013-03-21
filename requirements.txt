@@ -12,3 +12,4 @@ pillow
 BeautifulSoup
 django-annoying
 django_compressor
+django-extensions
