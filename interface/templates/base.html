@@ -14,12 +14,21 @@
     <script src="{% static "js/bootstrap.min.js" %}"></script>
 </head>
 <body>
-    <div class='container'>
-        <header>
+    <header>
+        <div class='container'>
             <h1>
                 <a href="/">rdevic.es</a>
             </h1>
-        </header>
+            <div class='auth'>
+                You need to <a href='#'>sign in</a> or <a href='#'>sign up</a>
+            </div>
+        </div>
+    </header>
+    <div class='container'>
+        <div class="row-fluid">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 </body>
 </html>
