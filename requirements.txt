@@ -8,4 +8,6 @@ psycopg2
 south
 sorl-thumbnail
 lxml
+BeautifulSoup
 django-annoying
+django_compressor

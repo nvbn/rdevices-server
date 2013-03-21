@@ -63,7 +63,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -112,6 +112,7 @@ INSTALLED_APPS = (
     'tastypie',
     'tastypie_swagger',
     'sorl.thumbnail',
+    'compressor',
     'devices',
     'interface',
 )
@@ -144,3 +145,8 @@ LOGGING = {
 }
 
 TASTYPIE_SWAGGER_API_MODULE = 'rdevices.api_urls.api_v1'
+
+COMPRESS_PRECOMPILERS = (
+    ('text/coffeescript', 'coffee --compile --stdio'),
+    ('text/x-sass', 'sass {infile} {outfile}'),
+)
