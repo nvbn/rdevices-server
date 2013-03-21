@@ -14,3 +14,4 @@ django-annoying
 django_compressor
 django-extensions
 django-userena
+django-bootstrap-form

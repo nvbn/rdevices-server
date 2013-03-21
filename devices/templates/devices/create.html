@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>Create new device</h2>
+        <form method='POST'>
+            {% csrf_token %}
+                {{ form|bootstrap }}
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

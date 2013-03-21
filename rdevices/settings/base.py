@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'devices',
     'interface',
     'userena',
+    'bootstrapform',
 )
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -177,4 +178,4 @@ LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
 AUTH_PROFILE_MODULE = 'interface.Profile'
 USERENA_REDIRECT_ON_SIGNOUT = '/'
-USERENA_SIGNIN_REDIRECT_URL = '/devices/'
+USERENA_SIGNIN_REDIRECT_URL = '/devices/list/'

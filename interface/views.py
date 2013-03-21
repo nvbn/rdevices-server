@@ -1,9 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from devices.models import Device
 from interface.models import CarouselEntry, NewsEntry
 from django.views.generic import TemplateView, ListView
-from tools.mixins import LoginRequiredMixin
 
 
 class Index(TemplateView):
@@ -13,7 +11,7 @@ class Index(TemplateView):
     def get(self, request, *args, **kwargs):
         """Redirect to devices if authorised"""
         if request.user.is_authenticated():
-            return redirect(reverse('site_devices'))
+            return redirect(reverse('devices_list'))
         else:
             return super(Index, self).get(request, *args, **kwargs)
 
@@ -23,15 +21,3 @@ class Index(TemplateView):
             'carousel': CarouselEntry.objects.enabled(),
             'news': NewsEntry.objects.enabled(),
         }
-
-
-class DeviceList(LoginRequiredMixin, ListView):
-    """Device list view"""
-    template_name = 'interface/devices.html'
-    context_object_name = 'devices'
-
-    def get_queryset(self):
-        """Get devices queryset"""
-        return Device.objects.filter(
-            owner=self.request.user,
-        )

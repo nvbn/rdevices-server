@@ -9,6 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^', include('interface.urls')),
+    url(r'^devices/', include('devices.urls')),
     url(r'^api/', include(api_urls)),
     url(r'^accounts/', include('userena.urls')),
     url(r'^admin/', include(admin.site.urls)),
