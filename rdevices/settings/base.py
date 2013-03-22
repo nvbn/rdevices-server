@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'devices',
     'interface',
     'accounts',
+    'connector',
     'userena',
     'bootstrapform',
 )

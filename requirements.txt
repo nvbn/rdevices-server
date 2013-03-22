@@ -1,5 +1,4 @@
 redis
-pyzmq
 django
 python_digest
 django-tastypie
@@ -15,3 +14,4 @@ django-userena
 django-bootstrap-form
 jsonfield
 easy_thumbnails
+tornado
