@@ -5,7 +5,7 @@
 {% block content %}
     <div class='span12 well'>
         <h2>Create new device</h2>
-        <form method='POST'>
+        <form method='POST' enctype="multipart/form-data">
             {% csrf_token %}
             <div class='span4 left-side'>
                 {{ form.name|bootstrap }}
