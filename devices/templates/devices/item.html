@@ -9,6 +9,9 @@
             <a href="{% url 'devices_change' device.slug %}">Edit</a> /
             <a href="{% url 'devices_delete' device.slug %}">delete</a>
         </p>
+        <p>
+            <strong>uuid:</strong> {{ device.uuid }}
+        </p>
         <p>{{ device.description }}</p>
         {% if device.methods.count %}
             {% for pair in methods %}

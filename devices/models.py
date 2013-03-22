@@ -1,7 +1,9 @@
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.db import models
-from django_extensions.db.fields import AutoSlugField, CreationDateTimeField
+from django_extensions.db.fields import (
+    AutoSlugField, CreationDateTimeField, UUIDField,
+)
 from jsonfield import JSONField
 from tools.storage import storage
 from tools.shortcuts import prettify
@@ -12,6 +14,7 @@ class Device(models.Model):
     is_enabled = models.BooleanField(
         default=True, verbose_name=_('is enabled'),
     )
+    uuid = UUIDField(verbose_name=_('uuid'))
     slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     name = models.CharField(max_length=300, verbose_name=_('name'))
