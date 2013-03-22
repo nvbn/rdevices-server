@@ -181,3 +181,5 @@ LOGOUT_URL = '/accounts/signout/'
 AUTH_PROFILE_MODULE = 'accounts.Profile'
 USERENA_REDIRECT_ON_SIGNOUT = '/'
 USERENA_SIGNIN_REDIRECT_URL = '/devices/list/'
+
+CALLS_CHANNEL = 'calls'

@@ -1,12 +1,14 @@
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
+from django.dispatch import receiver
 from django.db import models
+from django.db.models.signals import post_save
 from django_extensions.db.fields import (
     AutoSlugField, CreationDateTimeField, UUIDField,
 )
 from jsonfield import JSONField
 from tools.storage import storage
-from tools.shortcuts import prettify
+from tools.shortcuts import prettify, send_call_request
 
 
 class Device(models.Model):
@@ -147,3 +149,15 @@ class DeviceMethodCall(models.Model):
     def pretty_response(self):
         """Get pretty response"""
         return prettify(self.response)
+
+
+@receiver(post_save, sender=DeviceMethodCall)
+def send_request(sender, instance, created, **kwargs):
+    """Send to call request to device"""
+    if created:
+        send_call_request(
+            action='request',
+            request_id=instance.id,
+            uuid=instance.method.device.uuid,
+            request=instance.request,
+        )

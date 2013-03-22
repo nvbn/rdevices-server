@@ -15,3 +15,4 @@ django-bootstrap-form
 jsonfield
 easy_thumbnails
 tornado
+tornado-redis

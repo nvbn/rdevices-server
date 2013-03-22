@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from tornado.ioloop import IOLoop
 from connector.server import DeviceServer
 
@@ -15,6 +16,6 @@ class Command(BaseCommand):
             host = None
             port = address
         ioloop = IOLoop.instance()
-        server = DeviceServer()
+        server = DeviceServer(settings.CALLS_CHANNEL)
         server.listen(port, host)
         ioloop.start()
