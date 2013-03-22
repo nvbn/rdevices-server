@@ -1,20 +1,36 @@
 {% extends "base.html" %}
 
+{% load thumbnail %}
+
 {% block content %}
     <div class='span12 well'>
         {% if not devices.count %}
             <h2>You don't have devices</h2>
         {% else %}
             <h2>Your devices</h2>
-            <ul class='devices'>
-                {% for device in devices %}
-                    <li>
-                        <a href="{{ device.get_absolute_url }}">
-                            {{ device }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+            <div class='devices'>
+            {% for device in devices %}
+                <div class='device-box'>
+                    <a class='thumbnail' href="{{ device.get_absolute_url }}">
+                        {% if device.image %}
+                            {{ device.image_size }}
+                            {% if device.image.width > device.image.height %}
+                                <img class="img-rounded"
+                                    src='{{ STATIC_URL }}{% thumbnail device.image '250x0' %}'
+                                />
+                            {% else %}
+                                <img class="img-rounded"
+                                    src='{{ STATIC_URL }}{% thumbnail device.image '0x250' %}'
+                                />
+                            {% endif %}
+                        {% endif %}
+                        <p>
+                            <strong>{{ device }}</strong>
+                        </p>
+                    </a>
+                </div>
+            {% endfor %}
+            </div>
         {% endif %}
     </div>
 {% endblock %}

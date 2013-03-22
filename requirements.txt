@@ -6,7 +6,6 @@ django-tastypie
 django-tastypie-swagger
 psycopg2
 south
-sorl-thumbnail
 lxml
 pillow
 BeautifulSoup
@@ -15,3 +14,4 @@ django-extensions
 django-userena
 django-bootstrap-form
 jsonfield
+easy_thumbnails
