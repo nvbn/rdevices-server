@@ -1,0 +1,30 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+{% load bootstrap %}
+
+{% block title %}{% trans "Account setup" %}{% endblock %}
+
+{% block content_title %}<h2>
+    {% blocktrans with profile.user.username as username %}Account &raquo; {{ username }}{% endblocktrans %}
+    </h2>{% endblock %}
+
+{% block content %}
+    <div class='span12 well'>
+    <ul class="nav nav-pills" id="box-nav">
+        {% block profile_navigation_items %}
+            <li><a href="{% url 'userena_profile_detail' user.username %}">{% trans "View profile" %}</a></li>
+            <li class='active'><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit details" %}</a>
+            </li>
+            <li><a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a></li>
+            <li><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a></li>
+        {% endblock %}
+    </ul>
+    <h2>Edit profile</h2>
+    <form action="" enctype="multipart/form-data" method="post" class='form'>
+
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <button class='btn' type="submit">Save</button>
+    </form>
+{% endblock %}

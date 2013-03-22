@@ -1,0 +1,16 @@
+{% extends 'userena/base_userena.html' %}
+{% load bootstrap %}
+
+{% block title %}Signup{% endblock %}
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>Registration</h2>
+
+        <form action="" method="post" class='form'>
+            {% csrf_token %}
+            {{ form|bootstrap }}
+            <button class='btn' type="submit"> Sign up</button>
+        </form>
+    </div>
+{% endblock %}
