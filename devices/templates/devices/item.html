@@ -11,34 +11,62 @@
         </p>
         <p>{{ device.description }}</p>
         {% if device.methods.count %}
-            <ul>
-                {% for pair in methods %}
-                    <li>
-                        <strong>{{ pair.method }}</strong>
-                        <p>{{ pair.method.description }}</p>
-                        {% include "devices/includes/call_form.html" with form=pair.form device_method=pair.method inline=True %}
-                        <ul>
-                            {% for call in pair.method.calls.all %}
-                                <li>
-                                    <p>State: {{ call.get_state }}</p>
-                                    {% if call.request %}
-                                        <p>Request:</p>
+            {% for pair in methods %}
+                <h3>{{ pair.method }}</h3>
+                <div class='method-box'>
+                    <ul class="nav nav-tabs">
+                        <li class='active'>
+                            <a data-toggle="tab" href="#info-{{ pair.method.slug }}">
+                                Information
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#create-{{ pair.method.slug }}">
+                                Create request
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#requests-{{ pair.method.slug }}">
+                                Previous requests
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class='tab-pane active' id="info-{{ pair.method.slug }}"
+                            <p>{{ pair.method.description }}</p>
+                            {% if call.spec %}
+<pre class='prettyprint linenums'>
+{{ call.pretty_spec }}
+</pre>
+                            {% endif %}
+                        </div>
+                        <div class='tab-pane' id="create-{{ pair.method.slug }}">
+                            {% include "devices/includes/call_form.html" with form=pair.form device_method=pair.method inline=True %}
+                        </div>
+                        <div class='tab-pane' id="requests-{{ pair.method.slug }}">
+                            <ul>
+                                {% for call in pair.method.calls.all %}
+                                    <li>
+                                        <p>State: {{ call.get_state }}</p>
+                                        {% if call.request %}
+                                            <p>Request:</p>
 <pre class='prettyprint linenums'>
 {{ call.pretty_request }}
 </pre>
-                                    {% endif %}
-                                    {% if call.response %}
-                                        <p>Response:</p>
+                                        {% endif %}
+                                        {% if call.response %}
+                                            <p>Response:</p>
 <pre class='prettyprint linenums'>
 {{ call.pretty_response }}
 </pre>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                {% endfor %}
-            </ul>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                </div>
+                <hr />
+            {% endfor %}
         {% else %}
             <p>This device doesn't register methods.</p>
         {% endif %}

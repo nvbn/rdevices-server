@@ -78,7 +78,7 @@ class DeviceMethod(models.Model):
     name = models.CharField(
         max_length=300, verbose_name=_('name'),
     )
-    spec = JSONField(verbose_name=_('spec'))
+    spec = JSONField(blank=True, verbose_name=_('spec'))
     description = models.TextField(verbose_name=_('description'))
 
     class Meta:
@@ -122,6 +122,10 @@ class DeviceMethodCall(models.Model):
     def get_state(self):
         """Get textual state"""
         return dict(DeviceMethodCall.STATES)[self.state]
+
+    def pretty_spec(self):
+        """Get pretty spec"""
+        return pformat(self.spec)
 
     def pretty_request(self):
         """Get pretty request"""
