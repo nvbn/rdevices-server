@@ -2,9 +2,9 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.db import models
 from django_extensions.db.fields import AutoSlugField, CreationDateTimeField
-from pprint import pformat
 from jsonfield import JSONField
 from tools.storage import storage
+from tools.shortcuts import prettify
 
 
 class Device(models.Model):
@@ -95,7 +95,7 @@ class DeviceMethod(models.Model):
 
     def pretty_spec(self):
         """Get pretty spec"""
-        return pformat(self.spec)
+        return prettify(self.spec)
 
 
 class DeviceMethodCall(models.Model):
@@ -131,8 +131,8 @@ class DeviceMethodCall(models.Model):
 
     def pretty_request(self):
         """Get pretty request"""
-        return pformat(self.request)
+        return prettify(self.request)
 
     def pretty_response(self):
         """Get pretty response"""
-        return pformat(self.response)
+        return prettify(self.response)
