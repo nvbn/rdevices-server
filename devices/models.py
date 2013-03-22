@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.db import models
-from django_extensions.db.fields import AutoSlugField
+from django_extensions.db.fields import AutoSlugField, CreationDateTimeField
 from pprint import pformat
 from jsonfield import JSONField
 from tools.storage import storage
@@ -104,6 +104,7 @@ class DeviceMethodCall(models.Model):
         (STATE_ERROR, _('error')),
     )
 
+    created = CreationDateTimeField(verbose_name=_('created'))
     caller = models.ForeignKey(User, verbose_name=_('caller'))
     state = models.PositiveSmallIntegerField(
         choices=STATES, default=STATE_CREATED,

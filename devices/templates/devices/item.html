@@ -47,15 +47,16 @@
                             <ul>
                                 {% for call in pair.method.calls.all %}
                                     <li>
-                                        <p>State: {{ call.get_state }}</p>
+                                        <p><strong>Created:</strong> {{ call.created }}</p>
+                                        <p><strong>State:</strong> {{ call.get_state }}</p>
                                         {% if call.request %}
-                                            <p>Request:</p>
+                                            <p><strong>Request:</strong></p>
 <pre class='prettyprint linenums'>
 {{ call.pretty_request }}
 </pre>
                                         {% endif %}
                                         {% if call.response %}
-                                            <p>Response:</p>
+                                            <p><strong>Response:</strong></p>
 <pre class='prettyprint linenums'>
 {{ call.pretty_response }}
 </pre>
