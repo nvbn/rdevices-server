@@ -2,6 +2,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
+from jsonfield import JSONField
 from tools.storage import storage
 
 
@@ -54,10 +55,21 @@ class Device(models.Model):
 
 
 class DeviceMethod(models.Model):
-    """Device method"""
+    """
+        Device method
+
+        spec = {
+            'args': {
+                'arg1: 'int',
+                'arg2': 'str',
+            },
+            'result': 'int',
+        }
+    """
     is_enabled = models.BooleanField(
         default=True, verbose_name=_('is enabled'),
     )
+    slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
     device = models.ForeignKey(
         Device, verbose_name=_('device'),
         related_name='methods',
@@ -65,7 +77,7 @@ class DeviceMethod(models.Model):
     name = models.CharField(
         max_length=300, verbose_name=_('name'),
     )
-    spec = models.TextField(verbose_name=_('spec'))
+    spec = JSONField(verbose_name=_('spec'))
     description = models.TextField(verbose_name=_('description'))
 
     class Meta:
@@ -74,6 +86,10 @@ class DeviceMethod(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_spec_args(self):
+        """Get spec arguments"""
+        return self.spec.get('args', {})
 
 
 class DeviceMethodCall(models.Model):

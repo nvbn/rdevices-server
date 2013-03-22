@@ -10,5 +10,17 @@
             <a href="{% url 'devices_delete' device.slug %}">delete</a>
         </p>
         <p>{{ device.description }}</p>
+        {% if device.methods.count %}
+            <ul>
+                {% for pair in methods %}
+                    <li>
+                        <strong>{{ pair.method }}</strong>
+                        {% include "devices/includes/call_form.html" with form=pair.form device_method=pair.method %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>This device doesn't register methods.</p>
+        {% endif %}
     </div>
 {% endblock %}

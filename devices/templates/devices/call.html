@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>Call device method: {{ device }}: {{ device_method }}</h2>
+        {% include "devices/includes/call_form.html" %}
+    </div>
+{% endblock %}

@@ -10,8 +10,8 @@ sorl-thumbnail
 lxml
 pillow
 BeautifulSoup
-django-annoying
 django_compressor
 django-extensions
 django-userena
 django-bootstrap-form
+jsonfield

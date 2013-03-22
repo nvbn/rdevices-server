@@ -1,0 +1,12 @@
+{% load bootstrap %}
+
+
+<form method='POST' action='{% url 'devices_call' device.slug device_method.slug %}'>
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <div class="control-group">
+        <div class="controls">
+            <button class='btn' type="submit">Call</button>
+        </div>
+    </div>
+</form>
