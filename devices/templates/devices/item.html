@@ -12,7 +12,7 @@
         <p>{{ device.description }}</p>
         {% if device.methods.count %}
             {% for pair in methods %}
-                <h3>{{ pair.method }}</h3>
+                <h3>Method: {{ pair.method }}</h3>
                 <div class='method-box'>
                     <ul class="nav nav-tabs">
                         <li class='active'>
@@ -34,9 +34,9 @@
                     <div class="tab-content">
                         <div class='tab-pane active' id="info-{{ pair.method.slug }}"
                             <p>{{ pair.method.description }}</p>
-                            {% if call.spec %}
+                            {% if pair.method.spec %}
 <pre class='prettyprint linenums'>
-{{ call.pretty_spec }}
+{{ pair.method.pretty_spec }}
 </pre>
                             {% endif %}
                         </div>

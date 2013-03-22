@@ -93,6 +93,11 @@ class DeviceMethod(models.Model):
         return self.spec.get('args', {})
 
 
+    def pretty_spec(self):
+        """Get pretty spec"""
+        return pformat(self.spec)
+
+
 class DeviceMethodCall(models.Model):
     """Call of device method"""
     STATE_CREATED = 0
@@ -123,10 +128,6 @@ class DeviceMethodCall(models.Model):
     def get_state(self):
         """Get textual state"""
         return dict(DeviceMethodCall.STATES)[self.state]
-
-    def pretty_spec(self):
-        """Get pretty spec"""
-        return pformat(self.spec)
 
     def pretty_request(self):
         """Get pretty request"""
