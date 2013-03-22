@@ -11,7 +11,10 @@
         <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "css/site.sass" %}" rel="stylesheet" type="text/x-sass" />
     {% endcompress %}
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    {% compress js %}
+        <script src="{% static "js/jquery-1.9.1.min.js" %}"></script>
+        <script src="{% static "js/bootstrap.min.js" %}"></script>
+    {% endcompress %}
 </head>
 <body>
     <header>

@@ -15,7 +15,27 @@
                 {% for pair in methods %}
                     <li>
                         <strong>{{ pair.method }}</strong>
-                        {% include "devices/includes/call_form.html" with form=pair.form device_method=pair.method %}
+                        <p>{{ pair.method.description }}</p>
+                        {% include "devices/includes/call_form.html" with form=pair.form device_method=pair.method inline=True %}
+                        <ul>
+                            {% for call in pair.method.calls.all %}
+                                <li>
+                                    <p>State: {{ call.get_state }}</p>
+                                    {% if call.request %}
+                                        <p>Request:</p>
+<pre class='prettyprint linenums'>
+{{ call.pretty_request }}
+</pre>
+                                    {% endif %}
+                                    {% if call.response %}
+                                        <p>Response:</p>
+<pre class='prettyprint linenums'>
+{{ call.pretty_response }}
+</pre>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </li>
                 {% endfor %}
             </ul>

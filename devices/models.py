@@ -2,6 +2,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
+from pprint import pformat
 from jsonfield import JSONField
 from tools.storage import storage
 
@@ -111,9 +112,21 @@ class DeviceMethodCall(models.Model):
         DeviceMethod, verbose_name=_('method'),
         related_name='calls',
     )
-    request = models.TextField(verbose_name=_('request'))
-    response = models.TextField(verbose_name=_('response'))
+    request = JSONField(verbose_name=_('request'))
+    response = JSONField(verbose_name=_('response'))
 
     class Meta:
         verbose_name = _('device method call')
         verbose_name_plural = _('devices methods calls')
+
+    def get_state(self):
+        """Get textual state"""
+        return dict(DeviceMethodCall.STATES)[self.state]
+
+    def pretty_request(self):
+        """Get pretty request"""
+        return pformat(self.request)
+
+    def pretty_response(self):
+        """Get pretty response"""
+        return pformat(self.response)

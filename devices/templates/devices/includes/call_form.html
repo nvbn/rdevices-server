@@ -1,7 +1,13 @@
 {% load bootstrap %}
 
 
-<form method='POST' action='{% url 'devices_call' device.slug device_method.slug %}'>
+<form
+    method='POST'
+    action='{% url 'devices_call' device.slug device_method.slug %}'
+    {% if inline %}
+        class="form form-inline"
+    {% endif %}
+>
     {% csrf_token %}
     {{ form|bootstrap }}
     <div class="control-group">
