@@ -15,5 +15,6 @@ urlpatterns = patterns(
         r'^(?P<device_slug>.*)/(?P<device_method_slug>.*)/call/$',
         DeviceMethodCallCreate.as_view(), name='devices_call',
     ),
+    url(r'^(?P<slug>.*)/(?P<method_slug>.*)/$', DeviceItem.as_view(), name='devices_item'),
     url(r'^(?P<slug>.*)/$', DeviceItem.as_view(), name='devices_item'),
 )

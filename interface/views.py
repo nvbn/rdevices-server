@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from interface.models import CarouselEntry, NewsEntry
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView
 
 
 class Index(TemplateView):

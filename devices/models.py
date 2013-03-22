@@ -88,10 +88,16 @@ class DeviceMethod(models.Model):
     def __unicode__(self):
         return self.name
 
+    @models.permalink
+    def get_absolute_url(self):
+        return 'devices_item', [], {
+            'slug': self.device.slug,
+            'method_slug': self.slug,
+        }
+
     def get_spec_args(self):
         """Get spec arguments"""
         return self.spec.get('args', {})
-
 
     def pretty_spec(self):
         """Get pretty spec"""

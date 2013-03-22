@@ -43,6 +43,10 @@ class DeviceItem(DeviceMixin, LoginRequiredMixin, DetailView):
                 ),
             }, context['device'].methods.all(),
         )
+        if 'method_slug' in self.kwargs:
+            context['active_method'] = get_object_or_404(
+                DeviceMethod, slug=self.kwargs['method_slug'],
+            )
         return context
 
 
@@ -99,7 +103,7 @@ class DeviceMethodCallCreate(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         """Get success url"""
-        return self.device.get_absolute_url()
+        return self.device_method.get_absolute_url() + '#active'
 
     def get_context_data(self, **kwargs):
         """Add device method to context"""

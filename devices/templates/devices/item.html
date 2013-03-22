@@ -12,10 +12,18 @@
         <p>{{ device.description }}</p>
         {% if device.methods.count %}
             {% for pair in methods %}
-                <h3>Method: {{ pair.method }}</h3>
+                <h3
+                    {% if active_method == pair.method %}
+                        id="active"
+                    {% endif %}
+                >Method: {{ pair.method }}</h3>
                 <div class='method-box'>
                     <ul class="nav nav-tabs">
-                        <li class='active'>
+                        <li
+                            {% if active_method != pair.method %}
+                                class='active'
+                            {% endif %}
+                        >
                             <a data-toggle="tab" href="#info-{{ pair.method.slug }}">
                                 Information
                             </a>
@@ -25,14 +33,22 @@
                                 Create request
                             </a>
                         </li>
-                        <li>
+                        <li
+                            {% if active_method == pair.method %}
+                                class='active'
+                            {% endif %}
+                        >
                             <a data-toggle="tab" href="#requests-{{ pair.method.slug }}">
                                 Previous requests
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class='tab-pane active' id="info-{{ pair.method.slug }}"
+                        <div class='tab-pane
+                            {% if active_method != pair.method %}
+                                active
+                            {% endif %}
+                            ' id="info-{{ pair.method.slug }}"
                             <p>{{ pair.method.description }}</p>
                             {% if pair.method.spec %}
 <pre class='prettyprint linenums'>
@@ -43,7 +59,14 @@
                         <div class='tab-pane' id="create-{{ pair.method.slug }}">
                             {% include "devices/includes/call_form.html" with form=pair.form device_method=pair.method inline=True %}
                         </div>
-                        <div class='tab-pane' id="requests-{{ pair.method.slug }}">
+                        <div
+                            {% if active_method == pair.method %}
+                                class='tab-pane active'
+                            {% else %}
+                                class='tab-pane'
+                            {% endif %}
+                                id="requests-{{ pair.method.slug }}"
+                        >
                             <ul>
                                 {% for call in pair.method.calls.all %}
                                     <li>
