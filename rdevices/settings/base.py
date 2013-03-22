@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'compressor',
     'devices',
     'interface',
+    'accounts',
     'userena',
     'bootstrapform',
 )
@@ -176,6 +177,6 @@ ANONYMOUS_USER_ID = -1
 LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
 LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
-AUTH_PROFILE_MODULE = 'interface.Profile'
+AUTH_PROFILE_MODULE = 'accounts.Profile'
 USERENA_REDIRECT_ON_SIGNOUT = '/'
 USERENA_SIGNIN_REDIRECT_URL = '/devices/list/'
