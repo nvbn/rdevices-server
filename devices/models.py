@@ -84,6 +84,7 @@ class DeviceMethod(models.Model):
     class Meta:
         verbose_name = _('device method')
         verbose_name_plural = _('device method')
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name
@@ -130,6 +131,7 @@ class DeviceMethodCall(models.Model):
     class Meta:
         verbose_name = _('device method call')
         verbose_name_plural = _('devices methods calls')
+        ordering = ('-created',)
 
     def get_state(self):
         """Get textual state"""
