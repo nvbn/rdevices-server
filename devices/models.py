@@ -84,7 +84,9 @@ class DeviceMethod(models.Model):
         max_length=300, verbose_name=_('name'),
     )
     spec = JSONField(blank=True, verbose_name=_('spec'))
-    description = models.TextField(verbose_name=_('description'))
+    description = models.TextField(
+        blank=True, null=True, verbose_name=_('description'),
+    )
 
     class Meta:
         verbose_name = _('device method')
@@ -157,6 +159,7 @@ def send_request(sender, instance, created, **kwargs):
     if created:
         send_call_request(
             action='request',
+            method=instance.method.name,
             request_id=instance.id,
             uuid=instance.method.device.uuid,
             request=instance.request,
