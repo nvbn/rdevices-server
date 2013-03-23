@@ -21,36 +21,94 @@
     {% endcompress %}
 </head>
 <body>
-    <header>
-        <div class='container'>
-            <h1>
-                <a href="/">rdevic.es</a>
-                <small>alpha</small>
-            </h1>
-            <div class='auth'>
-                {% if request.user.is_authenticated %}
-                    Hi, <a
-                        href="{% url "userena_profile_detail" request.user.username %}"
-                    >{{ request.user.username }}</a>!
-                    You can <a href="{% url "devices_create" %}">create new device</a>,
-                    <a
-                        href="{% url "userena_profile_edit" request.user.username %}"
-                    >change your profile</a> or
-                    <a
-                        href="{% url "userena_signout" %}"
-                    >sign out</a>.
-                {% else %}
-                    You need to <a href='{% url 'userena_signin' %}'>sign in</a>
-                    or <a href='{% url 'userena_signup' %}'>sign up</a>
-                {% endif %}
+    <div id="wrap">
+        <header>
+            <div class='container'>
+                <h1>
+                    <a href="/">rdevic.es</a>
+                    <small>alpha</small>
+                </h1>
+                <div class='auth'>
+                    {% if request.user.is_authenticated %}
+                        Hi, <a
+                            href="{% url "userena_profile_detail" request.user.username %}"
+                        >{{ request.user.username }}</a>!
+                        You can <a href="{% url "devices_create" %}">create new device</a>,
+                        <a
+                            href="{% url "userena_profile_edit" request.user.username %}"
+                        >change your profile</a> or
+                        <a
+                            href="{% url "userena_signout" %}"
+                        >sign out</a>.
+                    {% else %}
+                        You need to <a href='{% url 'userena_signin' %}'>sign in</a>
+                        or <a href='{% url 'userena_signup' %}'>sign up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+        <div class='container main'>
+            <div class="row-fluid">
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
-    </header>
-    <div class='container'>
-        <div class="row-fluid">
-            {% block content %}
-            {% endblock %}
-        </div>
     </div>
+    <footer>
+        <div class='container'>
+            <div class='span2'>
+                <p>
+                    <a href="#">
+                        <b class="icon-upload"></b>
+                        Download client
+                    </a>
+                </p>
+                <p>
+                    <a href="{% url 'devices_create' %}">
+                        <b class="icon-plus"></b>
+                        Create device
+                    </a>
+                </p>
+                <p>
+                    <a href="#">
+                        <b class="icon-magic"></b>
+                        How-to
+                    </a>
+                </p>
+                <p>
+                    <a href="#">
+                        <b class="icon-question-sign"></b>
+                        FAQ
+                    </a>
+                </p>
+            </div>
+            <div class='span2'>
+                <p>
+                    <a target="_blank" href="https://github.com/nvbn/rdevices-client">
+                        <b class="icon-github"></b>
+                        Client source
+                    </a>
+                </p>
+                <p>
+                    <a target="_blank" href="https://github.com/nvbn/rdevices-server">
+                        <b class="icon-github"></b>
+                        Server source
+                    </a>
+                </p>
+                <p>
+                    <a target="_blank" href="#">
+                        <b class="icon-facebook"></b>
+                        Facebook
+                    </a>
+                </p>
+                <p>
+                    <a target="_blank" href="#">
+                        <b class="icon-twitter"></b>
+                        Twitter
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

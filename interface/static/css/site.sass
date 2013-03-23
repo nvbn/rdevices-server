@@ -1,6 +1,20 @@
-header
+@mixin reversed
     background: #23323E
     color: #EEE7DA
+
+
+html, body
+    height: 100%
+
+
+#wrap
+    min-height: 100%
+    height: auto
+    overflow: auto
+
+
+header
+    @include reversed
     
     h1
         a, a:hover, a:active
@@ -9,6 +23,26 @@ header
 
     .auth
         padding-bottom: 20px
+
+
+.main
+    margin-bottom: 260px
+
+
+footer
+    @include reversed
+    height:  160px
+    margin-top: -200px
+    padding-top: 40px
+
+    a, a:hover, a:active
+        color: #EEE7DA
+        text-decoration: none
+
+    b
+        width: 15px !important
+        text-align: center
+
 
 form
     .left-side
