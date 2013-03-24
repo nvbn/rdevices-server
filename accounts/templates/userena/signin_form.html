@@ -3,7 +3,7 @@
 {% load bootstrap %}
 {% load facebook %}
 {% load github %}
-{% load url from future %}
+{% load twitter %}
 
 {% block title %}{% trans "Signin" %}{% endblock %}
 
@@ -22,5 +22,6 @@
         </p>
         {% facebook_button %}
         {% github_button %}
+        {% twitter_button %}
     </div>
 {% endblock %}

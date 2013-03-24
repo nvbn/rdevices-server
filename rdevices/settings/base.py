@@ -135,7 +135,8 @@ INSTALLED_APPS = (
     'pytils',
     'socialregistration',
     'socialregistration.contrib.facebook',
-    'socialregistration.contrib.github'
+    'socialregistration.contrib.github',
+    'socialregistration.contrib.twitter',
 )
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -177,6 +178,7 @@ AUTHENTICATION_BACKENDS = (
     'userena.backends.UserenaAuthenticationBackend',
     'socialregistration.contrib.facebook.auth.FacebookAuth',
     'socialregistration.contrib.github.auth.GithubAuth',
+    'socialregistration.contrib.twitter.auth.TwitterAuth',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
