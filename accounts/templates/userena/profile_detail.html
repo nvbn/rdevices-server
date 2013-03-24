@@ -13,7 +13,7 @@
         <div class="white-box">
 
             {% block profile_navigation %}
-                {% if user.username == profile.user.username and not profile.user.facebookprofile_set.count %}
+                {% if user.username == profile.user.username and not profile.is_social %}
                     <ul class="nav nav-pills" id="box-nav">
                         {% block profile_navigation_items %}
                             <li class='active'><a

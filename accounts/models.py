@@ -10,3 +10,10 @@ class Profile(UserenaBaseProfile):
         User, unique=True, verbose_name=_('user'),
         related_name='profile',
     )
+
+    def is_social(self):
+        """Check is social"""
+        return self.user.facebookprofile_set.count() \
+            or self.user.githubprofile_set.count() \
+            or self.user.twitterprofile_set.count() \
+            or self.user.googleprofile_set.count()
