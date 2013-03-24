@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>Are you sure want to regenerate uuid of {{ device }}</h2>
+        <form method='post'>
+            {% csrf_token %}
+            <a href="{{ device.get_absolute_url }}" class='btn back'>No, return me to device page</a>
+            <button type="submit" class='btn btn-danger'>Yes, regenerate it!</button>
+        </form>
+    </div>
+{% endblock %}

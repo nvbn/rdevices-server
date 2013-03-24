@@ -3,14 +3,13 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
-from django_extensions.db.fields import (
-    AutoSlugField, CreationDateTimeField, UUIDField,
-)
+from django_extensions.db.fields import AutoSlugField, CreationDateTimeField
 from jsonfield import JSONField
 from pytils.translit import slugify
 from datetime import datetime
 from tools.storage import storage
 from tools.shortcuts import prettify, send_call_request
+from tools.fields import ReUUIDField
 
 
 def device_image_file_name(instance, filename):
@@ -29,7 +28,7 @@ class Device(models.Model):
     is_enabled = models.BooleanField(
         default=True, verbose_name=_('is enabled'),
     )
-    uuid = UUIDField(verbose_name=_('uuid'))
+    uuid = ReUUIDField(verbose_name=_('uuid'))
     slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     name = models.CharField(max_length=300, verbose_name=_('name'))

@@ -12,6 +12,7 @@
                     href="{% url 'devices_change' device.slug %}"
                     data-toggle="tooltip"
                     title='Change device information'
+                    class='action'
                 >
                     <b class="icon-edit icon-1x"></b>
                 </a>
@@ -19,7 +20,8 @@
                     href="{% url 'devices_delete' device.slug %}"
                     data-toggle="tooltip"
                     title='Delete device'
-                    >
+                    class='action'
+                >
                     <b class="icon-trash icon-1x"></b>
                 </a>
             </small>
@@ -31,6 +33,14 @@
                 data-toggle="tooltip"
                 title='Set it to Meta.uuid in device declaration'
             >{{ device.uuid }}</a>
+            <a
+                href="{% url "devices_regenerate" device.slug %}"
+                data-toggle="tooltip"
+                title='Generate new device uuid'
+                class='action'
+            >
+                <b class="icon-refresh"></b>
+            </a>
         </p>
         <p>
             <strong>Description:</strong>

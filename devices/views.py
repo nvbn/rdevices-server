@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from devices.models import Device, DeviceMethod, DeviceMethodCall
 from django.views.generic import (
     ListView, CreateView, UpdateView, DetailView, DeleteView,
@@ -74,6 +74,21 @@ class DeviceDelete(DeviceMixin, LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('devices_list')
     template_name = 'devices/delete.html'
     context_object_name = 'device'
+
+
+class DeviceRegenerateUUID(DeviceMixin, LoginRequiredMixin, DetailView):
+    """Regenerate device uuid"""
+    template_name = 'devices/regenerate.html'
+    context_object_name = 'device'
+
+    def post(self, *args, **kwargs):
+        return self.regenerate_uuid()
+
+    def regenerate_uuid(self):
+        self.object = self.get_object()
+        self.object.uuid = None
+        self.object.save()
+        return redirect(self.object.get_absolute_url())
 
 
 class DeviceMethodCallCreate(LoginRequiredMixin, CreateView):
