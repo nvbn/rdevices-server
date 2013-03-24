@@ -10,6 +10,7 @@ class DeviceResource(ModelResource):
     """Resource for devices"""
     methods = fields.ToManyField(
         'devices.resources.DeviceMethodResource', 'methods',
+        blank=True, full=False,
     )
 
     def apply_authorization_limits(self, request, object_list):
@@ -20,7 +21,7 @@ class DeviceResource(ModelResource):
 
     class Meta:
         queryset = Device.objects.all()
-        resource_name = 'my/device'
+        resource_name = 'device'
         authorization = DjangoAuthorization()
 
 
@@ -39,7 +40,7 @@ class DeviceMethodResource(ModelResource):
 
     class Meta:
         queryset = DeviceMethod.objects.all()
-        resource_name = 'my/device_method'
+        resource_name = 'device_method'
         authorization = DjangoAuthorization()
 
 
@@ -55,5 +56,5 @@ class DeviceMethodCallResource(ModelResource):
 
     class Meta:
         queryset = DeviceMethodCall.objects.all()
-        resource_name = 'my/device_method_call'
+        resource_name = 'device_method_call'
         authorization = DjangoAuthorization()
