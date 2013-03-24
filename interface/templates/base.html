@@ -63,7 +63,7 @@
         <div class='container'>
             <div class='span2'>
                 <p>
-                    <a href="#">
+                    <a href="{% url "django.contrib.flatpages.views.flatpage" "/download/" %}">
                         <b class="icon-upload"></b>
                         Download client
                     </a>
@@ -75,13 +75,13 @@
                     </a>
                 </p>
                 <p>
-                    <a href="#">
+                    <a href="{% url "django.contrib.flatpages.views.flatpage" "/how-to/" %}">
                         <b class="icon-magic"></b>
                         How-to
                     </a>
                 </p>
                 <p>
-                    <a href="#">
+                    <a href="{% url "django.contrib.flatpages.views.flatpage" "/faq/" %}">
                         <b class="icon-question-sign"></b>
                         FAQ
                     </a>

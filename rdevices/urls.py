@@ -15,5 +15,6 @@ urlpatterns = patterns(
     url(r'^social/', include(
         'socialregistration.urls', namespace='socialregistration',
     )),
+    url(r'^pages', include('django.contrib.flatpages.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
