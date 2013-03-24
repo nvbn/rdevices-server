@@ -4,6 +4,7 @@
 {% load facebook %}
 {% load github %}
 {% load twitter %}
+{% load google %}
 
 {% block title %}{% trans "Signin" %}{% endblock %}
 
@@ -23,5 +24,6 @@
         {% facebook_button %}
         {% github_button %}
         {% twitter_button %}
+        {% google_button %}
     </div>
 {% endblock %}

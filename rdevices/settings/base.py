@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'socialregistration.contrib.facebook',
     'socialregistration.contrib.github',
     'socialregistration.contrib.twitter',
+    'socialregistration.contrib.google',
 )
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -179,6 +180,7 @@ AUTHENTICATION_BACKENDS = (
     'socialregistration.contrib.facebook.auth.FacebookAuth',
     'socialregistration.contrib.github.auth.GithubAuth',
     'socialregistration.contrib.twitter.auth.TwitterAuth',
+    'socialregistration.contrib.google.auth.GoogleAuth',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
