@@ -1,6 +1,50 @@
 {% extends "base.html" %}
 
+{% load thumbnail %}
+
 {% block content %}
-    <div class='well'>
+    <div class='span12 well'>
+        <div id="index-carousel">
+            <ol class="carousel-indicators">
+                {% for entry in carousel %}
+                    <li
+                        data-target="#index-carousel"
+                        data-slide-to="{{ forloop.counter0 }}"
+                        {% if forloop.first %}
+                            class="active"
+                        {% endif %}
+                    ></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for entry in carousel %}
+                    <div
+                        {% if forloop.first %}
+                            class='active item'
+                        {% else %}
+                            class='item'
+                        {% endif %}
+                    >
+                        <img src='{{ STATIC_URL }}{% thumbnail entry.image.url '1130x615' %}' />
+                        <div class="carousel-caption">
+                            <h4>{{ entry.title }}</h4>
+                            <p>
+                                {{ entry.text }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <a
+                class="carousel-control left"
+                href="#index-carousel"
+                data-slide="prev"
+            >&lsaquo;</a>
+            <a
+                class="carousel-control right"
+                href="#index-carousel"
+                data-slide="next"
+            >&rsaquo;</a>
+        </div>
     </div>
 {% endblock %}
