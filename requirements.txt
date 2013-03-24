@@ -18,3 +18,5 @@ tornado
 tornado-redis
 pytils
 django-widget-tweaks
+django-socialregistration
+-e git+https://github.com/pythonforfacebook/facebook-sdk#egg=FacebookSDK

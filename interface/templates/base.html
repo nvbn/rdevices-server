@@ -41,9 +41,7 @@
                             href="{% url "userena_profile_detail" request.user.username %}"
                         >{{ request.user.username }}</a>!
                         You can <a href="{% url "devices_create" %}">create new device</a>,
-                        <a
-                            href="{% url "userena_profile_edit" request.user.username %}"
-                        >change your profile</a> or
+                        <a href="{% url "devices_list" %}">manage exists</a> or
                         <a
                             href="{% url "userena_signout" %}"
                         >sign out</a>.

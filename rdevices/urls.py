@@ -12,5 +12,8 @@ urlpatterns = patterns(
     url(r'^devices/', include('devices.urls')),
     url(r'^api/', include(api_urls)),
     url(r'^accounts/', include('userena.urls')),
+    url(r'^social/', include(
+        'socialregistration.urls', namespace='socialregistration',
+    )),
     url(r'^admin/', include(admin.site.urls)),
 )

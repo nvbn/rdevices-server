@@ -1,6 +1,7 @@
 {% extends 'userena/base_userena.html' %}
 {% load i18n %}
 {% load bootstrap %}
+{% load facebook %}
 {% load url from future %}
 
 {% block title %}{% trans "Signin" %}{% endblock %}
@@ -18,5 +19,6 @@
         <p class="forgot-password"><a href="{% url 'userena_password_reset' %}"
                                       title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
         </p>
+        {% facebook_button %}
     </div>
 {% endblock %}

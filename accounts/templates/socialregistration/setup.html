@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>Setup profile</h2>
+        {% if error %}
+            <p>{{ error }}</p>
+        {% else %}
+            <form action="." method="post">
+                {{ form|bootstrap }}
+                {% csrf_token %}
+                <button class='btn' type="submit">Continue</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
