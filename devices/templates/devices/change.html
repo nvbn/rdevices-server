@@ -14,16 +14,13 @@
         <form class='device-form' method='POST' enctype="multipart/form-data">
             {% csrf_token %}
             <div class='span4 left-side'>
-                <p>
-                    <a href="{{ device.get_absolute_url }}">Back to device page</a> /
-                    <a href="#">delete</a>
-                </p>
                 {{ form.is_enabled|bootstrap }}
                 {{ form.name|attr:"required"|bootstrap }}
                 {{ form.description|bootstrap }}
                 <div class="control-group">
                     <div class="controls">
-                        <button class='btn' type="submit">Save</button>
+                        <a class='btn' href="{{ device.get_absolute_url }}">Cancel</a>
+                        <button class='btn btn-danger' type="submit">Save</button>
                     </div>
                 </div>
             </div>

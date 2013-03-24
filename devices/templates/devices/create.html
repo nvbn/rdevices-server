@@ -17,7 +17,8 @@
                 {{ form.description|bootstrap }}
                 <div class="control-group">
                     <div class="controls">
-                        <button class='btn' type="submit">Create</button>
+                        <a class='btn' href="{% url "devices_list" %}">Cancel</a>
+                        <button class='btn btn-danger' type="submit">Create</button>
                     </div>
                 </div>
             </div>

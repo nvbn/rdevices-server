@@ -5,11 +5,25 @@
 
 {% block content %}
     <div class='span12 well'>
-        <h2>Device: {{ device }}</h2>
-        <p>
-            <a href="{% url 'devices_change' device.slug %}">Edit</a> /
-            <a href="{% url 'devices_delete' device.slug %}">delete</a>
-        </p>
+        <h2>
+            Device: {{ device }}
+            <small class='action-panel'>
+                <a
+                    href="{% url 'devices_change' device.slug %}"
+                    data-toggle="tooltip"
+                    title='Change device information'
+                >
+                    <b class="icon-edit icon-1x"></b>
+                </a>
+                <a
+                    href="{% url 'devices_delete' device.slug %}"
+                    data-toggle="tooltip"
+                    title='Delete device'
+                    >
+                    <b class="icon-trash icon-1x"></b>
+                </a>
+            </small>
+        </h2>
         <p>
             <strong>uuid:</strong>
             <a
@@ -18,9 +32,13 @@
                 title='Set it to Meta.uuid in device declaration'
             >{{ device.uuid }}</a>
         </p>
-        <p>{{ device.description }}</p>
+        <p>
+            <strong>Description:</strong>
+            {{ device.description|linebreaksbr }}
+        </p>
         {% if device.methods.count %}
             {% for pair in methods %}
+                </div><div class='span12 well'>
                 <h3
                     {% if active_method == pair.method %}
                         id="active"
@@ -59,8 +77,14 @@
                             {% endif %}
                             ' id="info-{{ pair.method.slug }}"
                         >
-                            <p>{{ pair.method.description }}</p>
+                            {% if pair.method.descrioption %}
+                                <p>
+                                    <strong>Description:</strong>
+                                    {{ pair.method.description|linebreaksbr }}
+                                </p>
+                            {% endif %}
                             {% if pair.method.spec %}
+                                <p><strong>Spec:</strong></p>
 <pre class='prettyprint linenums'>
 {{ pair.method.pretty_spec }}
 </pre>
@@ -103,7 +127,7 @@
                 <hr />
             {% endfor %}
         {% else %}
-            <p>This device doesn't have registered methods.</p>
+            </div><div class='span12 well'>
             <h3>How-to register methods?</h3>
             <p><strong>1)</strong> Create device declaration file, for example:</p>
 <pre class='prettyprint linenums'>
