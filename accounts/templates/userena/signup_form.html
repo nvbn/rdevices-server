@@ -1,16 +1,36 @@
 {% extends 'userena/base_userena.html' %}
 {% load bootstrap %}
+{% load facebook %}
+{% load github %}
+{% load twitter %}
+{% load google %}
 
 {% block title %}Signup{% endblock %}
 
 {% block content %}
     <div class='span12 well'>
-        <h2>Registration</h2>
-
-        <form action="" method="post" class='form'>
-            {% csrf_token %}
-            {{ form|bootstrap }}
-            <button class='btn' type="submit"> Sign up</button>
-        </form>
+        <div class='span4 left-side'>
+            <h2>Registration</h2>
+            <form action="" method="post" class='form'>
+                {% csrf_token %}
+                {{ form|bootstrap }}
+                <button class='btn' type="submit"> Sign up</button>
+            </form>
+        </div>
+        <div class='span4 offset1'>
+            <h2>Or use oauth</h2>
+            <div class='span3'>
+                {% facebook_button %}
+            </div>
+            <div class='span3'>
+                {% github_button %}
+            </div>
+            <div class='span3'>
+                {% twitter_button %}
+            </div>
+            <div class='span3'>
+                {% google_button %}
+            </div>
+        </div>
     </div>
 {% endblock %}

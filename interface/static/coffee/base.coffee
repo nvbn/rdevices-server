@@ -11,3 +11,8 @@ $ ->
         view.delegateEvents()
 
     $('[data-toggle=tooltip]').tooltip()
+
+    $('.submit-form').click (e) ->
+        e.preventDefault()
+        $(e.currentTarget).closest('form').submit()
+        false

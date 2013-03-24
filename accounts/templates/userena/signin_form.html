@@ -10,20 +10,32 @@
 
 {% block content %}
     <div class='span12 well'>
-        <h2>Login</h2>
-
-        <form action="" method="post" class='form'>
-            {% csrf_token %}
-            {{ form|bootstrap }}
-            <button class='btn' type="submit">Sign in</button>
-            {% if next %}<input type="hidden" name="next" value="{{ next }}"/>{% endif %}
-        </form>
-        <p class="forgot-password"><a href="{% url 'userena_password_reset' %}"
-                                      title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
-        </p>
-        {% facebook_button %}
-        {% github_button %}
-        {% twitter_button %}
-        {% google_button %}
+        <div class='span4 left-side'>
+            <h2>Login</h2>
+            <form action="" method="post" class='form'>
+                {% csrf_token %}
+                {{ form|bootstrap }}
+                <button class='btn' type="submit">Sign in</button>
+                {% if next %}<input type="hidden" name="next" value="{{ next }}"/>{% endif %}
+            </form>
+            <p class="forgot-password"><a href="{% url 'userena_password_reset' %}"
+                                          title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
+            </p>
+        </div>
+        <div class='span4 offset1'>
+            <h2>Or use oauth</h2>
+            <div class='span3'>
+                {% facebook_button %}
+            </div>
+            <div class='span3'>
+                {% github_button %}
+            </div>
+            <div class='span3'>
+                {% twitter_button %}
+            </div>
+            <div class='span3'>
+                {% google_button %}
+            </div>
+        </div>
     </div>
 {% endblock %}

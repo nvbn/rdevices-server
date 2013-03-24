@@ -1,9 +1,9 @@
-<form action="{% url "socialregistration:google:redirect" %}" method="post">
+<form action="{% url 'socialregistration:github:redirect' %}" method="post">
     {% csrf_token %}
     {% if next %}
         <input type="hidden" name="next" value="{{ next }}" />
     {% endif %}
     <a href="#" class='submit-form social-button'>
-        <b class="icon-google-plus-sign icon-4x"></b>
+        <b class="icon-github-alt icon-4x"></b>
     </a>
 </form>
