@@ -7,8 +7,16 @@ from django_extensions.db.fields import (
     AutoSlugField, CreationDateTimeField, UUIDField,
 )
 from jsonfield import JSONField
+from pytils.translit import slugify
 from tools.storage import storage
 from tools.shortcuts import prettify, send_call_request
+
+
+def device_image_file_name(instance, filename):
+    """Slugify device image filename"""
+    return "device/%m/%d/{{filename}}".format(
+        filename=slugify(filename),
+    )
 
 
 class Device(models.Model):
@@ -24,8 +32,8 @@ class Device(models.Model):
         blank=True, null=True, verbose_name=_('description'),
     )
     image = models.ImageField(
-        upload_to='device/%m/%d/', verbose_name=_('image'),
-        blank=True, null=True,
+        upload_to=device_image_file_name,
+        verbose_name=_('image'), blank=True, null=True,
     )
 
     class Meta:

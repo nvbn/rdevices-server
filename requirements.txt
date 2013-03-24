@@ -16,3 +16,4 @@ jsonfield
 easy_thumbnails
 tornado
 tornado-redis
+pytils
