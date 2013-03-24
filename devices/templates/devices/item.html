@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load bootstrap %}
+{% load pytils_translit %}
 
 {% block content %}
     <div class='span12 well'>
@@ -10,7 +11,12 @@
             <a href="{% url 'devices_delete' device.slug %}">delete</a>
         </p>
         <p>
-            <strong>uuid:</strong> {{ device.uuid }}
+            <strong>uuid:</strong>
+            <a
+                href='#'
+                data-toggle="tooltip"
+                title='Set it to Meta.uuid in device declaration'
+            >{{ device.uuid }}</a>
         </p>
         <p>{{ device.description }}</p>
         {% if device.methods.count %}
@@ -52,6 +58,7 @@
                                 active
                             {% endif %}
                             ' id="info-{{ pair.method.slug }}"
+                        >
                             <p>{{ pair.method.description }}</p>
                             {% if pair.method.spec %}
 <pre class='prettyprint linenums'>
@@ -96,7 +103,30 @@
                 <hr />
             {% endfor %}
         {% else %}
-            <p>This device doesn't register methods.</p>
+            <p>This device doesn't have registered methods.</p>
+            <h3>How-to register methods?</h3>
+            <p><strong>1)</strong> Create device declaration file, for example:</p>
+<pre class='prettyprint linenums'>
+from rdclient import Device, method
+
+
+class Calc(Device):
+
+    @method('int', x='int', y='int')
+    def sum(self, x, y):
+        return int(x) + int(y)
+
+    @method('None', a='int')
+    def do_nothing(self, a):
+        pass
+
+    class Meta:
+        uuid = '{{ device.uuid }}'
+</pre>
+        <p><strong>2)</strong> Run rdclient, like:</p>
+<pre class='prettyprint linenums'>
+rdclient {{ device.name|slugify }}.py
+</pre>
         {% endif %}
     </div>
 {% endblock %}

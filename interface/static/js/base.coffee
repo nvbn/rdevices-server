@@ -9,3 +9,5 @@ $ ->
         view = new DeviceFormView()
         view.setElement $('.device-form')
         view.delegateEvents()
+
+    $('[data-toggle=tooltip]').tooltip()
