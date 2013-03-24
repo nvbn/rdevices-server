@@ -5,7 +5,7 @@ $ ->
 
     prettyPrint()
 
-    if $('.create-new-device-form').length
+    if $('.device-form').length
         view = new DeviceFormView()
         view.setElement $('.device-form')
         view.delegateEvents()
