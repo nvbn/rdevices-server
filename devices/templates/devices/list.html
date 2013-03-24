@@ -15,11 +15,11 @@
                         {% if device.image %}
                             {{ device.image_size }}
                             {% if device.image.width > device.image.height %}
-                                <img class="img-rounded"
+                                <img
                                     src='{{ STATIC_URL }}{% thumbnail device.image '230x0' %}'
                                 />
                             {% else %}
-                                <img class="img-rounded"
+                                <img
                                     src='{{ STATIC_URL }}{% thumbnail device.image '0x230' %}'
                                 />
                             {% endif %}
