@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'connector',
     'userena',
     'bootstrapform',
+    'widget_tweaks',
 )
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

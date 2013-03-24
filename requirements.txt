@@ -17,3 +17,4 @@ easy_thumbnails
 tornado
 tornado-redis
 pytils
+django-widget-tweaks
