@@ -31,6 +31,9 @@ class UpdateDeviceForm(forms.ModelForm):
             'name', 'description', 'image',
             'is_enabled',
         )
+        widgets = {
+            'image': forms.FileInput,
+        }
 
 
 class DeviceMethodCallForm(forms.ModelForm):

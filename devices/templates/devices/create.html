@@ -2,10 +2,14 @@
 
 {% load bootstrap %}
 
+{% block extrahead %}
+    {% include 'devices/includes/image-preview-js.html' %}
+{% endblock %}
+
 {% block content %}
     <div class='span12 well'>
         <h2>Create new device</h2>
-        <form method='POST' enctype="multipart/form-data">
+        <form class='device-form' method='POST' enctype="multipart/form-data">
             {% csrf_token %}
             <div class='span4 left-side'>
                 {{ form.name|bootstrap }}
@@ -16,8 +20,9 @@
                     </div>
                 </div>
             </div>
-            <div class='span4'>
+            <div class='span4 offset1'>
                 {{ form.image|bootstrap }}
+                <div class='preview-holder'></div>
             </div>
         </form>
     </div>
