@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap %}
 {% load facebook %}
+{% load github %}
 {% load url from future %}
 
 {% block title %}{% trans "Signin" %}{% endblock %}
@@ -20,5 +21,6 @@
                                       title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
         </p>
         {% facebook_button %}
+        {% github_button %}
     </div>
 {% endblock %}
