@@ -8,13 +8,18 @@ from django_extensions.db.fields import (
 )
 from jsonfield import JSONField
 from pytils.translit import slugify
+from datetime import datetime
 from tools.storage import storage
 from tools.shortcuts import prettify, send_call_request
 
 
 def device_image_file_name(instance, filename):
     """Slugify device image filename"""
-    return "device/%m/%d/{{filename}}".format(
+    now = datetime.now()
+    return "device/{month}/{day}/{owner}_{filename}".format(
+        month=now.month,
+        day=now.day,
+        owner=instance.owner.id,
         filename=slugify(filename),
     )
 
