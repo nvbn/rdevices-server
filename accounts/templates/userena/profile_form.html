@@ -5,9 +5,6 @@
 
 {% block title %}{% trans "Account setup" %}{% endblock %}
 
-{% block content_title %}<h2>
-    {% blocktrans with profile.user.username as username %}Account &raquo; {{ username }}{% endblocktrans %}
-    </h2>{% endblock %}
 
 {% block content %}
     <div class='span12 well'>
@@ -27,4 +24,5 @@
         {{ form|bootstrap }}
         <button class='btn' type="submit">Save</button>
     </form>
+    </div>
 {% endblock %}
