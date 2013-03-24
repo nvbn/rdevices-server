@@ -30,6 +30,7 @@ class DeviceMethodResource(ModelResource):
     device = fields.ToOneField(DeviceResource, 'device')
     calls = fields.ToManyField(
         'devices.resources.DeviceMethodCallResource', 'calls',
+        blank=True, full=False,
     )
 
     def apply_authorization_limits(self, request, object_list):
