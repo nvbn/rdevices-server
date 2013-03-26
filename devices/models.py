@@ -11,7 +11,7 @@ from tools.shortcuts import prettify, send_call_request
 from tools.fields import ReUUIDField
 
 
-def device_image_file_name(instance, filename):
+def image_file_name(instance, filename):
     """Slugify device image filename"""
     now = datetime.now()
     return "device/{month}/{day}/{owner}_{filename}".format(
@@ -35,7 +35,7 @@ class Device(models.Model):
         blank=True, null=True, verbose_name=_('description'),
     )
     image = models.ImageField(
-        upload_to=device_image_file_name,
+        upload_to=image_file_name,
         verbose_name=_('image'), blank=True, null=True,
     )
 
@@ -163,3 +163,25 @@ def send_request(sender, instance, created, **kwargs):
             uuid=instance.method.device.uuid,
             request=instance.request,
         )
+
+
+class Dashboard(models.Model):
+    """Dashboard for device or user"""
+    owner = models.ForeignKey(User, verbose_name=_('owner'))
+    device = models.ForeignKey(
+        Device, blank=True, null=True ,verbose_name=_('Device'),
+    )
+    slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
+    name = models.CharField(max_length=300, verbose_name=_('name'))
+    description = models.TextField(
+        blank=True, null=True, verbose_name=_('description'),
+    )
+    image = models.ImageField(
+        upload_to=image_file_name,
+        verbose_name=_('image'), blank=True, null=True,
+    )
+    code = models.TextField(verbose_name=_('code'))
+
+    class Meta:
+        verbose_name = _('dashboard')
+        verbose_name_plural = _('dashboards')
