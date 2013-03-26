@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+<div class='span12 well'>
+    <h2>
+        Dashboard: {{ dashboard }}
+        <small class='action-panel'>
+            <a
+                    href="{% url 'devices_dashboard_change' dashboard.slug %}"
+                    data-toggle="tooltip"
+                    title='Change dashboard information'
+                    class='action'
+                    >
+                <b class="icon-edit icon-1x"></b>
+            </a>
+            <a
+                    href="{% url 'devices_dashboard_delete' dashboard.slug %}"
+                    data-toggle="tooltip"
+                    title='Delete dashboard'
+                    class='action'
+                    >
+                <b class="icon-trash icon-1x"></b>
+            </a>
+        </small>
+    </h2>
+    <p>
+        <strong>Description:</strong>
+        {{ dashboard.description|linebreaksbr }}
+    </p>
+    <a href="#" class='btn btn-danger'>Change dashboard code</a>
+</div>
+<div class='span12 well'>
+    {% if dashboard.code %}
+        {{ code|safe }}
+    {% else %}
+        <h3>This dashboard is blank!</h3>
+    {% endif %}
+</div>
+{% endblock %}

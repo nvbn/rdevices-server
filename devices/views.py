@@ -186,3 +186,19 @@ class DashboardItem(LoginRequiredMixin, DetailView):
         return Dashboard.objects.filter(
             owner=self.request.user,
         )
+
+
+class DashboardDelete(LoginRequiredMixin, DeleteView):
+    """Delete device view"""
+    template_name = 'devices/dashboard_delete.html'
+    context_object_name = 'dashboard'
+    model = Dashboard
+
+    def get_queryset(self):
+        """Get dashboard queryset"""
+        return Dashboard.objects.filter(
+            owner=self.request.user,
+        )
+
+    def get_success_url(self):
+        return '/'

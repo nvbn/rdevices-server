@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% load bootstrap %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block extrahead %}
+    <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+    {% include 'devices/includes/image-preview-js.html' %}
+{% endblock %}

@@ -187,7 +187,7 @@ class Dashboard(models.Model):
         verbose_name = _('dashboard')
         verbose_name_plural = _('dashboards')
 
-    def __unicode(self):
+    def __unicode__(self):
         return self.name
 
     @models.permalink

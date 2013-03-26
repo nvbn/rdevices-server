@@ -3,6 +3,7 @@ from devices.views import (
     DeviceList, DeviceCreate, DeviceItem, DeviceChange,
     DeviceDelete, DeviceMethodCallCreate, DeviceRegenerateUUID,
     DashboardCreate, DashboardChange, DashboardItem,
+    DashboardDelete,
 )
 
 
@@ -19,12 +20,12 @@ urlpatterns = patterns(
         DashboardCreate.as_view(), name='devices_dashboard_create',
     ),
     url(
-        r'^(?P<device>.*)/dashboard/(?P<slug>.*)/change/$',
+        r'^dashboard/(?P<slug>.*)/change/$',
         DashboardChange.as_view(), name='devices_dashboard_change',
     ),
     url(
-        r'dashboard/(?P<slug>.*)/change/$',
-        DashboardChange.as_view(), name='devices_dashboard_change',
+        r'^dashboard/(?P<slug>.*)/delete/$',
+        DashboardDelete.as_view(), name='devices_dashboard_delete',
     ),
     url(
         r'^(?P<device>.*)/dashboard/(?P<slug>.*)/$',
