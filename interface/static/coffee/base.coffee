@@ -16,3 +16,7 @@ $ ->
         e.preventDefault()
         $(e.currentTarget).closest('form').submit()
         false
+
+    $('.copy-it').click (e) ->
+        e.preventDefault()
+        false

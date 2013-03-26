@@ -7,7 +7,6 @@ from django_extensions.db.fields import AutoSlugField, CreationDateTimeField
 from jsonfield import JSONField
 from pytils.translit import slugify
 from datetime import datetime
-from tools.storage import storage
 from tools.shortcuts import prettify, send_call_request
 from tools.fields import ReUUIDField
 
@@ -57,18 +56,6 @@ class Device(models.Model):
             owner_id=self.owner.id,
             device_id=self.id,
             key=key,
-        )
-
-    def set_value(self, key, value):
-        """Store per device value"""
-        storage.set(
-            self._prepare_key(key), value,
-        )
-
-    def get_value(self, key, default=None):
-        """Get per device value"""
-        return storage.get(
-            self._prepare_key(key), default,
         )
 
 

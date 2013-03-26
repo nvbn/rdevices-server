@@ -18,13 +18,3 @@ class DeviceTest(TestCase):
             name='test',
             description='test',
         )
-
-    def test_storage(self):
-        """Test device storage"""
-        self.device.set_value('test', '123')
-        self.assertEqual(
-            self.device.get_value('test'), '123',
-        )
-        self.assertEqual(
-            self.device.get_value('test2', '567'), '567',
-        )
