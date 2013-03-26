@@ -31,13 +31,14 @@
             <a
                 href='#'
                 data-toggle="tooltip"
+                class='copy-it'
                 title='Set it to Meta.uuid in device declaration'
             >{{ device.uuid }}</a>
             <a
                 href="{% url "devices_regenerate" device.slug %}"
                 data-toggle="tooltip"
                 title='Generate new device uuid'
-                class='action copy-it'
+                class='action'
             >
                 <b class="icon-refresh"></b>
             </a>
@@ -77,6 +78,11 @@
                         >
                             <a data-toggle="tab" href="#requests-{{ pair.method.slug }}">
                                 Previous requests
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#api-{{ pair.method.slug }}">
+                                API
                             </a>
                         </li>
                     </ul>
@@ -132,9 +138,79 @@
                                 {% endfor %}
                             </ul>
                         </div>
+                        <div class='tab-pane' id="api-{{ pair.method.slug }}">
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Action
+                                        </th>
+                                        <th>
+                                            Method
+                                        </th>
+                                        <th>
+                                            URI
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Read device method
+                                        </td>
+                                        <td>
+                                            GET
+                                        </td>
+                                        <td>
+                                            <a target="_blank" href="{% url "api_dispatch_detail" "v1" "device_method" pair.method.pk %}?format=xml">
+                                                {% url "api_dispatch_detail" "v1" "device_method" pair.method.pk %}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            List device method calls
+                                        </td>
+                                        <td>
+                                            GET
+                                        </td>
+                                        <td>
+                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}&format=xml">
+                                                {% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Create new device method call
+                                        </td>
+                                        <td>
+                                            PUT, POST
+                                        </td>
+                                        <td>
+                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}&format=xml">
+                                                {% url "api_dispatch_list" "v1" "device_method_call" %}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Read device method call
+                                        </td>
+                                        <td>
+                                            PUT, POST
+                                        </td>
+                                        <td>
+                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}&format=xml">
+                                                {% url "api_dispatch_list" "v1" "device_method_call" %}DEVICE_METHOD_CALL_ID/
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <hr />
             {% endfor %}
         {% else %}
             </div><div class='span12 well'>

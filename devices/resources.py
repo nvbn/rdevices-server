@@ -1,3 +1,5 @@
+from django.conf.urls import url
+from tastypie.utils import trailing_slash
 from devices.models import (
     Device, DeviceMethod, DeviceMethodCall,
 )
@@ -59,3 +61,6 @@ class DeviceMethodCallResource(ModelResource):
         queryset = DeviceMethodCall.objects.all()
         resource_name = 'device_method_call'
         authorization = DjangoAuthorization()
+        filtering = {
+            'method': ['exact'],
+        }
