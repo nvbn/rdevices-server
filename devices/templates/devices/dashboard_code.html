@@ -12,7 +12,7 @@
                 <a href="#editor-tab" data-toggle="tab">Edit</a>
             </li>
             <li>
-                <a href="#previewtab" data-toggle="tab">Preview</a>
+                <a href="#preview-tab" data-toggle="tab">Preview</a>
             </li>
         </ul>
         <div class='tab-content'>
@@ -20,9 +20,18 @@
                 <div id="editor"><%= code %></div>
             </div>
             <div id="preview-tab" class='tab-pane'>
-                <iframe id="preview"></iframe>
+                <iframe src="{% url "devices_preview" %}" id="editor-preview"></iframe>
             </div>
         </div>
+        <a href="{{ dashboard.get_absolute_url }}" class='btn'>
+            Cancel
+        </a>
+        <button class='btn btn-danger' type="button">
+            Save
+        </button>
+    </script>
+    <script type="text/javascript">
+        var dashboardId = {{ dashboard.pk|escapejs }};
     </script>
 {% endblock %}
 

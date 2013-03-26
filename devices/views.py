@@ -4,6 +4,7 @@ from devices.models import (
 )
 from django.views.generic import (
     ListView, CreateView, UpdateView, DetailView, DeleteView,
+    TemplateView,
 )
 from django.core.urlresolvers import reverse_lazy
 from tools.mixins import LoginRequiredMixin
@@ -207,3 +208,8 @@ class DashboardDelete(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return '/'
+
+
+class PreviewTemplate(TemplateView):
+    """Template for preview"""
+    template_name = "devices/preview_template.html"

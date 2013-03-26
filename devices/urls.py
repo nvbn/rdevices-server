@@ -3,12 +3,13 @@ from devices.views import (
     DeviceList, DeviceCreate, DeviceItem, DeviceChange,
     DeviceDelete, DeviceMethodCallCreate, DeviceRegenerateUUID,
     DashboardCreate, DashboardChange, DashboardItem,
-    DashboardDelete, DashboardCode,
+    DashboardDelete, DashboardCode, PreviewTemplate,
 )
 
 
 urlpatterns = patterns(
     'interface.views',
+    url(r'^preview/$', PreviewTemplate.as_view(), name='devices_preview'),
     url(r'^list/$', DeviceList.as_view(), name='devices_list'),
     url(r'^create/$', DeviceCreate.as_view(), name='devices_create'),
     url(

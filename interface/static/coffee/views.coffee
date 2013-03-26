@@ -21,3 +21,35 @@ class window.DeviceFormView extends Backbone.View
                 @$el.find(@previewHolder).html @previewTemplate
                     uri: uri
             reader.readAsDataURL files[0]
+
+
+class window.ChangeDashboardView extends Backbone.View
+    element: 'div'
+    templateId: '#editor-tmpl'
+
+    constructor: (options) ->
+        super options
+        @loadTemplates()
+
+    loadTemplates: ->
+        @template = _.template $(@templateId).html()
+
+    render: ->
+        @$el.html @template @model.attributes
+        @createEditor()
+        @initEvents()
+
+    createEditor: ->
+        @editor = ace.edit "editor"
+        @editor.setTheme "ace/theme/textmate"
+        @editor.getSession().setMode "ace/mode/html"
+
+    initEvents: ->
+        @$el.find('a[data-toggle="tab"]').on 'shown', (e) =>
+            tab = $($(e.target).attr 'href')
+            if tab.attr('id') == 'preview-tab'
+                @showPreview()
+            true
+
+    showPreview: ->
+        @$el.find('#editor-preview').contents().find('body').html @editor.getSession().getValue()

@@ -39,3 +39,12 @@ class window.DeviceMethodCall extends Backbone.RelationalModel
 class window.DeviceMethodCallCollection extends Backbone.Collection
     url: '/api/v1/device_method_call/'
     model: DeviceMethodCall
+
+
+class window.Dashboard extends Backbone.RelationalModel
+    urlRoot: '/api/v1/dashboard/'
+
+
+class window.DashboardCollection extends Backbone.Collection
+    url: '/api/v1/dashboard/'
+    model: Dashboard

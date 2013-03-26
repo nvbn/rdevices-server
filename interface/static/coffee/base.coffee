@@ -20,3 +20,13 @@ $ ->
     $('.copy-it').click (e) ->
         e.preventDefault()
         false
+
+    if $('#editor-holder').length
+        model = new Dashboard
+            id: window.dashboardId
+        model.fetch
+            success: (model) ->
+                view = new ChangeDashboardView
+                    model: model
+                view.setElement $('#editor-holder')
+                view.render()
