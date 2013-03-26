@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect
-from devices.models import Device, DeviceMethod, DeviceMethodCall
+from devices.models import (
+    Device, DeviceMethod, DeviceMethodCall, Dashboard,
+)
 from django.views.generic import (
     ListView, CreateView, UpdateView, DetailView, DeleteView,
 )
@@ -7,6 +9,7 @@ from django.core.urlresolvers import reverse_lazy
 from tools.mixins import LoginRequiredMixin
 from devices.forms import (
     CreateDeviceForm, UpdateDeviceForm, DeviceMethodCallForm,
+    CreateDashboardForm, UpdateDashboardForm,
 )
 
 
@@ -133,4 +136,53 @@ class DeviceMethodCallCreate(LoginRequiredMixin, CreateView):
         """Get form class"""
         return DeviceMethodCallForm.create_form(
             self.device_method, self.request.user,
+        )
+
+
+class DashboardCreate(LoginRequiredMixin, CreateView):
+    """Create dashboard view"""
+    template_name = 'devices/dashboard_create.html'
+    form_class = CreateDashboardForm
+    model = Dashboard
+
+    def get_form_kwargs(self):
+        """Add owner to kwargs"""
+        kwargs = super(DashboardCreate, self).get_form_kwargs()
+        kwargs['owner'] = self.request.user
+        if self.kwargs.get('device'):
+            print self.kwargs['device']
+            kwargs['device'] = get_object_or_404(
+                Device,
+                slug=self.kwargs['device'],
+                owner=self.request.user,
+            )
+        else:
+            kwargs['device'] = None
+        return kwargs
+
+
+class DashboardChange(LoginRequiredMixin, UpdateView):
+    """Change dashboard view"""
+    template_name = 'devices/dashboard_change.html'
+    form_class = UpdateDashboardForm
+    context_object_name = 'dashboard'
+    model = Dashboard
+
+    def get_queryset(self):
+        """Get dashboard queryset"""
+        return Dashboard.objects.filter(
+            owner=self.request.user,
+        )
+
+
+class DashboardItem(LoginRequiredMixin, DetailView):
+    """Dashboard view"""
+    template_name = 'devices/dashboard.html'
+    context_object_name = 'dashboard'
+    model = Dashboard
+
+    def get_queryset(self):
+        """Get dashboard queryset"""
+        return Dashboard.objects.filter(
+            owner=self.request.user,
         )

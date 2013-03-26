@@ -1,5 +1,5 @@
 from django import forms
-from devices.models import Device, DeviceMethodCall
+from devices.models import Device, DeviceMethodCall, Dashboard
 
 
 class CreateDeviceForm(forms.ModelForm):
@@ -74,3 +74,35 @@ class DeviceMethodCallForm(forms.ModelForm):
             _method=method,
             **DeviceMethodCallForm._fields_from_spec(method)
         ))
+
+
+class CreateDashboardForm(forms.ModelForm):
+    """Create dashboard form"""
+
+    class Meta:
+        model = Dashboard
+        fields = (
+            'name', 'description', 'image',
+        )
+
+    def __init__(self, owner, device, *args, **kwargs):
+        """Set owner"""
+        super(CreateDashboardForm, self).__init__(*args, **kwargs)
+        self._owner = owner
+        self._device = device
+
+    def save(self, *args, **kwargs):
+        """Set owner and save"""
+        self.instance.owner = self._owner
+        self.instance.device = self._device
+        return super(CreateDashboardForm, self).save(*args, **kwargs)
+
+
+class UpdateDashboardForm(forms.ModelForm):
+    """Update dashboard form"""
+
+    class Meta:
+        model = Dashboard
+        fields = (
+            'name', 'description', 'image',
+        )

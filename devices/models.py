@@ -169,7 +169,8 @@ class Dashboard(models.Model):
     """Dashboard for device or user"""
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     device = models.ForeignKey(
-        Device, blank=True, null=True ,verbose_name=_('Device'),
+        Device, blank=True, null=True, verbose_name=_('Device'),
+        related_name='dashboards',
     )
     slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
     name = models.CharField(max_length=300, verbose_name=_('name'))
@@ -180,8 +181,21 @@ class Dashboard(models.Model):
         upload_to=image_file_name,
         verbose_name=_('image'), blank=True, null=True,
     )
-    code = models.TextField(verbose_name=_('code'))
+    code = models.TextField(blank=True, null=True, verbose_name=_('code'))
 
     class Meta:
         verbose_name = _('dashboard')
         verbose_name_plural = _('dashboards')
+
+    def __unicode(self):
+        return self.name
+
+    @models.permalink
+    def get_absolute_url(self):
+        kwargs = {
+            'slug': self.slug,
+        }
+        if self.device:
+            kwargs['device'] = self.device.slug
+        print kwargs
+        return 'devices_dashboard', [], kwargs

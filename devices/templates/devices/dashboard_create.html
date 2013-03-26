@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load bootstrap %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block extrahead %}
+    <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+    {% include 'devices/includes/image-preview-js.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>Create new dashboard</h2>
+        <form class='device-form' method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class='span4 left-side'>
+                {{ form.name|attr:"required"|bootstrap }}
+                {{ form.description|bootstrap }}
+                <div class="control-group">
+                    <div class="controls">
+                        <a class='btn' href="{% url "devices_list" %}">Cancel</a>
+                        <button class='btn btn-danger' type="submit">Create</button>
+                    </div>
+                </div>
+            </div>
+            <div class='span4 offset1'>
+                {{ form.image|bootstrap }}
+                <div class='preview-holder'></div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
