@@ -188,6 +188,11 @@ class DashboardItem(LoginRequiredMixin, DetailView):
         )
 
 
+class DashboardCode(DashboardItem):
+    """Change dashboard code"""
+    template_name = 'devices/dashboard_code.html'
+
+
 class DashboardDelete(LoginRequiredMixin, DeleteView):
     """Delete device view"""
     template_name = 'devices/dashboard_delete.html'

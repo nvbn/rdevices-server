@@ -6,5 +6,37 @@
 
 {% block extrahead %}
     <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
-    {% include 'devices/includes/image-preview-js.html' %}
+    <script type="text/template" id="editor-tmpl">
+        <ul class='nav nav-tabs'>
+            <li class='active'>
+                <a href="#editor-tab" data-toggle="tab">Edit</a>
+            </li>
+            <li>
+                <a href="#previewtab" data-toggle="tab">Preview</a>
+            </li>
+        </ul>
+        <div class='tab-content'>
+            <div id="editor-tab" class='tab-pane active'>
+                <div id="editor"><%= code %></div>
+            </div>
+            <div id="preview-tab" class='tab-pane'>
+                <iframe id="preview"></iframe>
+            </div>
+        </div>
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>
+            Dashboard: {{ dashboard }}
+        </h2>
+        <p>
+            <strong>Description:</strong>
+            {{ dashboard.description|linebreaksbr }}
+        </p>
+        <a href="{{ dashboard.get_absolute_url }}" class='btn'>Back to dashboard</a>
+    </div>
+    <div class='span12 well' id="editor-holder">
+    </div>
 {% endblock %}

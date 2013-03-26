@@ -1,7 +1,5 @@
-from django.conf.urls import url
-from tastypie.utils import trailing_slash
 from devices.models import (
-    Device, DeviceMethod, DeviceMethodCall,
+    Device, DeviceMethod, DeviceMethodCall, Dashboard,
 )
 from tastypie.resources import ModelResource
 from tastypie.authorization import DjangoAuthorization
@@ -64,3 +62,22 @@ class DeviceMethodCallResource(ModelResource):
         filtering = {
             'method': ['exact'],
         }
+
+
+class DashboardResource(ModelResource):
+    """Resource for dashboards"""
+    device = fields.ToOneField(
+        DeviceResource, 'device', blank=True, full=False,
+    )
+
+    def apply_authorization_limits(self, request, object_list):
+        """Only user resources"""
+        return object_list.filter(
+            owner=request.user,
+        )
+
+    class Meta:
+        queryset = Dashboard.objects.all()
+        resource_name = 'dashboard'
+        authorization = DjangoAuthorization()
+

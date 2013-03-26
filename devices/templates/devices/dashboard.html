@@ -29,7 +29,7 @@
         <strong>Description:</strong>
         {{ dashboard.description|linebreaksbr }}
     </p>
-    <a href="#" class='btn btn-danger'>Change dashboard code</a>
+    <a href="{% url 'devices_dashboard_code' dashboard.slug %}" class='btn btn-danger'>Change dashboard code</a>
 </div>
 <div class='span12 well'>
     {% if dashboard.code %}
