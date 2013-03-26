@@ -1,5 +1,5 @@
 {% load bootstrap %}
-
+{% load widget_tweaks %}
 
 <form
     method='POST'
@@ -9,7 +9,9 @@
     {% endif %}
 >
     {% csrf_token %}
-    {{ form|bootstrap }}
+    {% for field in form.visible_fields %}
+        {{ field|attr:"required"|bootstrap }}
+    {% endfor %}
     <div class="control-group">
         <div class="controls">
             <button class='btn' type="submit">Send request</button>
