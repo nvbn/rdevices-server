@@ -4,20 +4,24 @@ class window.DeviceHelper
     constructor: (@model) -> @
 
     loadMethods: (callback) ->
-        @model.fetchRelated 'methods',
-            success: (method) =>
-                @[method.get('name')] = (request, requestCallback) =>
+        methodsWhen = @model.fetchRelated('methods')
+        needMethods = methodsWhen.length
+        _.each methodsWhen, (methodWhen) =>
+            methodWhen.then (method) =>
+                @[method.name] = (request, requestCallback) =>
                     @callMethod method, request, requestCallback
-            setTimeout (=>callback.call @), 0
+                needMethods -= 1
+                if not needMethods
+                    callback.call @, 0
 
     callMethod: (method, request, callback) ->
         call = new DeviceMethodCall
-            method: method.id
+            method: method.resource_uri
             request: request
         call.save()
         @checkCall call, =>
             if callback
-                callback.call call
+                callback.call @, call.get('response')
 
     checkCall: (call, callback) ->
         call.fetch
