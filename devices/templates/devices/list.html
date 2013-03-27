@@ -6,6 +6,7 @@
     <div class='span12 well'>
         {% if not devices.count %}
             <h2>You don't have devices</h2>
+            <a href="{% url "devices_create" %}">Create device</a>
         {% else %}
             <h2>Your devices</h2>
             <div class='devices'>
@@ -13,7 +14,6 @@
                 <div class='device-box'>
                     <a class='thumbnail' href="{{ device.get_absolute_url }}">
                         {% if device.image %}
-                            {{ device.image_size }}
                             {% if device.image.width > device.image.height %}
                                 <img
                                     src='{{ STATIC_URL }}{% thumbnail device.image '230x0' %}'
@@ -33,4 +33,31 @@
             </div>
         {% endif %}
     </div>
+    {% if dashboards.count %}
+        <div class='span12 well'>
+            <h2>Your dashboards</h2>
+            <div class='dashboards'>
+                {% for dashboard in dashboards.all %}
+                    <div class='dashboard-box'>
+                        <a class='thumbnail' href="{{ dashboard.get_absolute_url }}">
+                            {% if dashboard.image %}
+                                {% if dashboard.image.width > dashboard.image.height %}
+                                    <img
+                                            src='{{ STATIC_URL }}{% thumbnail dashboard.image '230x0' %}'
+                                            />
+                                {% else %}
+                                    <img
+                                            src='{{ STATIC_URL }}{% thumbnail dashboard.image '0x230' %}'
+                                            />
+                                {% endif %}
+                            {% endif %}
+                            <p>
+                                <strong>{{ dashboard }}</strong>
+                            </p>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

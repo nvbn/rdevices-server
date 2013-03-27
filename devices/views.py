@@ -30,6 +30,14 @@ class DeviceList(DeviceMixin, LoginRequiredMixin, ListView):
     template_name = 'devices/list.html'
     context_object_name = 'devices'
 
+    def get_context_data(self, **kwargs):
+        """Put dashboards to context"""
+        context = super(DeviceList, self).get_context_data(**kwargs)
+        context['dashboards'] = Dashboard.objects.filter(
+            owner=self.request.user,
+        )
+        return context
+
 
 class DeviceItem(DeviceMixin, LoginRequiredMixin, DetailView):
     """Device item view"""

@@ -3,6 +3,10 @@ $ ->
         $('.devices').masonry
             itemSelector: '.device-box'
 
+    $('.dashboards').imagesLoaded ->
+        $('.dashboards').masonry
+            itemSelector: '.dashboard-box'
+
     prettyPrint()
 
     if $('.device-form').length
