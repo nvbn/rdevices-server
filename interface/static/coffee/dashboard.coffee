@@ -16,12 +16,14 @@ class window.DeviceHelper
 
     callMethod: (method, request, callback) ->
         call = new DeviceMethodCall
+        call.save
             method: method.resource_uri
             request: request
-        call.save()
-        @checkCall call, =>
-            if callback
-                callback.call @, call.get('response')
+        ,
+            success: =>
+                @checkCall call, =>
+                    if callback
+                        callback.call @, call.get('response')
 
     checkCall: (call, callback) ->
         call.fetch

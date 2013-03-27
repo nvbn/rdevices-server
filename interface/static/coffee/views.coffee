@@ -61,8 +61,6 @@ class window.ChangeDashboardView extends Backbone.View
         @model.save
             preview: @editor.getSession().getValue()
         ,
-            patch: true
-        @model.fetch
             success: =>
                 preview = @$el.find('#editor-preview')[0]
                 preview.contentWindow.location.reload()
