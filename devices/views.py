@@ -213,3 +213,11 @@ class DashboardDelete(LoginRequiredMixin, DeleteView):
 class PreviewTemplate(TemplateView):
     """Template for preview"""
     template_name = "devices/preview_template.html"
+
+    def get_context_data(self, **kwargs):
+        """Send dashboard to context"""
+        return {
+            'dashboard': get_object_or_404(
+                Dashboard, slug=self.kwargs['slug'],
+            ),
+        }

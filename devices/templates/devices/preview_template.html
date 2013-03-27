@@ -1,6 +1,15 @@
+{% load static %}
+{% load compress %}
+
 <html>
 <head>
     {% include "interface/includes/header.html" %}
+    {% compress js %}
+        <script type="text/coffeescript" src='{% static "coffee/dashboard.coffee" %}'></script>
+    {% endcompress %}
+    <script type="text/javascript">
+        var dashboard = new DashboardHelper({{ dashboard.id|escapejs }});
+    </script>
 </head>
 <body>
 </body>

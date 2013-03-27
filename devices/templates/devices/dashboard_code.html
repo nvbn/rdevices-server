@@ -3,9 +3,13 @@
 {% load bootstrap %}
 {% load widget_tweaks %}
 {% load static %}
+{% load compress %}
 
 {% block extrahead %}
-    <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+    {% compress js %}
+        <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+        <script type="text/coffeescript" src='{% static "coffee/dashboard.coffee" %}'></script>
+    {% endcompress %}
     <script type="text/template" id="editor-tmpl">
         <ul class='nav nav-tabs'>
             <li class='active'>
@@ -17,22 +21,20 @@
         </ul>
         <div class='tab-content'>
             <div id="editor-tab" class='tab-pane active'>
-                <div id="editor"><%= code %></div>
+                <div id="editor"></div>
             </div>
             <div id="preview-tab" class='tab-pane'>
-                <iframe src="{% url "devices_preview" %}" id="editor-preview"></iframe>
+                <iframe src="{% url "devices_preview" dashboard.slug %}" id="editor-preview"></iframe>
             </div>
         </div>
-        <a href="{{ dashboard.get_absolute_url }}" class='btn'>
-            Cancel
-        </a>
-        <button class='save btn btn-danger' type="button">
+        <button class='save btn btn-danger' title='Dashboard saved' type="button">
             Save
         </button>
     </script>
     <script type="text/javascript">
         var dashboardId = {{ dashboard.pk|escapejs }};
         var absoluteUrl = "{{ dashboard.get_absolute_url|escapejs }}";
+        var dashboard = new DashboardHelper({{ dashboard.id|escapejs }});
     </script>
 {% endblock %}
 

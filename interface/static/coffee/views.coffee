@@ -45,6 +45,7 @@ class window.ChangeDashboardView extends Backbone.View
         @editor = ace.edit "editor"
         @editor.setTheme "ace/theme/textmate"
         @editor.getSession().setMode "ace/mode/html"
+        @editor.getSession().setValue @model.get('code')
 
     initEvents: ->
         @$el.find('a[data-toggle="tab"]').on 'shown', (e) =>
@@ -52,15 +53,19 @@ class window.ChangeDashboardView extends Backbone.View
             if tab.attr('id') == 'preview-tab'
                 @showPreview()
             true
+        $('button.save').tooltip
+            trigger: 'manual'
+            placement: 'right'
 
     showPreview: ->
         @$el.find('#editor-preview').contents().find('body').html @editor.getSession().getValue()
 
     save: (e) ->
         e.preventDefault()
-        @model.set 'code', @editor.getSession().getValue()
-        @model.save()
-        @model.fetch
-            success: ->
-                document.location = window.absoluteUrl;
+        @model.save
+            code: @editor.getSession().getValue()
+        ,
+            patch: true
+        $(e.currentTarget).tooltip('show')
+        setTimeout (=>$(e.currentTarget).tooltip('hide')), 3000
         false
