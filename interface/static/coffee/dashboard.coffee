@@ -27,7 +27,7 @@ class window.DeviceHelper
                 else
                     setTimeout =>
                         @checkCall call, callback
-                    , 1
+                    , 1000
 
 
 
