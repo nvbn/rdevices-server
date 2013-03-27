@@ -26,6 +26,8 @@ class window.DeviceFormView extends Backbone.View
 class window.ChangeDashboardView extends Backbone.View
     element: 'div'
     templateId: '#editor-tmpl'
+    events:
+        'click .save': 'save'
 
     constructor: (options) ->
         super options
@@ -53,3 +55,12 @@ class window.ChangeDashboardView extends Backbone.View
 
     showPreview: ->
         @$el.find('#editor-preview').contents().find('body').html @editor.getSession().getValue()
+
+    save: (e) ->
+        e.preventDefault()
+        @model.set 'code', @editor.getSession().getValue()
+        @model.save()
+        @model.fetch
+            success: ->
+                document.location = window.absoluteUrl;
+        false

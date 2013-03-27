@@ -80,4 +80,3 @@ class DashboardResource(ModelResource):
         queryset = Dashboard.objects.all()
         resource_name = 'dashboard'
         authorization = DjangoAuthorization()
-

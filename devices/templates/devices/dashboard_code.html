@@ -26,12 +26,13 @@
         <a href="{{ dashboard.get_absolute_url }}" class='btn'>
             Cancel
         </a>
-        <button class='btn btn-danger' type="button">
+        <button class='save btn btn-danger' type="button">
             Save
         </button>
     </script>
     <script type="text/javascript">
         var dashboardId = {{ dashboard.pk|escapejs }};
+        var absoluteUrl = "{{ dashboard.get_absolute_url|escapejs }}";
     </script>
 {% endblock %}
 
