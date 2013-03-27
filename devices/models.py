@@ -182,6 +182,9 @@ class Dashboard(models.Model):
         verbose_name=_('image'), blank=True, null=True,
     )
     code = models.TextField(blank=True, null=True, verbose_name=_('code'))
+    preview = models.TextField(
+        blank=True, null=True, verbose_name=_('preview'),
+    )
 
     class Meta:
         verbose_name = _('dashboard')

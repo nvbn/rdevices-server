@@ -58,7 +58,14 @@ class window.ChangeDashboardView extends Backbone.View
             placement: 'right'
 
     showPreview: ->
-        @$el.find('#editor-preview').contents().find('body').html @editor.getSession().getValue()
+        @model.save
+            preview: @editor.getSession().getValue()
+        ,
+            patch: true
+        @model.fetch
+            success: =>
+                preview = @$el.find('#editor-preview')[0]
+                preview.contentWindow.location.reload()
 
     save: (e) ->
         e.preventDefault()
