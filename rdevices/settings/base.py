@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'bootstrapform',
     'widget_tweaks',
     'pytils',
+    'gunicorn',
     'socialregistration',
     'socialregistration.contrib.facebook',
     'socialregistration.contrib.github',
