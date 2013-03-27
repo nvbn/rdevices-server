@@ -55,6 +55,12 @@ class DeviceMethodCallResource(ModelResource):
             caller=request.user,
         )
 
+    def obj_create(self, bundle,  **kwargs):
+        """Create call with caller"""
+        return super(DeviceMethodCallResource, self).obj_create(
+            bundle, caller=bundle.request.user, **kwargs
+        )
+
     class Meta:
         queryset = DeviceMethodCall.objects.all()
         resource_name = 'device_method_call'

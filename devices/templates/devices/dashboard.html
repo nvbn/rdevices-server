@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 
 {% load bootstrap %}
+{% load static %}
+{% load compress %}
+
+{% block extrahead %}
+    {% compress js %}
+        <script type="text/coffeescript" src='{% static "coffee/dashboard.coffee" %}'></script>
+    {% endcompress %}
+    <script type="text/javascript">
+        var dashboard = new DashboardHelper({{ dashboard.id|escapejs }});
+    </script>
+{% endblock %}
 
 {% block content %}
 <div class='span12 well'>
