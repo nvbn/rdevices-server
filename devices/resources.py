@@ -68,6 +68,7 @@ class DeviceMethodCallResource(ModelResource):
         filtering = {
             'method': ['exact'],
         }
+        always_return_data = True
 
 
 class DashboardResource(ModelResource):
