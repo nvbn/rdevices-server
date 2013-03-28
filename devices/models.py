@@ -198,7 +198,4 @@ class Dashboard(models.Model):
         kwargs = {
             'slug': self.slug,
         }
-        if self.device:
-            kwargs['device'] = self.device.slug
-        print kwargs
         return 'devices_dashboard', [], kwargs
