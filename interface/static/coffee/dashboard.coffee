@@ -1,5 +1,6 @@
 STATE_FINISHED = 1
 
+
 class window.DeviceHelper
     constructor: (@model) -> @
 
@@ -8,13 +9,21 @@ class window.DeviceHelper
         needMethods = methodsWhen.length
         _.each methodsWhen, (methodWhen) =>
             methodWhen.then (method) =>
-                @[method.name] = (request, requestCallback) =>
-                    @callMethod method, request, requestCallback
+                @[method.name] = (request, options) =>
+                    @callMethod method, request, options
+                @[method.name].getCalls = (options) =>
+                    @getMethodCalls method, options
                 needMethods -= 1
                 if not needMethods
                     callback.call @, 0
 
-    callMethod: (method, request, callback) ->
+    callMethod: (method, request, options) ->
+        if _.isFunction options
+            callback = options
+        else if options
+            callback = options.success or (->@)
+        else
+            callback = (->@)
         call = new DeviceMethodCall
         call.save
             method: method.resource_uri
@@ -22,8 +31,7 @@ class window.DeviceHelper
         ,
             success: =>
                 @checkCall call, =>
-                    if callback
-                        callback.call @, call.get('response')
+                    callback.call @, call.get('response')
 
     checkCall: (call, callback) ->
         call.fetch
@@ -35,11 +43,17 @@ class window.DeviceHelper
                         @checkCall call, callback
                     , 1000
 
+    getMethodCalls: (method, options) ->
+        if not options.data
+            options.data = {}
+        options.data.method = method.id
+        DeviceMethodCallCollection.fetch options
 
 
 class window.DashboardHelper
     constructor: (@id) ->
         @called = false
+        @devices = {}
 
     ready: (callback) ->
         if @called
@@ -48,8 +62,7 @@ class window.DashboardHelper
             @called = true
             $ =>
                 @loadDashboard =>
-                    @loadDevice =>
-                        callback.call @
+                    callback.call @
 
     loadDashboard: (callback) ->
         @model = new Dashboard
@@ -59,9 +72,19 @@ class window.DashboardHelper
                 @model = model
                 callback.call @
 
-    loadDevice: (callback) ->
-        @model.fetchRelated 'device',
-            success: (device) =>
-                @device = new DeviceHelper device
-                @device.loadMethods =>
-                    callback.call @
+    getDevice: (deviceId, options) ->
+        if _.isFunction options
+            callback = options
+        else
+            callback = options.success or (->@)
+        if @devices[deviceId]
+            callback.call @, @devices[deviceId]
+        else
+            device = new Device
+                id: deviceId
+            device.fetch
+                success: (device) =>
+                    helper = new DeviceHelper device
+                    helper.loadMethods =>
+                        @devices[deviceId] = helper
+                        callback.call @, helper
