@@ -24,9 +24,6 @@ def image_file_name(instance, filename):
 
 class Device(models.Model):
     """Device"""
-    is_enabled = models.BooleanField(
-        default=True, verbose_name=_('is enabled'),
-    )
     uuid = ReUUIDField(verbose_name=_('uuid'))
     slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))

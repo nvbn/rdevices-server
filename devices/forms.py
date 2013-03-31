@@ -29,7 +29,6 @@ class UpdateDeviceForm(forms.ModelForm):
         model = Device
         fields = (
             'name', 'description', 'image',
-            'is_enabled',
         )
         widgets = {
             'image': forms.FileInput,
@@ -104,3 +103,6 @@ class UpdateDashboardForm(forms.ModelForm):
         fields = (
             'name', 'description', 'image',
         )
+        widgets = {
+            'image': forms.FileInput,
+        }
