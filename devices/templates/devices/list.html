@@ -27,11 +27,11 @@
                         {% if device.image %}
                             {% if device.image.width > device.image.height %}
                                 <img
-                                    src='{{ STATIC_URL }}{% thumbnail device.image '230x0' %}'
+                                    src='{% thumbnail device.image '230x0' %}'
                                 />
                             {% else %}
                                 <img
-                                    src='{{ STATIC_URL }}{% thumbnail device.image '0x230' %}'
+                                    src='{% thumbnail device.image '0x230' %}'
                                 />
                             {% endif %}
                         {% endif %}
@@ -66,11 +66,11 @@
                         {% if dashboard.image %}
                             {% if dashboard.image.width > dashboard.image.height %}
                                 <img
-                                        src='{{ STATIC_URL }}{% thumbnail dashboard.image '230x0' %}'
+                                        src='{% thumbnail dashboard.image '230x0' %}'
                                         />
                             {% else %}
                                 <img
-                                        src='{{ STATIC_URL }}{% thumbnail dashboard.image '0x230' %}'
+                                        src='{% thumbnail dashboard.image '0x230' %}'
                                         />
                             {% endif %}
                         {% endif %}
