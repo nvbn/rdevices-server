@@ -7,9 +7,9 @@
 
 {% block extrahead %}
     {% compress js %}
-        <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
         <script type="text/coffeescript" src='{% static "coffee/dashboard.coffee" %}'></script>
     {% endcompress %}
+    <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
     <script type="text/template" id="editor-tmpl">
         <ul class='nav nav-tabs'>
             <li class='active'>
