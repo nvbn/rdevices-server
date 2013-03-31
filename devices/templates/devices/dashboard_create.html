@@ -17,16 +17,16 @@
             <div class='span4 left-side'>
                 {{ form.name|attr:"required"|bootstrap }}
                 {{ form.description|bootstrap }}
-                <div class="control-group">
-                    <div class="controls">
-                        <a class='btn' href="{% url "devices_list" %}">Cancel</a>
-                        <button class='btn btn-danger' type="submit">Create</button>
-                    </div>
-                </div>
             </div>
             <div class='span4 offset1'>
                 {{ form.image|bootstrap }}
                 <div class='preview-holder'></div>
+            </div>
+            <div class="control-group span12 left-side">
+                <div class="controls">
+                    <a class='btn' href="{% url "devices_list" %}">Cancel</a>
+                    <button class='btn btn-danger' type="submit">Create</button>
+                </div>
             </div>
         </form>
     </div>

@@ -1,6 +1,14 @@
+$small_screen: 767px
+
+
 @mixin reversed
     background: #23323E
     color: #EEE7DA
+
+
+@mixin small-screen-padding
+    @media (max-width: $small_screen)
+        padding: 10px
 
 
 html, body
@@ -15,6 +23,7 @@ html, body
 
 header
     @include reversed
+    @include small-screen-padding
     
     h1
         a, a:hover, a:active
@@ -34,9 +43,13 @@ header
 
 footer
     @include reversed
-    height:  160px
+    @include small-screen-padding
+
+    @media (min-width: $small_screen)
+        padding-top: 40px
+
     margin-top: -200px
-    padding-top: 40px
+    min-height:  160px
 
     a, a:hover, a:active
         color: #EEE7DA

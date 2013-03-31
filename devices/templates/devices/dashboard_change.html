@@ -17,12 +17,6 @@
             <div class='span4 left-side'>
                 {{ form.name|attr:"required"|bootstrap }}
                 {{ form.description|bootstrap }}
-                <div class="control-group">
-                    <div class="controls">
-                        <a class='btn' href="{{ dashboard.get_absolute_url }}">Cancel</a>
-                        <button class='btn btn-danger' type="submit">Change</button>
-                    </div>
-                </div>
             </div>
             <div class='span4 offset1'>
                 {{ form.image|bootstrap }}
@@ -30,6 +24,12 @@
                     {% if dashboard.image %}
                         <img src='{% static dashboard.image.url %}' />
                     {% endif %}
+                </div>
+            </div>
+            <div class="control-group span12 left-side">
+                <div class="controls">
+                    <a class='btn' href="{{ dashboard.get_absolute_url }}">Cancel</a>
+                    <button class='btn btn-danger' type="submit">Change</button>
                 </div>
             </div>
         </form>

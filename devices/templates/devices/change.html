@@ -17,12 +17,6 @@
                 {{ form.is_enabled|bootstrap }}
                 {{ form.name|attr:"required"|bootstrap }}
                 {{ form.description|bootstrap }}
-                <div class="control-group">
-                    <div class="controls">
-                        <a class='btn' href="{{ device.get_absolute_url }}">Cancel</a>
-                        <button class='btn btn-danger' type="submit">Save</button>
-                    </div>
-                </div>
             </div>
             <div class='span4 offset1'>
                 {{ form.image|bootstrap }}
@@ -30,6 +24,12 @@
                     {% if device.image %}
                         <img src='{% static device.image.url %}' />
                     {% endif %}
+                </div>
+            </div>
+            <div class="control-group span12 left-side">
+                <div class="controls">
+                    <a class='btn' href="{{ device.get_absolute_url }}">Cancel</a>
+                    <button class='btn btn-danger' type="submit">Save</button>
                 </div>
             </div>
         </form>
