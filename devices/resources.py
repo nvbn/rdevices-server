@@ -24,6 +24,7 @@ class DeviceResource(ModelResource):
         resource_name = 'device'
         allowed_methods = ('get',)
         authorization = DjangoAuthorization()
+        excludes = ('owner',)
 
 
 class DeviceMethodResource(ModelResource):
@@ -57,7 +58,7 @@ class DeviceMethodCallResource(ModelResource):
             caller=request.user,
         )
 
-    def obj_create(self, bundle,  **kwargs):
+    def obj_create(self, bundle, **kwargs):
         """Create call with caller"""
         return super(DeviceMethodCallResource, self).obj_create(
             bundle, caller=bundle.request.user, **kwargs
@@ -73,6 +74,7 @@ class DeviceMethodCallResource(ModelResource):
         always_return_data = True
         list_allowed_methods = ('get', 'post', 'put')
         detailed_allowed_methods = ('get',)
+        excludes = ('caller',)
 
 
 class DashboardResource(ModelResource):
@@ -84,12 +86,9 @@ class DashboardResource(ModelResource):
             owner=request.user,
         )
 
-    def is_valid(self, bundle):
-        """Check bundle is valid"""
-        return super(DashboardResource, self).is_valid(bundle)
-
     class Meta:
         queryset = Dashboard.objects.all()
         resource_name = 'dashboard'
         authorization = DjangoAuthorization()
         allowed_methods = ('get', 'post', 'put', 'delete', 'patch')
+        excludes = ('slug', 'owner')
