@@ -3,6 +3,25 @@
 {% load bootstrap %}
 {% load pytils_translit %}
 
+{% block extrahead %}
+    <script type="text/template" id="device-method-calls-tmpl">
+        <li>
+            <p><strong>Created:</strong> <%= created %></p>
+            <p><strong>State:</strong> <%= text_state %></p>
+            <% if (request) { %>
+                <p><strong>Request:</strong></p>
+<pre class='prettyprint linenums'>
+<%= prettyPrintOne(pretty_request, 'json', true) %></pre>
+            <% } %>
+            <% if (response) { %>
+                <p><strong>Response:</strong></p>
+<pre class='prettyprint linenums'>
+<%= prettyPrintOne(pretty_response, 'json', true) %></pre>
+            <% } %>
+        </li>
+    </script>
+{% endblock %}
+
 {% block content %}
     <div class='span12 well'>
         <h2>
@@ -124,32 +143,15 @@
                         </div>
                         <div
                             {% if active_method == pair.method %}
-                                class='tab-pane active'
+                                class='tab-pane active requests-holder'
                             {% else %}
-                                class='tab-pane'
+                                class='tab-pane requests-holder'
                             {% endif %}
-                                id="requests-{{ pair.method.slug }}"
+                            id="requests-{{ pair.method.slug }}"
+                            data-method="{{ pair.method.id }}"
                         >
-                            <ul>
-                                {% for call in pair.method.calls.all %}
-                                    <li>
-                                        <p><strong>Created:</strong> {{ call.created }}</p>
-                                        <p><strong>State:</strong> {{ call.get_state }}</p>
-                                        {% if call.request %}
-                                            <p><strong>Request:</strong></p>
-<pre class='prettyprint linenums'>
-{{ call.pretty_request }}
-</pre>
-                                        {% endif %}
-                                        {% if call.response %}
-                                            <p><strong>Response:</strong></p>
-<pre class='prettyprint linenums'>
-{{ call.pretty_response }}
-</pre>
-                                        {% endif %}
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            <ul></ul>
+                            <button class='btn show-more'>Show more</button>
                         </div>
                         <div class='tab-pane' id="dashboard-{{ pair.method.slug }}">
 <p><strong>Simple usage:</strong></p>

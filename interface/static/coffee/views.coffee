@@ -1,5 +1,14 @@
+class window.LazyTemplatedView extends Backbone.View
+    constructor: (options) ->
+        super options
+        @loadTemplates()
+
+    loadTemplates: ->
+        @template = _.template $(@templateId).html()
+
+
 class window.DeviceFormView extends Backbone.View
-    element: 'form'
+    tagName: 'form'
     previewHolder: '.preview-holder'
     previewTemplateId: '#preview-tmpl'
     events:
@@ -23,18 +32,11 @@ class window.DeviceFormView extends Backbone.View
             reader.readAsDataURL files[0]
 
 
-class window.ChangeDashboardView extends Backbone.View
-    element: 'div'
+class window.ChangeDashboardView extends LazyTemplatedView
+    tagName: 'div'
     templateId: '#editor-tmpl'
     events:
         'click .save': 'save'
-
-    constructor: (options) ->
-        super options
-        @loadTemplates()
-
-    loadTemplates: ->
-        @template = _.template $(@templateId).html()
 
     render: ->
         @$el.html @template @model.attributes
@@ -73,4 +75,36 @@ class window.ChangeDashboardView extends Backbone.View
             patch: true
         $(e.currentTarget).tooltip('show')
         setTimeout (=>$(e.currentTarget).tooltip('hide')), 3000
+        false
+
+
+class window.MethodCallsView extends LazyTemplatedView
+    tagName: 'div'
+    templateId: '#device-method-calls-tmpl'
+    limit: 20
+    offset: 0
+    events:
+        'click .show-more': 'more'
+
+    setMethod: (@methodId) -> @
+
+    render: ->
+        collection = new DeviceMethodCallCollection
+        collection.fetch
+            data:
+                method: @methodId
+                limit: @limit
+                offset: @offset
+            success: (collection) =>
+                if collection.meta.total_count > (@offset + @limit)
+                    @$el.find('.show-more').css 'display', 'block'
+                else
+                    @$el.find('.show-more').css 'display', 'none'
+                collection.each (item) =>
+                    @$el.find('ul').append @template item.attributes
+
+    more: (e) ->
+        e.preventDefault()
+        @offset += @limit
+        @render()
         false

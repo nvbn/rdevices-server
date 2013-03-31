@@ -34,3 +34,10 @@ $ ->
                     model: model
                 view.setElement $('#editor-holder')
                 view.render()
+
+    _.each $('.requests-holder'), (holder) ->
+        $holder = $(holder)
+        view = new MethodCallsView
+        view.setMethod $holder.data('method')
+        view.setElement $holder
+        view.render()
