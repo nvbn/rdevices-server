@@ -168,10 +168,6 @@ def send_request(sender, instance, created, **kwargs):
 class Dashboard(models.Model):
     """Dashboard for device or user"""
     owner = models.ForeignKey(User, verbose_name=_('owner'))
-    device = models.ForeignKey(
-        Device, blank=True, null=True, verbose_name=_('Device'),
-        related_name='dashboards',
-    )
     slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
     name = models.CharField(max_length=300, verbose_name=_('name'))
     description = models.TextField(

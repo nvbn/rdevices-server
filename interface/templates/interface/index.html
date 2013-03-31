@@ -5,17 +5,6 @@
 {% block content %}
     <div class='span12 well'>
         <div id="index-carousel">
-            <ol class="carousel-indicators">
-                {% for entry in carousel %}
-                    <li
-                        data-target="#index-carousel"
-                        data-slide-to="{{ forloop.counter0 }}"
-                        {% if forloop.first %}
-                            class="active"
-                        {% endif %}
-                    ></li>
-                {% endfor %}
-            </ol>
             <div class="carousel-inner">
                 {% for entry in carousel %}
                     <div

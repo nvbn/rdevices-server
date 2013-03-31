@@ -158,15 +158,6 @@ class DashboardCreate(LoginRequiredMixin, CreateView):
         """Add owner to kwargs"""
         kwargs = super(DashboardCreate, self).get_form_kwargs()
         kwargs['owner'] = self.request.user
-        if self.kwargs.get('device'):
-            print self.kwargs['device']
-            kwargs['device'] = get_object_or_404(
-                Device,
-                slug=self.kwargs['device'],
-                owner=self.request.user,
-            )
-        else:
-            kwargs['device'] = None
         return kwargs
 
 

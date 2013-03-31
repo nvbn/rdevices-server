@@ -13,10 +13,6 @@ urlpatterns = patterns(
     url(r'^list/$', DeviceList.as_view(), name='devices_list'),
     url(r'^create/$', DeviceCreate.as_view(), name='devices_create'),
     url(
-        r'^(?P<device>.*)/dashboard/create/$',
-        DashboardCreate.as_view(), name='devices_dashboard_create',
-    ),
-    url(
         r'^dashboard/create/$',
         DashboardCreate.as_view(), name='devices_dashboard_create',
     ),
@@ -27,10 +23,6 @@ urlpatterns = patterns(
     url(
         r'^dashboard/(?P<slug>.*)/delete/$',
         DashboardDelete.as_view(), name='devices_dashboard_delete',
-    ),
-    url(
-        r'^(?P<device>.*)/dashboard/(?P<slug>.*)/$',
-        DashboardItem.as_view(), name='devices_dashboard',
     ),
     url(
         r'^dashboard/(?P<slug>.*)/code/$',

@@ -55,14 +55,6 @@
             <strong>Description:</strong>
             {{ device.description|linebreaksbr }}
         </p>
-        <p>
-            <strong>Dashboards:</strong>
-            {% for dashboard in device.dashboards.all %}
-                <a href="{{ dashboard.get_absolute_url }}">
-                    {{ dashboard }}</a>{% if not forloop.last %},{% endif %}
-            {% endfor %}
-            <a href="{% url "devices_dashboard_create" device.slug %}" class='btn'>Create</a>
-        </p>
         {% if device.methods.count %}
             {% for pair in methods %}
                 </div><div class='span12 well'>

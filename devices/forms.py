@@ -85,16 +85,14 @@ class CreateDashboardForm(forms.ModelForm):
             'name', 'description', 'image',
         )
 
-    def __init__(self, owner, device, *args, **kwargs):
+    def __init__(self, owner, *args, **kwargs):
         """Set owner"""
         super(CreateDashboardForm, self).__init__(*args, **kwargs)
         self._owner = owner
-        self._device = device
 
     def save(self, *args, **kwargs):
         """Set owner and save"""
         self.instance.owner = self._owner
-        self.instance.device = self._device
         return super(CreateDashboardForm, self).save(*args, **kwargs)
 
 
