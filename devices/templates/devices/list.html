@@ -66,12 +66,12 @@
                         {% if dashboard.image %}
                             {% if dashboard.image.width > dashboard.image.height %}
                                 <img
-                                        src='{% thumbnail dashboard.image '230x0' %}'
-                                        />
+                                    src='{% thumbnail dashboard.image '230x0' %}'
+                                />
                             {% else %}
                                 <img
-                                        src='{% thumbnail dashboard.image '0x230' %}'
-                                        />
+                                    src='{% thumbnail dashboard.image '0x230' %}'
+                                />
                             {% endif %}
                         {% endif %}
                         <p>
