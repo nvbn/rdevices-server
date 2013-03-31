@@ -41,12 +41,6 @@ class window.DeviceMethodCallCollection extends Backbone.Collection
 
 class window.Dashboard extends Backbone.RelationalModel
     urlRoot: '/api/v1/dashboard/'
-    relations: [
-            type: Backbone.HasOne
-            key: 'device'
-            relatedModel: 'Device'
-            collectionType: 'DeviceCollection'
-    ]
 
 
 class window.DashboardCollection extends Backbone.Collection

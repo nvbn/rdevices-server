@@ -77,9 +77,6 @@ class DeviceMethodCallResource(ModelResource):
 
 class DashboardResource(ModelResource):
     """Resource for dashboards"""
-    device = fields.ToOneField(
-        DeviceResource, 'device', blank=True, full=False,
-    )
 
     def apply_authorization_limits(self, request, object_list):
         """Only user resources"""
