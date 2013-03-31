@@ -31,8 +31,12 @@ nbproject
 *.mo
 .idea
 
-# Totemi project ignore extensions
 rdevices/settings/local.py
 ENV/*
 logs/
-static_collected/
+static/*
+media/*
+
+!static/.gitkeep
+!media/.gitkeep
+
