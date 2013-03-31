@@ -175,11 +175,13 @@ device.{{ pair.method }}({{% for arg in pair.method.get_spec_args %}
 </pre>
 <p><strong>Full example</strong></p>
 <pre class='prettyprint linenums'>
-dashboard.getDevice({{ device.id }}, function(device){
-    device.{{ pair.method }}({{% for arg in pair.method.get_spec_args %}
-        {{ arg }}: "{{ arg }}Value"{% if forloop.last %}
-    {% else %},{% endif %}{% endfor %}}, function(result){
-        console.log(result);
+dashboard.ready(function(){
+    dashboard.getDevice({{ device.id }}, function(device){
+        device.{{ pair.method }}({{% for arg in pair.method.get_spec_args %}
+            {{ arg }}: "{{ arg }}Value"{% if forloop.last %}
+        {% else %},{% endif %}{% endfor %}}, function(result){
+            console.log(result);
+        });
     });
 });
 </pre>
