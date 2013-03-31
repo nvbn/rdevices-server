@@ -91,4 +91,4 @@ class DashboardResource(ModelResource):
         resource_name = 'dashboard'
         authorization = DjangoAuthorization()
         allowed_methods = ('get', 'post', 'put', 'delete', 'patch')
-        excludes = ('slug', 'owner')
+        excludes = ('slug', 'owner', 'image')
