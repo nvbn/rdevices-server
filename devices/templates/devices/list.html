@@ -6,9 +6,20 @@
     <div class='span12 well'>
         {% if not devices.count %}
             <h2>You don't have devices</h2>
-            <a href="{% url "devices_create" %}">Create device</a>
+            <a class='btn btn-danger' href="{% url "devices_create" %}">Create new device</a>
         {% else %}
-            <h2>Your devices</h2>
+            <h2>Your devices
+                <small class='action-panel'>
+                    <a
+                        href="{% url 'devices_create' %}"
+                        data-toggle="tooltip"
+                        title='Create new device'
+                        class='action'
+                        >
+                        <b class="icon-plus-sign icon-1x"></b>
+                    </a>
+                </small>
+            </h2>
             <div class='devices'>
             {% for device in devices %}
                 <div class='device-box'>
@@ -33,31 +44,46 @@
             </div>
         {% endif %}
     </div>
-    {% if dashboards.count %}
-        <div class='span12 well'>
-            <h2>Your dashboards</h2>
-            <div class='dashboards'>
-                {% for dashboard in dashboards.all %}
-                    <div class='dashboard-box'>
-                        <a class='thumbnail' href="{{ dashboard.get_absolute_url }}">
-                            {% if dashboard.image %}
-                                {% if dashboard.image.width > dashboard.image.height %}
-                                    <img
-                                            src='{{ STATIC_URL }}{% thumbnail dashboard.image '230x0' %}'
-                                            />
-                                {% else %}
-                                    <img
-                                            src='{{ STATIC_URL }}{% thumbnail dashboard.image '0x230' %}'
-                                            />
-                                {% endif %}
+    <div class='span12 well'>
+        {% if dashboards.count %}
+            <h2>
+            Your dashboards
+            <small class='action-panel'>
+                <a
+                    href="{% url 'devices_dashboard_create' %}"
+                    data-toggle="tooltip"
+                    title='Create new dashboard'
+                    class='action'
+                    >
+                    <b class="icon-plus-sign icon-1x"></b>
+                </a>
+            </small>
+        </h2>
+        <div class='dashboards'>
+            {% for dashboard in dashboards.all %}
+                <div class='dashboard-box'>
+                    <a class='thumbnail' href="{{ dashboard.get_absolute_url }}">
+                        {% if dashboard.image %}
+                            {% if dashboard.image.width > dashboard.image.height %}
+                                <img
+                                        src='{{ STATIC_URL }}{% thumbnail dashboard.image '230x0' %}'
+                                        />
+                            {% else %}
+                                <img
+                                        src='{{ STATIC_URL }}{% thumbnail dashboard.image '0x230' %}'
+                                        />
                             {% endif %}
-                            <p>
-                                <strong>{{ dashboard }}</strong>
-                            </p>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
+                        {% endif %}
+                        <p>
+                            <strong>{{ dashboard }}</strong>
+                        </p>
+                    </a>
+                </div>
+            {% endfor %}
         </div>
-    {% endif %}
+        {% else %}
+            <h2>You don't have dashboards</h2>
+            <a class='btn btn-danger' href="{% url "devices_dashboard_create" %}">Create new dashboard</a>
+        {% endif %}
+    </div>
 {% endblock %}
