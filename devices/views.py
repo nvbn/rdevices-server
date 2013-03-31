@@ -192,6 +192,14 @@ class DashboardCode(DashboardItem):
     """Change dashboard code"""
     template_name = 'devices/dashboard_code.html'
 
+    def get_context_data(self, **kwargs):
+        """Pass all available devices to context"""
+        context = super(DashboardCode, self).get_context_data(**kwargs)
+        context['devices'] = Device.objects.filter(
+            owner=self.request.user,
+        )
+        return context
+
 
 class DashboardDelete(LoginRequiredMixin, DeleteView):
     """Delete device view"""

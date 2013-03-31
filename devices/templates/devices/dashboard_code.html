@@ -18,6 +18,9 @@
             <li>
                 <a href="#preview-tab" data-toggle="tab">Preview</a>
             </li>
+            <li>
+                <a href="#help-tab" data-toggle="tab">Help</a>
+            </li>
         </ul>
         <div class='tab-content'>
             <div id="editor-tab" class='tab-pane active'>
@@ -25,6 +28,29 @@
             </div>
             <div id="preview-tab" class='tab-pane'>
                 <iframe allowtransparency="true" src="{% url "devices_preview" dashboard.slug %}" id="editor-preview"></iframe>
+            </div>
+            <div id="help-tab" class='tab-pane'>
+                <h3>Dashboard methods</h3>
+                <p><code>dashboard.ready(callback)</code> &mdash; initialise dashboard and jQuery</p>
+                <p><code>dashboard.getDevice(deviceId, callback)</code> &mdash; get device and pass it to callback</p>
+                <h3>Available devices</h3>
+                {% for device in devices %}
+                    <h4>
+                        <a href='{{ device.get_absolute_url }}' target="_blank">
+                            {{ device }}
+                        </a>
+                    </h4>
+                    <p><strong>device id:</strong> {{ device.id }}</p>
+                    {% if device.description %}
+                        <p>
+                            <strong>Description:</strong>
+                            {{ device.description|linebreaksbr }}
+                        </p>
+                    {% endif %}
+                    <hr />
+                {% empty %}
+                    <p>You don't have devices!</p>
+                {% endfor %}
             </div>
         </div>
         <button class='save btn btn-danger' title='Dashboard saved' type="button">
