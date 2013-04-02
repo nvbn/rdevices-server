@@ -16,6 +16,7 @@ jsonfield
 easy_thumbnails
 tornado
 tornado-redis
+sockjs-tornado
 pytils
 django-widget-tweaks
 django-socialregistration

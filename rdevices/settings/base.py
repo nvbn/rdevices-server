@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'interface',
     'accounts',
     'connector',
+    'push_notifications',
     'userena',
     'bootstrapform',
     'widget_tweaks',
@@ -203,7 +204,9 @@ USERENA_SIGNIN_REDIRECT_URL = '/devices/list/'
 USERENA_DISABLE_PROFILE_LIST = True
 USERENA_HIDE_EMAIL = True
 
+
 CALLS_CHANNEL = 'calls'
+NOTIFICATIONS_CHANNEL = 'notifications'
 
 
 COMPRESS_ROOT = STATIC_ROOT
