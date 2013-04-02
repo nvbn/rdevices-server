@@ -4,6 +4,10 @@ from functools import partial
 import tornadoredis
 import tornado.gen
 import json
+import logging
+
+
+logger = logging.getLogger('connector')
 
 
 class DeviceConnection(object):
@@ -46,7 +50,7 @@ class DeviceConnection(object):
                 self.action_response(request)
         except Exception as e:
             # fail silently
-            print e
+            logger.warning(e)
 
     def action_declare(self, request):
         """Create new method or update exist"""
@@ -120,7 +124,7 @@ class DeviceServer(TCPServer):
             )
         except Exception as e:
             # fail silently
-            print e
+            logger.warning(e)
 
     def handle_stream(self, stream, address):
         """Create device connection for stream"""

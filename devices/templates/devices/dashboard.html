@@ -22,19 +22,19 @@
         Dashboard: {{ dashboard }}
         <small class='action-panel'>
             <a
-                    href="{% url 'devices_dashboard_change' dashboard.slug %}"
-                    data-toggle="tooltip"
-                    title='Change dashboard information'
-                    class='action'
-                    >
+                href="{% url 'devices_dashboard_change' dashboard.slug %}"
+                data-toggle="tooltip"
+                title='Change dashboard information'
+                class='action'
+            >
                 <b class="icon-edit icon-1x"></b>
             </a>
             <a
-                    href="{% url 'devices_dashboard_delete' dashboard.slug %}"
-                    data-toggle="tooltip"
-                    title='Delete dashboard'
-                    class='action'
-                    >
+                href="{% url 'devices_dashboard_delete' dashboard.slug %}"
+                data-toggle="tooltip"
+                title='Delete dashboard'
+                class='action'
+            >
                 <b class="icon-trash icon-1x"></b>
             </a>
         </small>

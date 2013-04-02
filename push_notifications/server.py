@@ -3,6 +3,10 @@ import tornadoredis
 import tornado.gen
 import tornado.web
 import json
+import logging
+
+
+logger = logging.getLogger('push_notifications')
 
 
 class PushConnection(SockJSConnection):
@@ -72,4 +76,4 @@ class NotificationServer(tornado.web.Application):
                     connection.notify(data)
         except Exception as e:
             # fail silently
-            print e
+            logger.warning(e)
