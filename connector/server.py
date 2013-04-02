@@ -74,6 +74,7 @@ class DeviceConnection(object):
         self._server.send_notification({
             'user_id': call.caller.id,
             'call_id': call.id,
+            'action': 'call_changed',
         })
 
     def send_request(self, request):

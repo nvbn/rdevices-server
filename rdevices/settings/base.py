@@ -101,6 +101,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.csrf",
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    'push_notifications.context_processors.push',
 )
 
 

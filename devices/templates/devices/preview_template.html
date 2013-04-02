@@ -6,9 +6,12 @@
     {% include "interface/includes/header.html" %}
     {% compress js %}
         <script type="text/coffeescript" src='{% static "coffee/dashboard.coffee" %}'></script>
+        <script type="text/javascript" src='{% static 'js/sockjs-0.3.min.js' %}'></script>
     {% endcompress %}
     <script type="text/javascript">
         var dashboard = new DashboardHelper({{ dashboard.id|escapejs }});
+        var sock = new SockJS('{{ NOTIFICATIONS_BIND|escapejs }}');
+        var userId = {{ request.user.id }};
     </script>
 </head>
 <body class='preview-body'>

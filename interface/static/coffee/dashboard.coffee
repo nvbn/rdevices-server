@@ -1,6 +1,29 @@
 STATE_FINISHED = 1
 
 
+class window.NotificationsHelper
+    constructor: (callback) ->
+        _.extend @, Backbone.Events
+
+        @openConnection callback
+        @initEvents()
+
+    openConnection: (callback) ->
+        alreadyOpened = false
+        window.sock.onopen = =>
+            if not alreadyOpened
+                alreadyOpened = true
+                callback.call @
+            window.sock.send JSON.stringify
+                action: 'subscribe'
+                user_id: window.userId
+
+    initEvents: ->
+        window.sock.onmessage = (message) =>
+            if message.data.action == 'call_changed'
+                @trigger 'callChanged_' + message.data.call_id
+
+
 class window.DeviceHelper
     constructor: (@model) -> @
 
@@ -34,14 +57,10 @@ class window.DeviceHelper
                     callback.call @, call.get('response')
 
     checkCall: (call, callback) ->
-        call.fetch
-            success: (call) =>
-                if call.get('state') == STATE_FINISHED
+        window.dashboard.notifications.on 'callChanged_' + call.get('id'), =>
+            call.fetch
+                success: (call) =>
                     callback.call call.get('response')
-                else
-                    setTimeout =>
-                        @checkCall call, callback
-                    , 1000
 
     getMethodCalls: (method, options) ->
         if not options.data
@@ -61,8 +80,12 @@ class window.DashboardHelper
         else
             @called = true
             $ =>
-                @loadDashboard =>
-                    callback.call @
+                @initPush =>
+                    @loadDashboard =>
+                        callback.call @
+
+    initPush: (callback) ->
+        @notifications = new NotificationsHelper callback
 
     loadDashboard: (callback) ->
         @model = new Dashboard

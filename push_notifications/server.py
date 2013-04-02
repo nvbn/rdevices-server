@@ -24,8 +24,8 @@ class PushConnection(SockJSConnection):
         if self.user_id:
             self.unsubscribe()
         if not PushConnection.users.get('user_id'):
-            PushConnection.users['user_id'] = []
-        PushConnection.users['user_id'].append(self)
+            PushConnection.users[user_id] = []
+        PushConnection.users[user_id].append(self)
         self.user_id = user_id
 
     def unsubscribe(self):
@@ -37,6 +37,10 @@ class PushConnection(SockJSConnection):
         """unsubscribe user on connection close"""
         if self.user_id:
             self.unsubscribe()
+
+    def notify(self, message):
+        """Notify user"""
+        self.send(message)
 
 
 class NotificationServer(tornado.web.Application):
@@ -60,7 +64,6 @@ class NotificationServer(tornado.web.Application):
 
     def _on_call(self, msg):
         """On new call"""
-        print msg
         try:
             data = json.loads(msg.body)
             user_id = data['user_id']
