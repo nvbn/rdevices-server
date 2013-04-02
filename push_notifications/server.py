@@ -60,6 +60,7 @@ class NotificationServer(tornado.web.Application):
 
     def _on_call(self, msg):
         """On new call"""
+        print msg
         try:
             data = json.loads(msg.body)
             user_id = data['user_id']

@@ -16,6 +16,9 @@ class Command(BaseCommand):
             host = None
             port = address
         ioloop = IOLoop.instance()
-        server = DeviceServer(settings.CALLS_CHANNEL)
+        server = DeviceServer(
+            settings.CALLS_CHANNEL,
+            settings.NOTIFICATIONS_CHANNEL,
+        )
         server.listen(port, host)
         ioloop.start()

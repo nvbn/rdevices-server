@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Run push notifications daemon'
     args = ('address',)
 
-    def handle(self, address='localhost:8080', *args, **options):
+    def handle(self, address='localhost:8880', *args, **options):
         """Run connector daemon"""
         if ':' in address:
             host, port = address.split(':')

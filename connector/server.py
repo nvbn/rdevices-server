@@ -1,7 +1,7 @@
 from tornado.netutil import TCPServer
-import tornadoredis
 from devices.models import DeviceMethodCall, Device, DeviceMethod
 from functools import partial
+import tornadoredis
 import tornado.gen
 import json
 
@@ -71,6 +71,10 @@ class DeviceConnection(object):
         call.response = request['response']
         call.state = DeviceMethodCall.STATE_FINISHED
         call.save()
+        self._server.send_notification({
+            'user_id': call.caller.id,
+            'call_id': call.id,
+        })
 
     def send_request(self, request):
         """Send request to device"""
@@ -80,21 +84,31 @@ class DeviceConnection(object):
 class DeviceServer(TCPServer):
     """Server for device connections"""
 
-    def __init__(self, calls_channel, *args, **kwargs):
+    def __init__(self, calls_channel, notifications_channel,
+                 *args, **kwargs):
         self._connections = {}
         self._calls_channel = calls_channel
-        self._init_channel()
+        self._notifications_channel = notifications_channel
+        self._init_subscribe_channel()
+        self._init_publish_channel()
         super(DeviceServer, self).__init__(*args, **kwargs)
 
     @tornado.gen.engine
-    def _init_channel(self):
+    def _init_subscribe_channel(self):
         """Init channel and start consumption"""
-        self._r = tornadoredis.Client()
-        self._r.connect()
+        self._sub = tornadoredis.Client()
+        self._sub.connect()
         yield tornado.gen.Task(
-            self._r.subscribe, self._calls_channel,
+            self._sub.subscribe, self._calls_channel,
         )
-        self._r.listen(self._on_call)
+        self._sub.listen(self._on_call)
+
+    @tornado.gen.engine
+    def _init_publish_channel(self):
+        """Init channel and start consumption"""
+        self._pub = tornadoredis.Client()
+        self._pub.connect()
+        self._pub.listen(self._on_call)
 
     def _on_call(self, msg):
         """On new call"""
@@ -106,7 +120,6 @@ class DeviceServer(TCPServer):
         except Exception as e:
             # fail silently
             print e
-            pass
 
     def handle_stream(self, stream, address):
         """Create device connection for stream"""
@@ -115,9 +128,15 @@ class DeviceServer(TCPServer):
     def register(self, uuid, connection):
         """Register connection"""
         self._connections[uuid] = connection
-        print self._connections
 
     def unregister(self, uuid):
         """Unregister connection"""
         if uuid in self._connections:
             self._connections.pop(uuid)
+
+    def send_notification(self, notification):
+        """Publish notification to redis channel"""
+        self._pub.publish(
+            self._notifications_channel,
+            json.dumps(notification),
+        )
