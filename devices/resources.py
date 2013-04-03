@@ -67,8 +67,9 @@ class DeviceMethodCallResource(ModelResource):
     def dehydrate(self, bundle):
         """Add pretty field to bundle"""
         bundle.data['text_state'] = bundle.obj.get_state()
-        bundle.data['pretty_request'] = bundle.obj.pretty_request()
-        bundle.data['pretty_response'] = bundle.obj.pretty_response()
+        if bundle.request.GET.get('with_pretty'):
+            bundle.data['pretty_request'] = bundle.obj.pretty_request()
+            bundle.data['pretty_response'] = bundle.obj.pretty_response()
         return bundle
 
     class Meta:

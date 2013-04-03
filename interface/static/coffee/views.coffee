@@ -95,6 +95,7 @@ class window.MethodCallsView extends LazyTemplatedView
                 method: @methodId
                 limit: @limit
                 offset: @offset
+                with_pretty: true
             success: (collection) =>
                 if collection.meta.total_count > (@offset + @limit)
                     @$el.find('.show-more').css 'display', 'block'
