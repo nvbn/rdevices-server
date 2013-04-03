@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
+from django.core.cache import cache
 from django_extensions.db.fields import AutoSlugField, CreationDateTimeField
 from jsonfield import JSONField
 from pytils.translit import slugify
@@ -140,13 +141,43 @@ class DeviceMethodCall(models.Model):
         """Get textual state"""
         return dict(DeviceMethodCall.STATES)[self.state]
 
+    def _get_request_cache_key(self):
+        """Get request cache key"""
+        return 'pretty_request_{id}'.format(id=self.id)
+
+    def _get_response_cache_key(self):
+        """Get response cache key"""
+        return 'pretty_response_{id}'.format(id=self.id)
+
     def pretty_request(self):
         """Get pretty request"""
-        return prettify(self.request)
+        key = self._get_request_cache_key()
+        value = cache.get(key)
+        if not value:
+            value = prettify(self.request)
+            cache.set(key, value)
+        return value
 
     def pretty_response(self):
         """Get pretty response"""
-        return prettify(self.response)
+        key = self._get_response_cache_key()
+        value = cache.get(key)
+        if not value:
+            value = prettify(self.response)
+            cache.set(key, value)
+        return value
+
+    def save(self, *args, **kwargs):
+        """Save and clear caches"""
+        super(DeviceMethodCall, self).save(*args, **kwargs)
+        self._clear_caches()
+
+    def _clear_caches(self):
+        """Clear caches"""
+        cache.delete_many([
+            self._get_request_cache_key(),
+            self._get_response_cache_key(),
+        ])
 
 
 @receiver(post_save, sender=DeviceMethodCall)
