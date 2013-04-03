@@ -27,7 +27,7 @@ class PushConnection(SockJSConnection):
         """Subscribe user to notifications"""
         if self.user_id:
             self.unsubscribe()
-        if not PushConnection.users.get('user_id'):
+        if not PushConnection.users.get(user_id):
             PushConnection.users[user_id] = []
         PushConnection.users[user_id].append(self)
         self.user_id = user_id
