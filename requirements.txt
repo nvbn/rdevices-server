@@ -2,7 +2,6 @@ redis
 django
 python_digest
 django-tastypie
-django-tastypie-swagger
 psycopg2
 south
 lxml

@@ -129,7 +129,6 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'south',
     'tastypie',
-    'tastypie_swagger',
     'easy_thumbnails',
     'guardian',
     'compressor',

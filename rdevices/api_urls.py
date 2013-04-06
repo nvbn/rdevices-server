@@ -16,7 +16,4 @@ api_v1.register(DashboardResource())
 urlpatterns = patterns(
     '',
     url(r'^', include(api_v1.urls)),
-    url(r'^doc/', include(
-        'tastypie_swagger.urls', namespace='tastypie_swagger',
-    )),
 )
