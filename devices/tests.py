@@ -297,15 +297,18 @@ class ViewsTestCase(TestCase):
             name='device name',
             description='description',
         )
+        name = 'changed name'
         response = self.client.post(
             reverse(
                 'devices_change', kwargs={'slug': device.slug},
             ), {
-                'name': 'name',
+                'name': name,
                 'description': 'description',
             },
         )
         self.assertIsInstance(response, HttpResponseNotFound)
+        device = Device.objects.get(id=device.id)
+        self.assertNotEqual(device.name, name)
 
     def test_device_delete(self):
         """Test device delete"""
@@ -334,3 +337,32 @@ class ViewsTestCase(TestCase):
         self.assertEqual(
             device, Device.objects.get(id=device.id),
         )
+
+    def test_device_regenerate_uuid(self):
+        """Test device regenerate uuid"""
+        device = Device.objects.create(
+            owner=self.user1,
+            name='device name',
+            description='description',
+        )
+        device_uuid = device.uuid
+        self.client.post(reverse('devices_regenerate', kwargs={
+            'slug': device.slug,
+        }))
+        device = Device.objects.get(id=device.id)
+        self.assertNotEqual(device.uuid, device_uuid)
+
+    def test_device_regenerate_uuid_access(self):
+        """Test device regenerate uuid access"""
+        device = Device.objects.create(
+            owner=self.user2,
+            name='device name',
+            description='description',
+        )
+        device_uuid = device.uuid
+        response = self.client.post(reverse('devices_regenerate', kwargs={
+            'slug': device.slug,
+        }))
+        self.assertIsInstance(response, HttpResponseNotFound)
+        device = Device.objects.get(id=device.id)
+        self.assertEqual(device.uuid, device_uuid)
