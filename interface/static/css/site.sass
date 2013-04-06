@@ -110,7 +110,11 @@ a.action, a.action:hover, a.action:active
 
 
 .next-cell
-    margin-left: 30px !important
+    @media (min-width: $small_screen)
+        margin-right: 30px !important
+
+.next-cell:last-child
+    margin-right: 0 !important
 
 
 .preview-body
