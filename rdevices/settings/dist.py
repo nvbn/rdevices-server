@@ -18,8 +18,6 @@ REDIS_CREDENTIALS = {
     'db': 0,
 }
 
-USER_STORAGE_PREFIX = 'prefix'
-
 EMAIL_BACKEND = ''
 
 FACEBOOK_APP_ID = ''
