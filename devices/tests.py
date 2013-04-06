@@ -1,5 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.http import HttpResponseNotFound
+from django.views.generic.base import ContextMixin
+from django.test.client import Client
+from django.core.urlresolvers import reverse
 from devices.models import (
     Device, DeviceMethodCall, DeviceMethod, Dashboard,
 )
@@ -160,3 +164,98 @@ class FormsTestCase(TestCase):
         dashboard = form.save()
         self.assertEqual(dashboard.owner, self.root)
         self.assertEqual(dashboard.name, dashboard_name)
+
+
+class ViewsTestCase(TestCase):
+    """Test case for views"""
+
+    def setUp(self):
+        """Create initial data"""
+        self.root = User.objects.create(
+            username='root',
+            is_superuser=True,
+            is_active=True,
+        )
+        self.user1 = User.objects.create(
+            username='user1',
+            is_active=True,
+        )
+        self.user1.set_password('user1')
+        self.user1.save()
+        self.user2 = User.objects.create(
+            username='user2',
+            is_active=True,
+        )
+        self.client = Client()
+        self.client.login(
+            username='user1',
+            password='user1',
+        )
+
+    def _patch_view_class(self):
+        """Patch view class for storing last context"""
+        self.last_context = None
+        case = self
+
+        def get_context_data(self, **kwargs):
+            if 'view' not in kwargs:
+                kwargs['view'] = self
+            case.last_context = kwargs
+            return kwargs
+        ContextMixin.get_context_data = get_context_data
+
+    def test_device_list(self):
+        """Test device list"""
+        devices = map(
+            lambda name: Device.objects.create(
+                name=str(name),
+                owner=self.user1,
+                description=str(name),
+            ),
+            range(10),
+        )
+        response = self.client.get(reverse('devices_list'))
+        self.assertItemsEqual(
+            response.context['devices'], devices,
+        )
+
+    def test_device_list_access(self):
+        """Test device list access"""
+        map(
+            lambda name: Device.objects.create(
+                name=str(name),
+                owner=self.user2,
+                description=str(name),
+            ),
+            range(10),
+        )
+        response = self.client.get(reverse('devices_list'))
+        self.assertItemsEqual(
+            response.context['devices'], [],
+        )
+
+    def test_device_item(self):
+        """Test device item"""
+        device = Device.objects.create(
+            name='device 1',
+            description='description',
+            owner=self.user1,
+        )
+        response = self.client.get(reverse(
+            'devices_item', kwargs={'slug': device.slug},
+        ))
+        self.assertEqual(
+            response.context['device'], device,
+        )
+
+    def test_device_item_access(self):
+        """Test device item access"""
+        device = Device.objects.create(
+            name='device 1',
+            description='description',
+            owner=self.user2,
+        )
+        response = self.client.get(reverse(
+            'devices_item', kwargs={'slug': device.slug},
+        ))
+        self.assertIsInstance(response, HttpResponseNotFound)
