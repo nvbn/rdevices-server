@@ -259,3 +259,78 @@ class ViewsTestCase(TestCase):
             'devices_item', kwargs={'slug': device.slug},
         ))
         self.assertIsInstance(response, HttpResponseNotFound)
+
+    def test_device_create(self):
+        """Test device create"""
+        name = 'test device name'
+        self.client.post(reverse('devices_create'), {
+            'name': name,
+            'description': 'description',
+        })
+        device = Device.objects.get(name=name)
+        self.assertEqual(device.name, name)
+        self.assertEqual(device.owner, self.user1)
+
+    def test_device_change(self):
+        """Test device change"""
+        device = Device.objects.create(
+            owner=self.user1,
+            name='device name',
+            description='description',
+        )
+        changed_name = 'changed name'
+        self.client.post(
+            reverse(
+                'devices_change', kwargs={'slug': device.slug},
+            ), {
+                'name': changed_name,
+                'description': 'description',
+            },
+        )
+        device = Device.objects.get(id=device.id)
+        self.assertEqual(device.name, changed_name)
+
+    def test_device_change_access(self):
+        """Test device change access"""
+        device = Device.objects.create(
+            owner=self.user2,
+            name='device name',
+            description='description',
+        )
+        response = self.client.post(
+            reverse(
+                'devices_change', kwargs={'slug': device.slug},
+            ), {
+                'name': 'name',
+                'description': 'description',
+            },
+        )
+        self.assertIsInstance(response, HttpResponseNotFound)
+
+    def test_device_delete(self):
+        """Test device delete"""
+        device = Device.objects.create(
+            owner=self.user1,
+            name='device name',
+            description='description',
+        )
+        self.client.post(reverse('devices_delete', kwargs={
+            'slug': device.slug,
+        }))
+        with self.assertRaises(Device.DoesNotExist):
+            Device.objects.get(id=device.id)
+
+    def test_device_delete_access(self):
+        """Test device delete"""
+        device = Device.objects.create(
+            owner=self.user2,
+            name='device name',
+            description='description',
+        )
+        response = self.client.post(reverse('devices_delete', kwargs={
+            'slug': device.slug,
+        }))
+        self.assertIsInstance(response, HttpResponseNotFound)
+        self.assertEqual(
+            device, Device.objects.get(id=device.id),
+        )
