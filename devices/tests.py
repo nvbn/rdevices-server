@@ -26,44 +26,44 @@ class ModelTestCase(TestCase):
             name='test',
             description='test',
         )
-
-    def test_pretty_method_caches(self):
-        """Test pretty methods caches"""
-        method = DeviceMethod.objects.create(
+        self.method = DeviceMethod.objects.create(
             device=self.device,
             spec={},
             name='test',
         )
-        call = DeviceMethodCall.objects.create(
-            method=method,
+        self.call = DeviceMethodCall.objects.create(
+            method=self.method,
             caller=self.root,
             request='request',
             response='response',
         )
 
+    def test_pretty_request_caches(self):
+        """Test pretty request caches"""
         self.assertGreater(
-            len(call.pretty_request()), 1,
+            len(self.call.pretty_request()), 1,
         )
-        self.assertGreater(
-            len(call.pretty_response()), 1,
-        )
-
-        prev_request = call.pretty_request()
-        prev_response = call.pretty_response()
-
-        call.request = {
+        prev_request = self.call.pretty_request()
+        self.call.request = {
             'a': 1,
         }
-        call.response = {
+        self.call.save()
+        self.assertNotEqual(
+            prev_request, self.call.pretty_request(),
+        )
+
+    def test_pretty_response_caches(self):
+        """Test pretty response caches"""
+        self.assertGreater(
+            len(self.call.pretty_response()), 1,
+        )
+        prev_response = self.call.pretty_response()
+        self.call.response = {
             'b': 2,
         }
-        call.save()
-
+        self.call.save()
         self.assertNotEqual(
-            prev_request, call.pretty_request(),
-        )
-        self.assertNotEqual(
-            prev_response, call.pretty_response(),
+            prev_response, self.call.pretty_response(),
         )
 
 
