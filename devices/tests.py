@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.http import HttpResponseNotFound
-from django.views.generic.base import ContextMixin
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from devices.models import (
@@ -175,6 +174,7 @@ class ViewsTestCase(TestCase):
         self._create_client()
         self._create_devices()
         self._create_methods()
+        self._create_dashboards()
 
     def _create_users(self):
         """Create test users"""
@@ -240,6 +240,19 @@ class ViewsTestCase(TestCase):
             }
         )
 
+    def _create_dashboards(self):
+        """Create test dashboards"""
+        self.user1_dashboard = Dashboard.objects.create(
+            owner=self.user1,
+            name='dashboard 1',
+            description='description 1',
+        )
+        self.user2_dashboard = Dashboard.objects.create(
+            owner=self.user2,
+            name='dashboard 2',
+            description='description 2',
+        )
+
     def test_device_list(self):
         """Test device list"""
         devices = map(
@@ -253,6 +266,9 @@ class ViewsTestCase(TestCase):
         response = self.client.get(reverse('devices_list'))
         self.assertItemsEqual(
             response.context['devices'], devices,
+        )
+        self.assertItemsEqual(
+            response.context['dashboards'], [self.user1_dashboard],
         )
 
     def test_device_list_access(self):
@@ -414,4 +430,113 @@ class ViewsTestCase(TestCase):
                 'y': '2',
             },
         )
+        self.assertIsInstance(response, HttpResponseNotFound)
+
+    def test_dashboard_create(self):
+        """Test create dashboard"""
+        name = 'dashboard'
+        self.client.post(reverse('devices_dashboard_create'), {
+            'name': name,
+            'description': 'description',
+        })
+        dashboard = Dashboard.objects.order_by('-id')[0]
+        self.assertEqual(dashboard.name, name)
+        self.assertEqual(dashboard.owner, self.user1)
+
+    def test_dashboard_change(self):
+        """Test changing dashboard"""
+        name = 'changed name'
+        self.client.post(
+            reverse('devices_dashboard_change', kwargs={
+                'slug': self.user1_dashboard.slug,
+            }),
+            {
+                'name': name,
+            }
+        )
+        dashboard = Dashboard.objects.get(id=self.user1_dashboard.id)
+        self.assertEqual(dashboard.name, name)
+
+    def test_dashboard_change_access(self):
+        """Test changing dashboard"""
+        name = 'changed name'
+        response = self.client.post(
+            reverse('devices_dashboard_change', kwargs={
+                'slug': self.user2_dashboard.slug,
+            }),
+            {
+                'name': name,
+            }
+        )
+        self.assertIsInstance(response, HttpResponseNotFound)
+        dashboard = Dashboard.objects.get(id=self.user2_dashboard.id)
+        self.assertNotEqual(dashboard.name, name)
+
+    def test_dashboard_item(self):
+        """Test dashboard item"""
+        response = self.client.get(reverse('devices_dashboard', kwargs={
+            'slug': self.user1_dashboard.slug,
+        }))
+        self.assertEqual(response.context['dashboard'], self.user1_dashboard)
+
+    def test_dashboard_item_access(self):
+        """Test dashboard item access"""
+        response = self.client.get(reverse('devices_dashboard', kwargs={
+            'slug': self.user2_dashboard.slug,
+        }))
+        self.assertIsInstance(response, HttpResponseNotFound)
+
+    def test_dashboard_code(self):
+        """Test dashboard code"""
+        response = self.client.get(reverse('devices_dashboard_code', kwargs={
+            'slug': self.user1_dashboard.slug,
+        }))
+        self.assertEqual(response.context['dashboard'], self.user1_dashboard)
+        self.assertItemsEqual(
+            response.context['devices'], [self.user1_device],
+        )
+
+    def test_dashboard_code_access(self):
+        """Test dashboard code access"""
+        response = self.client.get(reverse('devices_dashboard_code', kwargs={
+            'slug': self.user2_dashboard.slug,
+        }))
+        self.assertIsInstance(response, HttpResponseNotFound)
+
+    def test_dashboard_delete(self):
+        """Test dashboard delete"""
+        self.client.post(reverse('devices_dashboard_delete', kwargs={
+            'slug': self.user1_dashboard.slug,
+        }))
+        with self.assertRaises(Dashboard.DoesNotExist):
+            Dashboard.objects.get(id=self.user1_dashboard.id)
+
+    def test_dashboard_delete_access(self):
+        """Test dashboard code access"""
+        response = self.client.post(
+            reverse('devices_dashboard_delete', kwargs={
+                'slug': self.user2_dashboard.slug,
+            }),
+        )
+        self.assertIsInstance(response, HttpResponseNotFound)
+        self.assertEqual(
+            self.user1_dashboard,
+            Dashboard.objects.get(id=self.user1_dashboard.id),
+        )
+
+    def test_preview(self):
+        """Test preview"""
+        response = self.client.get(reverse('devices_preview', kwargs={
+            'slug': self.user1_dashboard.slug,
+        }))
+        self.assertEqual(
+            response.context['dashboard'],
+            self.user1_dashboard,
+        )
+
+    def test_preview_access(self):
+        """Test preview access"""
+        response = self.client.get(reverse('devices_preview', kwargs={
+            'slug': self.user2_dashboard.slug,
+        }))
         self.assertIsInstance(response, HttpResponseNotFound)
