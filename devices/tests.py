@@ -864,3 +864,92 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
         self.assertGreater(
             len(call['pretty_response']), 1,
         )
+
+    def test_dashboard_create(self):
+        """Test dashboard create"""
+        name = 'dashboard name'
+        response = self.api_client.post(
+            reverse('api_dispatch_list', kwargs={
+                'resource_name': 'dashboard',
+                'api_name': 'v1',
+            }),
+            data={
+                'name': name,
+                'description': 'description',
+                'code': 'code',
+            },
+            format='json',
+        )
+        self.assertHttpCreated(response)
+        dashboard = Dashboard.objects.order_by('-id')[0]
+        self.assertEqual(dashboard.name, name)
+        self.assertEqual(dashboard.owner, self.user1)
+
+    def test_dashboard_update(self):
+        """Test dashboard update"""
+        name = 'new dashboard name'
+        self.api_client.put(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'dashboard',
+                'api_name': 'v1',
+                'pk': self.user1_dashboard.pk,
+            }),
+            data={
+                'name': name,
+                'description': 'description',
+                'code': 'code',
+            },
+            format='json',
+        )
+        dashboard = Dashboard.objects.get(id=self.user1_dashboard.id)
+        self.assertEqual(dashboard.name, name)
+        self.assertEqual(dashboard.owner, self.user1)
+
+    def test_dashboard_update_access(self):
+        """Test dashboard update access"""
+        name = 'new dashboard name'
+        response = self.api_client.put(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'dashboard',
+                'api_name': 'v1',
+                'pk': self.user2_dashboard.pk,
+            }),
+            data={
+                'name': name,
+                'description': 'description',
+                'code': 'code',
+            },
+            format='json',
+        )
+        self.assertHttpUnauthorized(response)
+        dashboard = Dashboard.objects.get(id=self.user2_dashboard.id)
+        self.assertNotEqual(dashboard.name, name)
+
+    def test_dashboard_delete(self):
+        """Test dashboard delete"""
+        self.api_client.delete(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'dashboard',
+                'api_name': 'v1',
+                'pk': self.user1_dashboard.pk,
+            }),
+            format='json',
+        )
+        with self.assertRaises(Dashboard.DoesNotExist):
+            Dashboard.objects.get(id=self.user1_dashboard.id)
+
+    def test_dashboard_delete_access(self):
+        """Test dashboard delete access"""
+        response = self.api_client.delete(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'dashboard',
+                'api_name': 'v1',
+                'pk': self.user2_dashboard.pk,
+            }),
+            format='json',
+        )
+        self.assertHttpUnauthorized(response)
+        self.assertEqual(
+            self.user2_dashboard,
+            Dashboard.objects.get(id=self.user2_dashboard.id),
+        )

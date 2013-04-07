@@ -76,7 +76,7 @@ class DeviceMethodResource(ModelResource):
 
 class DeviceMethodCallAuthorization(DjangoAuthorization):
     """Authorization for device method call"""
-    #
+
     def read_list(self, object_list, bundle):
         """Return only owner devices"""
         return super(DeviceMethodCallAuthorization, self).read_list(
@@ -147,18 +147,55 @@ class DeviceMethodCallResource(ModelResource):
         excludes = ('caller',)
 
 
+class DashboardAuthorization(DjangoAuthorization):
+    """Authorization for dashboards"""
+
+    def read_list(self, object_list, bundle):
+        """Return only owner devices"""
+        return super(DashboardAuthorization, self).read_list(
+            object_list.filter(owner=bundle.request.user), bundle,
+        )
+
+    def read_detail(self, object_list, bundle):
+        """Return only owner device"""
+        if bundle.obj.owner == bundle.request.user:
+            return super(DashboardAuthorization, self).read_detail(
+                object_list, bundle,
+            )
+        else:
+            raise Unauthorized('Not your dashboard')
+
+    def create_detail(self, object_list, bundle):
+        """Check method owner"""
+        return True
+
+    def update_detail(self, object_list, bundle):
+        """Update only owner dashboards"""
+        if bundle.obj.owner == bundle.request.user:
+            return True
+        else:
+            raise Unauthorized('Not your dashboard')
+
+    def delete_detail(self, object_list, bundle):
+        """Update only owner dashboards"""
+        if bundle.obj.owner == bundle.request.user:
+            return True
+        else:
+            raise Unauthorized('Not your dashboard')
+
+
 class DashboardResource(ModelResource):
     """Resource for dashboards"""
 
-    def apply_authorization_limits(self, request, object_list):
-        """Only user resources"""
-        return object_list.filter(
-            owner=request.user,
+    def obj_create(self, bundle, **kwargs):
+        """Create call with caller"""
+        return super(DashboardResource, self).obj_create(
+            bundle, owner=bundle.request.user, **kwargs
         )
 
     class Meta:
         queryset = Dashboard.objects.all()
         resource_name = 'dashboard'
-        authorization = DjangoAuthorization()
+        authorization = DashboardAuthorization()
         allowed_methods = ('get', 'post', 'put', 'delete', 'patch')
         excludes = ('slug', 'owner', 'image')
