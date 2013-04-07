@@ -49,8 +49,8 @@ Testing
 
 For running tests run::
 
-    ./manage.py test devices interface connector push_notifications
+    ./manage.py test accounts devices interface connector push_notifications
 
 For faster testing use in-memory sqlite with::
 
-    ./manage.py test devices interface connector push_notifications --settings=rdevices.test_settings
+    ./manage.py test accounts devices interface connector push_notifications --settings=rdevices.test_settings
