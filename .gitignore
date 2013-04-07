@@ -39,4 +39,4 @@ media/*
 
 !static/.gitkeep
 !media/.gitkeep
-
+!media/test.png

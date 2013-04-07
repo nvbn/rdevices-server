@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from interface.models import CarouselEntry, NewsEntry
+from interface.models import CarouselEntry
 from django.views.generic import TemplateView
 
 
@@ -19,5 +19,4 @@ class Index(TemplateView):
         """Get carousel and news"""
         return {
             'carousel': CarouselEntry.objects.enabled(),
-            'news': NewsEntry.objects.enabled(),
         }
