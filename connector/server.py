@@ -64,6 +64,11 @@ class DeviceConnection(object):
         method.spec = request['spec']
         method.description = request['description']
         method.save()
+        logger.info('Declare:%s', json.dumps({
+            'name': method.name,
+            'device': method.device.uuid,
+            'spec': method.spec,
+        }))
 
     def action_response(self, request):
         """Set response to method call"""
@@ -117,6 +122,9 @@ class DeviceServer(TCPServer):
 
     def _on_call(self, msg):
         """On new call"""
+        if not type(msg.body) in (str, unicode):
+            # skip service messages
+            return
         try:
             data = json.loads(msg.body)
             self._connections[data['uuid']].send_request(

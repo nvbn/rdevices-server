@@ -36,6 +36,7 @@ ENV/*
 logs/
 static/*
 media/*
+test_daemons.db
 
 !static/.gitkeep
 !media/.gitkeep

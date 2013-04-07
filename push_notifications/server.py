@@ -38,7 +38,7 @@ class PushConnection(SockJSConnection):
         subscribers.remove(self)
 
     def on_close(self):
-        """unsubscribe user on connection close"""
+        """Unsubscribe user on connection close"""
         if self.user_id:
             self.unsubscribe()
 
