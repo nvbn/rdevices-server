@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
-from devices.models import Device, DeviceMethod
+from devices.models import Device
+from tools.shortcuts import send_call_request
 import subprocess
 import socket
 import time
@@ -74,11 +75,36 @@ class RequestsCase(TestCase):
         self.sock.send(json.dumps(self.declaration) + '\n')
         self._declare_out = self.server.stdout.readline()
 
+    def _request(self):
+        """Send request"""
+        self._request_id = 1
+        send_call_request(
+            action='request',
+            method=self.declaration['name'],
+            request_id=self._request_id,
+            uuid=self.declaration['uuid'],
+            request={
+                'a': 'valA',
+                'b': 'valB',
+            },
+        )
+        self._request_out = self.server.stdout.readline()
+
     def _parse(self, out):
         """Parse output"""
-        method, data = self._declare_out.split(':', 1)
+        method, data = out.split(':', 1)
         obj = json.loads(data.strip())
         return method, obj
+
+    def _read(self):
+        """Read from sock before new line"""
+        out = ''
+        while True:
+            char = self.sock.recv(1)
+            if char == '\n':
+                return out
+            else:
+                out += char
 
     def test_declare_methods(self):
         """Test method declaration"""
@@ -89,3 +115,13 @@ class RequestsCase(TestCase):
         )
         self.assertEqual(call['device'], self.declaration['uuid'])
 
+    def test_method_request(self):
+        """Test method requests"""
+        self._request()
+        method, data = self._parse(self._request_out)
+        self.assertEqual(method, 'Request')
+        self.assertEqual(data['request_id'], self._request_id)
+        request = json.loads(self._read())
+        self.assertEqual(request['action'], 'request')
+        self.assertEqual(request['uuid'], self.declaration['uuid'])
+        self.assertEqual(request['request_id'], self._request_id)

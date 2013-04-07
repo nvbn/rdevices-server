@@ -89,6 +89,7 @@ class DeviceConnection(object):
     def send_request(self, request):
         """Send request to device"""
         self._stream.write(json.dumps(request) + '\n')
+        logger.info('Request:%s', json.dumps(request))
 
 
 class DeviceServer(TCPServer):
