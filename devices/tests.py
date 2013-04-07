@@ -1,9 +1,12 @@
+from random import randint
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.http import HttpResponseNotFound
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from tastypie.test import ResourceTestCase
+from tools import connections
 from devices.models import (
     Device, DeviceMethodCall, DeviceMethod, Dashboard,
 )
@@ -11,6 +14,7 @@ from devices.forms import (
     CreateDeviceForm, UpdateDeviceForm, DeviceMethodCallForm,
     CreateDashboardForm, UpdateDashboardForm,
 )
+import json
 
 
 class ModelTestCase(TestCase):
@@ -953,3 +957,30 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
             self.user2_dashboard,
             Dashboard.objects.get(id=self.user2_dashboard.id),
         )
+
+
+class CallRequestCase(TestCase, BasicDataMixin):
+    """Test creating call requests"""
+
+    def setUp(self):
+        """Create initial data"""
+        BasicDataMixin.setUp(self)
+
+    def test_messaging_query(self):
+        """Test receiving request in mq"""
+        pubsub = connections.r.pubsub()
+        pubsub.subscribe(settings.CALLS_CHANNEL)
+        next(pubsub.listen())
+        x = str(randint(0, 100))
+        y = str(randint(0, 100))
+        call = DeviceMethodCall.objects.create(
+            method=self.user1_method,
+            request={
+                'x': x,
+                'y': y,
+            },
+            caller=self.user1,
+        )
+        msg = next(pubsub.listen())
+        data = json.loads(msg['data'])
+        self.assertEqual(data['request_id'], call.id)
