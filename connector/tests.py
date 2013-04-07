@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
-from devices.models import Device
+from devices.models import Device, DeviceMethodCall, DeviceMethod
 from tools.shortcuts import send_call_request
+from tools import connections
 import subprocess
 import socket
 import time
@@ -41,6 +42,8 @@ class RequestsCase(TestCase):
         self._connect()
         self.user = User.objects.get(pk=1)
         self.device = Device.objects.get(pk=1)
+        self.method = DeviceMethod.objects.get(pk=1)
+        self.call = DeviceMethodCall.objects.get(pk=1)
         self._declare()
 
     def tearDown(self):
@@ -65,8 +68,8 @@ class RequestsCase(TestCase):
         self.declaration = {
             'uuid': self.device.uuid,
             'spec': {
-                'a': 'str',
-                'b': 'str',
+                'x': 'str',
+                'y': 'str',
             },
             'name': 'method',
             'description': 'description',
@@ -77,15 +80,15 @@ class RequestsCase(TestCase):
 
     def _request(self):
         """Send request"""
-        self._request_id = 1
+        self._request_id = 2
         send_call_request(
             action='request',
             method=self.declaration['name'],
             request_id=self._request_id,
             uuid=self.declaration['uuid'],
             request={
-                'a': 'valA',
-                'b': 'valB',
+                'x': 'valA',
+                'y': 'valB',
             },
         )
         self._request_out = self.server.stdout.readline()
@@ -125,3 +128,38 @@ class RequestsCase(TestCase):
         self.assertEqual(request['action'], 'request')
         self.assertEqual(request['uuid'], self.declaration['uuid'])
         self.assertEqual(request['request_id'], self._request_id)
+
+    def test_method_response(self):
+        """Test method response"""
+        pubsub = connections.r.pubsub()
+        pubsub.subscribe(settings.NOTIFICATIONS_CHANNEL)
+        next(pubsub.listen())
+        send_call_request(
+            action='request',
+            method=self.method.name,
+            request_id=self.call.id,
+            uuid=self.device.uuid,
+            request={
+                'x': 'valA',
+                'y': 'valB',
+            },
+        )
+        self.server.stdout.readline()
+        request = json.loads(self._read())
+        response_value = 'response'
+        self.sock.send(json.dumps({
+            'request_id': self.call.id,
+            'uuid': self.device.uuid,
+            'action': 'response',
+            'response': response_value,
+        }) + '\n')
+        out = self.server.stdout.readline()
+        method, data = self._parse(out)
+        self.assertEqual(method, 'Response')
+        self.assertEqual(data['response'], response_value)
+        self.assertEqual(data['request_id'], request['request_id'])
+        msg = next(pubsub.listen())
+        notify = json.loads(msg['data'])
+        self.assertEqual(notify['action'], 'call_changed')
+        self.assertEqual(notify['user_id'], self.user.id)
+        self.assertEqual(notify['call_id'], self.call.id)

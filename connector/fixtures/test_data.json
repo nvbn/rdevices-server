@@ -1,32 +1,56 @@
 [
 {
     "pk": 1,
-    "model": "auth.user", 
+    "model": "auth.user",
     "fields": {
-        "username": "user", 
-        "first_name": "", 
-        "last_name": "", 
-        "is_active": true, 
-        "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-04-07T12:53:13.909Z", 
-        "groups": [], 
-        "user_permissions": [], 
-        "password": "", 
-        "email": "", 
+        "username": "user",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2013-04-07T12:53:13.909Z",
+        "groups": [],
+        "user_permissions": [],
+        "password": "",
+        "email": "",
         "date_joined": "2013-04-07T12:53:13.909Z"
     }
 },
 {
     "pk": 1,
-    "model": "devices.device", 
+    "model": "devices.device",
     "fields": {
-        "description": null, 
-        "image": "", 
-        "name": "device", 
-        "owner": 11, 
-        "slug": "device", 
+        "description": null,
+        "image": "",
+        "name": "device",
+        "owner": 1,
+        "slug": "device",
         "uuid": "23d6e61e-9f82-11e2-a40d-5404a6499c84"
+    }
+},
+{
+    "pk": 1,
+    "model": "devices.devicemethod",
+    "fields": {
+        "is_enabled": true,
+        "description": null,
+        "slug": "device_method",
+        "device": 1,
+        "spec": "{\"y\":\"int\",\"x\":\"int\"}",
+        "name": "device_method"
+    }
+},
+{
+    "pk": 1,
+    "model": "devices.devicemethodcall",
+    "fields": {
+        "created": "2013-04-07T14:01:16.253Z",
+        "caller": 1,
+        "request": "{\"y\":\"45\",\"x\":\"23\"}",
+        "method": 1,
+        "state": 0,
+        "response": ""
     }
 }
 ]

@@ -85,6 +85,7 @@ class DeviceConnection(object):
             'call_id': call.id,
             'action': 'call_changed',
         })
+        logger.info('Response:%s', json.dumps(request))
 
     def send_request(self, request):
         """Send request to device"""
