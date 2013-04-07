@@ -2,8 +2,27 @@ from devices.models import (
     Device, DeviceMethod, DeviceMethodCall, Dashboard,
 )
 from tastypie.resources import ModelResource
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import DjangoAuthorization, Unauthorized
 from tastypie import fields
+
+
+class DeviceAuthorization(DjangoAuthorization):
+    """Authorization for device"""
+
+    def read_list(self, object_list, bundle):
+        """Return only owner devices"""
+        return super(DeviceAuthorization, self).read_list(
+            object_list.filter(owner=bundle.request.user), bundle,
+        )
+
+    def read_detail(self, object_list, bundle):
+        """Return only owner device"""
+        if bundle.obj.owner == bundle.request.user:
+            return super(DeviceAuthorization, self).read_detail(
+                object_list, bundle,
+            )
+        else:
+            raise Unauthorized('Not your device')
 
 
 class DeviceResource(ModelResource):
@@ -13,17 +32,11 @@ class DeviceResource(ModelResource):
         blank=True, full=False,
     )
 
-    def apply_authorization_limits(self, request, object_list):
-        """Only user resources"""
-        return object_list.filter(
-            owner=request.user,
-        )
-
     class Meta:
         queryset = Device.objects.all()
         resource_name = 'device'
         allowed_methods = ('get',)
-        authorization = DjangoAuthorization()
+        authorization = DeviceAuthorization()
         excludes = ('owner',)
 
 

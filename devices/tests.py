@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseNotFound
 from django.test.client import Client
 from django.core.urlresolvers import reverse
+from tastypie.test import ResourceTestCase
 from devices.models import (
     Device, DeviceMethodCall, DeviceMethod, Dashboard,
 )
@@ -165,13 +166,12 @@ class FormsTestCase(TestCase):
         self.assertEqual(dashboard.name, dashboard_name)
 
 
-class ViewsTestCase(TestCase):
-    """Test case for views"""
+class BasicDataMixin(object):
+    """Mixin with basic data without fixtures"""
 
     def setUp(self):
         """Create initial data"""
         self._create_users()
-        self._create_client()
         self._create_devices()
         self._create_methods()
         self._create_dashboards()
@@ -192,14 +192,6 @@ class ViewsTestCase(TestCase):
         self.user2 = User.objects.create(
             username='user2',
             is_active=True,
-        )
-
-    def _create_client(self):
-        """Create test client"""
-        self.client = Client()
-        self.client.login(
-            username='user1',
-            password='user1',
         )
 
     def _create_devices(self):
@@ -251,6 +243,23 @@ class ViewsTestCase(TestCase):
             owner=self.user2,
             name='dashboard 2',
             description='description 2',
+        )
+
+
+class ViewsTestCase(TestCase, BasicDataMixin):
+    """Test case for views"""
+
+    def setUp(self):
+        """Create initial data"""
+        BasicDataMixin.setUp(self)
+        self._create_client()
+
+    def _create_client(self):
+        """Create test client"""
+        self.client = Client()
+        self.client.login(
+            username='user1',
+            password='user1',
         )
 
     def test_device_list(self):
@@ -540,3 +549,108 @@ class ViewsTestCase(TestCase):
             'slug': self.user2_dashboard.slug,
         }))
         self.assertIsInstance(response, HttpResponseNotFound)
+
+
+class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
+    """Test case for resources"""
+
+    def setUp(self):
+        """Create initial data"""
+        super(ResourcesTestCase, self).setUp()
+        BasicDataMixin.setUp(self)
+        self._authenticate()
+
+    def _authenticate(self):
+        """Authenticate client"""
+        self.api_client.client.login(
+            username='user1',
+            password='user1',
+        )
+
+    def test_device_create(self):
+        """Test create device"""
+        response = self.api_client.post(
+            reverse('api_dispatch_list', kwargs={
+                'resource_name': 'device',
+                'api_name': 'v1',
+            }),
+            data={
+                'name': 'created device',
+                'description': 'device description',
+            },
+            format='json',
+        )
+        self.assertHttpMethodNotAllowed(response)
+
+    def test_device_read(self):
+        """Test read device"""
+        response = self.api_client.get(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device',
+                'api_name': 'v1',
+                'pk': self.user1_device.pk,
+            }),
+            format='json',
+        )
+        self.assertEqual(
+            self.deserialize(response)['name'],
+            self.user1_device.name,
+        )
+
+    def test_device_read_access(self):
+        """Test read device access"""
+        response = self.api_client.get(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device',
+                'api_name': 'v1',
+                'pk': self.user2_device.pk,
+            }),
+            format='json',
+        )
+        self.assertHttpUnauthorized(response)
+
+    def test_device_update(self):
+        """Test update device"""
+        response = self.api_client.put(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device',
+                'api_name': 'v1',
+                'pk': self.user1_device.pk,
+            }),
+            data={
+                'name': 'created device',
+                'description': 'device description',
+            },
+            format='json',
+        )
+        self.assertHttpMethodNotAllowed(response)
+
+    def test_device_update(self):
+        """Test update device"""
+        response = self.api_client.delete(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device',
+                'api_name': 'v1',
+                'pk': self.user1_device.pk,
+            }),
+            data={
+                'name': 'created device',
+                'description': 'device description',
+            },
+            format='json',
+        )
+        self.assertHttpMethodNotAllowed(response)
+
+    def test_device_list(self):
+        """Test read device"""
+        response = self.api_client.get(
+            reverse('api_dispatch_list', kwargs={
+                'resource_name': 'device',
+                'api_name': 'v1',
+            }),
+            format='json',
+        )
+        self.assertItemsEqual(
+            map(lambda device: device['name'], self.deserialize(response)['objects']),
+            [self.user1_device.name],
+        )
