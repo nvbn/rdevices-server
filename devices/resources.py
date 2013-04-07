@@ -44,19 +44,19 @@ class DeviceMethodAuthorization(DjangoAuthorization):
     """Authorization for device methods"""
 
     def read_list(self, object_list, bundle):
-        """Return only owner devices"""
+        """Return only owner methods"""
         return super(DeviceMethodAuthorization, self).read_list(
             object_list.filter(device__owner=bundle.request.user), bundle,
         )
 
     def read_detail(self, object_list, bundle):
-        """Return only owner device"""
+        """Return only owner method"""
         if bundle.obj.device.owner == bundle.request.user:
             return super(DeviceMethodAuthorization, self).read_detail(
                 object_list, bundle,
             )
         else:
-            raise Unauthorized('Not your device')
+            raise Unauthorized('Not your device method')
 
 
 class DeviceMethodResource(ModelResource):
@@ -74,20 +74,56 @@ class DeviceMethodResource(ModelResource):
         allowed_methods = ('get',)
 
 
+class DeviceMethodCallAuthorization(DjangoAuthorization):
+    """Authorization for device method call"""
+    #
+    def read_list(self, object_list, bundle):
+        """Return only owner devices"""
+        return super(DeviceMethodCallAuthorization, self).read_list(
+            object_list.filter(caller=bundle.request.user), bundle,
+        )
+
+    def read_detail(self, object_list, bundle):
+        """Return only owner device"""
+        if bundle.obj.caller == bundle.request.user:
+            return super(DeviceMethodCallAuthorization, self).read_detail(
+                object_list, bundle,
+            )
+        else:
+            raise Unauthorized('Not your call')
+
+    def create_detail(self, object_list, bundle):
+        """Check method owner"""
+        if bundle.hydrated.obj.method.device.owner == bundle.request.user:
+            return True
+        else:
+            raise Unauthorized('Not your method')
+
+    def update_detail(self, object_list, bundle):
+        """Updates not allowed"""
+        raise Unauthorized('Updates not allowed')
+
+    def delete_detail(self, object_list, bundle):
+        """Deletes not allowed"""
+        raise Unauthorized('Deletes not allowed')
+
+
 class DeviceMethodCallResource(ModelResource):
     """Resource for device method calls"""
     method = fields.ToOneField(DeviceMethodResource, 'method')
-
-    def apply_authorization_limits(self, request, object_list):
-        """Only user resources"""
-        return object_list.filter(
-            caller=request.user,
-        )
 
     def obj_create(self, bundle, **kwargs):
         """Create call with caller"""
         return super(DeviceMethodCallResource, self).obj_create(
             bundle, caller=bundle.request.user, **kwargs
+        )
+
+    def authorized_create_detail(self, object_list, bundle):
+        """Do full hydrate before normal check"""
+        # TODO: rewrite that
+        bundle.hydrated = self.full_hydrate(bundle)
+        return super(DeviceMethodCallResource, self).authorized_create_detail(
+            object_list, bundle,
         )
 
     def dehydrate(self, bundle):
@@ -101,12 +137,12 @@ class DeviceMethodCallResource(ModelResource):
     class Meta:
         queryset = DeviceMethodCall.objects.all()
         resource_name = 'device_method_call'
-        authorization = DjangoAuthorization()
+        authorization = DeviceMethodCallAuthorization()
         filtering = {
             'method': ['exact'],
         }
         always_return_data = True
-        list_allowed_methods = ('get', 'post', 'put')
+        list_allowed_methods = ('get', 'post',)
         detailed_allowed_methods = ('get',)
         excludes = ('caller',)
 

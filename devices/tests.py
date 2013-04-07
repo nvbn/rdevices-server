@@ -734,3 +734,110 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
             map(lambda method: method['name'], self.deserialize(response)['objects']),
             [self.user1_method.name],
         )
+
+    def test_device_method_call_create(self):
+        """Test create device method"""
+        method = reverse('api_dispatch_detail', kwargs={
+            'resource_name': 'device_method',
+            'api_name': 'v1',
+            'pk': self.user1_method.pk,
+        })
+        response = self.api_client.post(
+            reverse('api_dispatch_list', kwargs={
+                'resource_name': 'device_method_call',
+                'api_name': 'v1',
+            }),
+            data={
+                'method': method,
+                'request': {
+                    'x': '1',
+                    'y': '2,'
+                },
+            },
+            format='json',
+        )
+        self.assertHttpCreated(response)
+        call = DeviceMethodCall.objects.order_by('-id')[0]
+        self.assertEqual(call.request['x'], '1')
+        self.assertEqual(call.caller, self.user1)
+
+    def test_device_method_call_create_access(self):
+        """Test device method call create access"""
+        method = reverse('api_dispatch_detail', kwargs={
+            'resource_name': 'device_method',
+            'api_name': 'v1',
+            'pk': self.user2_method.pk,
+        })
+        response = self.api_client.post(
+            reverse('api_dispatch_list', kwargs={
+                'resource_name': 'device_method_call',
+                'api_name': 'v1',
+            }),
+            data={
+                'method': method,
+                'request': {
+                    'x': '1',
+                    'y': '2,'
+                },
+            },
+            format='json',
+        )
+        self.assertHttpUnauthorized(response)
+
+    def test_device_method_call_update(self):
+        """Test device method call update"""
+        call = DeviceMethodCall.objects.create(
+            request={},
+            method=self.user1_method,
+            caller=self.user1,
+        )
+        method = reverse('api_dispatch_detail', kwargs={
+            'resource_name': 'device_method',
+            'api_name': 'v1',
+            'pk': self.user1_method.pk,
+        })
+        response = self.api_client.put(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device_method_call',
+                'api_name': 'v1',
+                'pk': call.pk,
+            }),
+            data={
+                'method': method,
+                'request': {
+                    'x': '1',
+                    'y': '2,'
+                },
+            },
+            format='json',
+        )
+        self.assertHttpUnauthorized(response)
+
+    def test_device_method_call_delete(self):
+        """Test device method call delete"""
+        call = DeviceMethodCall.objects.create(
+            request={},
+            method=self.user1_method,
+            caller=self.user1,
+        )
+        method = reverse('api_dispatch_detail', kwargs={
+            'resource_name': 'device_method',
+            'api_name': 'v1',
+            'pk': self.user1_method.pk,
+        })
+        response = self.api_client.delete(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device_method_call',
+                'api_name': 'v1',
+                'pk': call.pk,
+            }),
+            data={
+                'method': method,
+                'request': {
+                    'x': '1',
+                    'y': '2,'
+                },
+            },
+            format='json',
+        )
+        self.assertHttpUnauthorized(response)
