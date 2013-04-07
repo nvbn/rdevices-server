@@ -21,7 +21,6 @@ Copy settings::
     cp rdevices/settings/{dist,local}.py
 
 Fill local settings values in  rdevices/settings/local.py:
-
  - ``REDIS_CREDENTIALS`` - redis connection credentials
  - ``NOTIFICATIONS_BIND`` - url of push notifications daemon
  - ``FACEBOOK_APP_ID``, ``FACEBOOK_SECRET_KEY``, ``FACEBOOK_REQUEST_PERMISSIONS`` - facebook app information for authentication
