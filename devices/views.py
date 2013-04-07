@@ -113,7 +113,9 @@ class DeviceMethodCallCreate(LoginRequiredMixin, CreateView):
         """Lazy device"""
         if not hasattr(self, '_device'):
             self._device = get_object_or_404(
-                Device, slug=self.kwargs['device_slug'],
+                Device,
+                slug=self.kwargs['device_slug'],
+                owner=self.request.user,
             )
         return self._device
 

@@ -173,6 +173,8 @@ class ViewsTestCase(TestCase):
         """Create initial data"""
         self._create_users()
         self._create_client()
+        self._create_devices()
+        self._create_methods()
 
     def _create_users(self):
         """Create test users"""
@@ -213,17 +215,30 @@ class ViewsTestCase(TestCase):
             owner=self.user2,
         )
 
-    def _patch_view_class(self):
-        """Patch view class for storing last context"""
-        self.last_context = None
-        case = self
-
-        def get_context_data(self, **kwargs):
-            if 'view' not in kwargs:
-                kwargs['view'] = self
-            case.last_context = kwargs
-            return kwargs
-        ContextMixin.get_context_data = get_context_data
+    def _create_methods(self):
+        """Create test methods"""
+        self.user1_method = DeviceMethod.objects.create(
+            device=self.user1_device,
+            name='method 1',
+            spec={
+                'args': {
+                    'x': 'str',
+                    'y': 'str',
+                },
+                'result': 'str',
+            }
+        )
+        self.user2_method = DeviceMethod.objects.create(
+            device=self.user2_device,
+            name='method 2',
+            spec={
+                'args': {
+                    'x': 'str',
+                    'y': 'str',
+                    },
+                'result': 'str',
+                }
+        )
 
     def test_device_list(self):
         """Test device list"""
@@ -345,5 +360,26 @@ class ViewsTestCase(TestCase):
             'slug':  self.user2_device.slug,
         }))
         self.assertIsInstance(response, HttpResponseNotFound)
-        device = Device.objects.get(id= self.user2_device.id)
+        device = Device.objects.get(id=self.user2_device.id)
         self.assertEqual(device.uuid, device_uuid)
+
+    def test_device_method_call_create_get(self):
+        """Test GET to device method call create"""
+        response = self.client.get(reverse('devices_call', kwargs={
+            'device_slug': self.user1_device.slug,
+            'device_method_slug': self.user1_method.slug,
+        }))
+        self.assertEqual(
+            response.context['device'], self.user1_device,
+        )
+        self.assertEqual(
+            response.context['device_method'], self.user1_method,
+        )
+
+    def test_device_method_call_create_get_access(self):
+        """Test GET to device method call create access"""
+        response = self.client.get(reverse('devices_call', kwargs={
+            'device_slug': self.user2_device.slug,
+            'device_method_slug': self.user2_method.slug,
+        }))
+        self.assertIsInstance(response, HttpResponseNotFound)
