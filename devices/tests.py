@@ -841,3 +841,26 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
             format='json',
         )
         self.assertHttpUnauthorized(response)
+
+    def test_device_method_call_prettify(self):
+        """Test device method call prettify"""
+        call = DeviceMethodCall.objects.create(
+            request={},
+            method=self.user1_method,
+            caller=self.user1,
+        )
+        response = self.api_client.get(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device_method_call',
+                'api_name': 'v1',
+                'pk': call.pk,
+            }) + '?with_pretty=true',
+            format='json',
+        )
+        call = self.deserialize(response)
+        self.assertGreater(
+            len(call['pretty_request']), 1,
+        )
+        self.assertGreater(
+            len(call['pretty_response']), 1,
+        )
