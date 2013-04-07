@@ -625,18 +625,14 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
         )
         self.assertHttpMethodNotAllowed(response)
 
-    def test_device_update(self):
-        """Test update device"""
+    def test_device_delete(self):
+        """Test delete device"""
         response = self.api_client.delete(
             reverse('api_dispatch_detail', kwargs={
                 'resource_name': 'device',
                 'api_name': 'v1',
                 'pk': self.user1_device.pk,
             }),
-            data={
-                'name': 'created device',
-                'description': 'device description',
-            },
             format='json',
         )
         self.assertHttpMethodNotAllowed(response)
@@ -653,4 +649,88 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
         self.assertItemsEqual(
             map(lambda device: device['name'], self.deserialize(response)['objects']),
             [self.user1_device.name],
+        )
+
+    def test_device_method_create(self):
+        """Test create device method"""
+        response = self.api_client.post(
+            reverse('api_dispatch_list', kwargs={
+                'resource_name': 'device_method',
+                'api_name': 'v1',
+            }),
+            data={
+                'name': 'created device',
+                'description': 'method description',
+            },
+            format='json',
+        )
+        self.assertHttpMethodNotAllowed(response)
+
+    def test_device_method_read(self):
+        """Test read device method"""
+        response = self.api_client.get(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device_method',
+                'api_name': 'v1',
+                'pk': self.user1_method.pk,
+            }),
+            format='json',
+        )
+        self.assertEqual(
+            self.deserialize(response)['name'],
+            self.user1_method.name,
+        )
+
+    def test_device_method_read_access(self):
+        """Test read device method access"""
+        response = self.api_client.get(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device_method',
+                'api_name': 'v1',
+                'pk': self.user2_method.pk,
+            }),
+            format='json',
+        )
+        self.assertHttpUnauthorized(response)
+
+    def test_device_method_update(self):
+        """Test update device method"""
+        response = self.api_client.put(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device_method',
+                'api_name': 'v1',
+                'pk': self.user1_method.pk,
+            }),
+            data={
+                'name': 'created device method',
+                'description': 'device method description',
+            },
+            format='json',
+        )
+        self.assertHttpMethodNotAllowed(response)
+
+    def test_device_method_delete(self):
+        """Test delete device method"""
+        response = self.api_client.delete(
+            reverse('api_dispatch_detail', kwargs={
+                'resource_name': 'device_method',
+                'api_name': 'v1',
+                'pk': self.user1_method.pk,
+            }),
+            format='json',
+        )
+        self.assertHttpMethodNotAllowed(response)
+
+    def test_device_list(self):
+        """Test read device"""
+        response = self.api_client.get(
+            reverse('api_dispatch_list', kwargs={
+                'resource_name': 'device_method',
+                'api_name': 'v1',
+            }),
+            format='json',
+        )
+        self.assertItemsEqual(
+            map(lambda method: method['name'], self.deserialize(response)['objects']),
+            [self.user1_method.name],
         )

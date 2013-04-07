@@ -40,6 +40,25 @@ class DeviceResource(ModelResource):
         excludes = ('owner',)
 
 
+class DeviceMethodAuthorization(DjangoAuthorization):
+    """Authorization for device methods"""
+
+    def read_list(self, object_list, bundle):
+        """Return only owner devices"""
+        return super(DeviceMethodAuthorization, self).read_list(
+            object_list.filter(device__owner=bundle.request.user), bundle,
+        )
+
+    def read_detail(self, object_list, bundle):
+        """Return only owner device"""
+        if bundle.obj.device.owner == bundle.request.user:
+            return super(DeviceMethodAuthorization, self).read_detail(
+                object_list, bundle,
+            )
+        else:
+            raise Unauthorized('Not your device')
+
+
 class DeviceMethodResource(ModelResource):
     """Resource for device methods"""
     device = fields.ToOneField(DeviceResource, 'device')
@@ -48,16 +67,10 @@ class DeviceMethodResource(ModelResource):
         blank=True, full=False,
     )
 
-    def apply_authorization_limits(self, request, object_list):
-        """Only user resources"""
-        return object_list.filter(
-            device__owner=request.user,
-        )
-
     class Meta:
         queryset = DeviceMethod.objects.all()
         resource_name = 'device_method'
-        authorization = DjangoAuthorization()
+        authorization = DeviceMethodAuthorization()
         allowed_methods = ('get',)
 
 
