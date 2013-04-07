@@ -171,6 +171,11 @@ class ViewsTestCase(TestCase):
 
     def setUp(self):
         """Create initial data"""
+        self._create_users()
+        self._create_client()
+
+    def _create_users(self):
+        """Create test users"""
         self.root = User.objects.create(
             username='root',
             is_superuser=True,
@@ -186,11 +191,17 @@ class ViewsTestCase(TestCase):
             username='user2',
             is_active=True,
         )
+
+    def _create_client(self):
+        """Create test client"""
         self.client = Client()
         self.client.login(
             username='user1',
             password='user1',
         )
+
+    def _create_devices(self):
+        """Create test devices"""
         self.user1_device = Device.objects.create(
             name='device 1',
             description='description',
