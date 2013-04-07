@@ -227,6 +227,8 @@ class PreviewTemplate(TemplateView):
         """Send dashboard to context"""
         return {
             'dashboard': get_object_or_404(
-                Dashboard, slug=self.kwargs['slug'],
+                Dashboard,
+                slug=self.kwargs['slug'],
+                owner=self.request.user,
             ),
         }
