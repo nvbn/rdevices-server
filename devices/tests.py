@@ -235,9 +235,9 @@ class ViewsTestCase(TestCase):
                 'args': {
                     'x': 'str',
                     'y': 'str',
-                    },
+                },
                 'result': 'str',
-                }
+            }
         )
 
     def test_device_list(self):
@@ -382,4 +382,36 @@ class ViewsTestCase(TestCase):
             'device_slug': self.user2_device.slug,
             'device_method_slug': self.user2_method.slug,
         }))
+        self.assertIsInstance(response, HttpResponseNotFound)
+
+    def test_device_method_call_create_post(self):
+        """Test POST to device method call create"""
+        self.client.post(
+            reverse('devices_call', kwargs={
+                'device_slug': self.user1_device.slug,
+                'device_method_slug': self.user1_method.slug,
+            }),
+            {
+                'x': '1',
+                'y': '2',
+            },
+        )
+        call = DeviceMethodCall.objects.filter(
+            method=self.user1_method,
+        ).order_by('-id')[0]
+        self.assertEqual(call.caller, self.user1)
+        self.assertEqual(call.request['x'], '1')
+
+    def test_device_method_call_create_post_access(self):
+        """Test POST to device method call create access"""
+        response = self.client.post(
+            reverse('devices_call', kwargs={
+                'device_slug': self.user1_device.slug,
+                'device_method_slug': self.user2_method.slug,
+            }),
+            {
+                'x': '1',
+                'y': '2',
+            },
+        )
         self.assertIsInstance(response, HttpResponseNotFound)
