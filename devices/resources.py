@@ -33,7 +33,7 @@ class DeviceResource(ModelResource):
     )
 
     class Meta:
-        queryset = Device.objects.all()
+        queryset = Device.objects.select_related('methods')
         resource_name = 'device'
         allowed_methods = ('get',)
         authorization = DeviceAuthorization()
@@ -68,7 +68,7 @@ class DeviceMethodResource(ModelResource):
     )
 
     class Meta:
-        queryset = DeviceMethod.objects.all()
+        queryset = DeviceMethod.objects.select_related('device', 'calls')
         resource_name = 'device_method'
         authorization = DeviceMethodAuthorization()
         allowed_methods = ('get',)
@@ -135,7 +135,7 @@ class DeviceMethodCallResource(ModelResource):
         return bundle
 
     class Meta:
-        queryset = DeviceMethodCall.objects.all()
+        queryset = DeviceMethodCall.objects.select_related('method')
         resource_name = 'device_method_call'
         authorization = DeviceMethodCallAuthorization()
         filtering = {
