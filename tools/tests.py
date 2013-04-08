@@ -46,7 +46,7 @@ class SeleniumTestMixin(object):
             username='test_user',
             email='test_user@test.test',
             is_active=True,
-            )
+        )
         self.user.set_password('test')
         self.user.save()
 

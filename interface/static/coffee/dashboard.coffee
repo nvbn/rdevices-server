@@ -73,16 +73,22 @@ class window.DashboardHelper
     constructor: (@id) ->
         @called = false
         @devices = {}
+        @waiters = []
+
+    _ready: (callback) ->
+        $ =>
+            @initPush =>
+                @loadDashboard =>
+                    @called = true
+                    callback.call @
+                    _.each @waiters, (waiter) =>
+                        waiter.call @
 
     ready: (callback) ->
         if @called
-            callback.call()
+            callback.call @
         else
-            @called = true
-            $ =>
-                @initPush =>
-                    @loadDashboard =>
-                        callback.call @
+            @waiters.push callback
 
     initPush: (callback) ->
         @notifications = new NotificationsHelper callback
@@ -111,3 +117,15 @@ class window.DashboardHelper
                     helper.loadMethods =>
                         @devices[deviceId] = helper
                         callback.call @, helper
+
+$ ->
+    window.dashboard._ready ->
+        if $('[type="text/coffeescript"]').length
+            $.getScript window.staticRoot + 'js/coffee-script.js', ->
+                _.each $('[type="text/coffeescript"]'), (script) ->
+                    CoffeeScript.run $(script).html()
+
+        if $('[type="text/iced-coffeescript"]').length
+            $.getScript window.staticRoot + 'js/coffee-script-iced.js', ->
+                _.each $('[type="text/iced-coffeescript"]'), (script) ->
+                    CoffeeScript.run $(script).html()
