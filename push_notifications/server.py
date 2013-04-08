@@ -65,12 +65,17 @@ class NotificationServer(tornado.web.Application):
             self._r.subscribe, self._channel,
         )
         self._r.listen(self._on_call)
+        logger.info('Start consuming')
 
     def _on_call(self, msg):
         """On new call"""
+        if not type(msg.body) in (str, unicode):
+            # skip service messages
+            return
         try:
             data = json.loads(msg.body)
             user_id = data['user_id']
+            logger.info('Call:%s', msg.body)
             if PushConnection.users.get(user_id, None):
                 for connection in PushConnection.users[user_id]:
                     connection.notify(data)

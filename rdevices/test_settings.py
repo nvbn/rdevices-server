@@ -12,6 +12,7 @@ DATABASES = {
 CALLS_CHANNEL = 'calls_test'
 NOTIFICATIONS_CHANNEL = 'notifications_test'
 TEST_CONNECTOR = 'localhost:9999'
+TEST_PUSH = 'localhost:9990'
 
 LOGGING = {
     'version': 1,
@@ -34,7 +35,11 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
-    }
+        'push_notifications': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
 }
 
 TEST_DAEMON_DB = 'test_daemons.db'

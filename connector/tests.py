@@ -3,38 +3,20 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from devices.models import Device, DeviceMethodCall, DeviceMethod
 from tools.shortcuts import send_call_request
+from tools.tests import TestWithDaemonMixin
 from tools import connections
 import subprocess
 import socket
 import time
 import json
-import os
 
 
-class RequestsCase(TestCase):
+class RequestsCase(TestCase, TestWithDaemonMixin):
     """Test requests"""
-    fixtures = ['connector/fixtures/test_data.json']
 
     def setUp(self):
         """Create server and initial data"""
-        try:
-            os.unlink(os.path.join(
-                settings.PROJECT_ROOT, settings.TEST_DAEMON_DB,
-            ))
-        except OSError:
-            pass
-        subprocess.call([
-            'python', 'manage.py', 'syncdb', '--noinput',
-            '--settings=rdevices.test_daemons_settings',
-        ], stdout=subprocess.PIPE)
-        subprocess.call([
-            'python', 'manage.py', 'migrate', '--noinput',
-            '--settings=rdevices.test_daemons_settings',
-        ], stdout=subprocess.PIPE)
-        subprocess.call([
-            'python', 'manage.py', 'loaddata', 'connector/fixtures/test_data.json',
-            '--settings=rdevices.test_daemons_settings',
-        ], stdout=subprocess.PIPE)
+        TestWithDaemonMixin.setUp(self)
         self.server = subprocess.Popen([
             'python', 'manage.py', 'run_connector', settings.TEST_CONNECTOR,
             '--settings=rdevices.test_daemons_settings',
