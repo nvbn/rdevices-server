@@ -1,9 +1,8 @@
 from django.test import TestCase, LiveServerTestCase
 from django.contrib.auth.models import User
 from guardian.shortcuts import assign
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
 from socialregistration.contrib.github.models import GithubProfile
+from tools.tests import SeleniumTestMixin
 from accounts.models import Profile
 
 
@@ -28,37 +27,15 @@ class ModelCase(TestCase):
         self.assertTrue(self.user.profile.is_social())
 
 
-class ClientSideCase(LiveServerTestCase):
+class ClientSideCase(LiveServerTestCase, SeleniumTestMixin):
     """Test client site part of accounts"""
 
     def setUp(self):
         """Create items"""
-        self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(30)
-        self.base_url = self.live_server_url
-        self.verificationErrors = []
-        self.accept_next_alert = True
-        self.user = User.objects.create(
-            username='test_user',
-            email='test_user@test.test',
-            is_active=True,
-        )
-        self.user.set_password('test')
-        self.user.save()
+        SeleniumTestMixin.setUp(self)
         Profile.objects.create(user=self.user)
         assign('change_profile', self.user, self.user.get_profile())
         assign('change_user', self.user, self.user)
-
-    def _login(self):
-        """Login"""
-        driver = self.driver
-        driver.get(self.base_url + "/")
-        driver.find_element_by_link_text("sign in").click()
-        driver.find_element_by_id("id_identification").clear()
-        driver.find_element_by_id("id_identification").send_keys("test_user")
-        driver.find_element_by_id("id_password").clear()
-        driver.find_element_by_id("id_password").send_keys("test")
-        driver.find_element_by_css_selector("button.btn").click()
 
     def test_registration(self):
         """Test registration"""
@@ -134,24 +111,3 @@ class ClientSideCase(LiveServerTestCase):
 
         user = User.objects.get(id=self.user.id)
         self.assertTrue(user.check_password(password))
-
-    def is_element_present(self, how, what):
-        try:
-            self.driver.find_element(by=how, value=what)
-        except NoSuchElementException, e:
-            return False
-        return True
-
-    def close_alert_and_get_its_text(self):
-        try:
-            alert = self.driver.switch_to_alert()
-            if self.accept_next_alert:
-                alert.accept()
-            else:
-                alert.dismiss()
-            return alert.text
-        finally: self.accept_next_alert = True
-
-    def tearDown(self):
-        self.driver.quit()
-        self.assertEqual([], self.verificationErrors)
