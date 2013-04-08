@@ -41,3 +41,8 @@ $ ->
         view.setMethod $holder.data('method')
         view.setElement $holder
         view.render()
+
+    if $('[type="text/coffeescript"]').length
+        $.getScript window.staticRoot + 'js/coffee-script.js', ->
+            _.each $('[type="text/coffeescript"]'), (script) ->
+                CoffeeScript.run $(script).html()

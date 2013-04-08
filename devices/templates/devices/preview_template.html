@@ -12,6 +12,7 @@
         var dashboard = new DashboardHelper({{ dashboard.id|escapejs }});
         var sock = new SockJS('{{ NOTIFICATIONS_BIND|escapejs }}');
         var userId = {{ request.user.id }};
+        var staticRoot = "{{ STATIC_URL|escapejs }}";
     </script>
 </head>
 <body class='preview-body'>
