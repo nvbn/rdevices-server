@@ -94,10 +94,7 @@ class DeviceMethodCallAuthorization(DjangoAuthorization):
 
     def create_detail(self, object_list, bundle):
         """Check method owner"""
-        if bundle.hydrated.obj.method.device.owner == bundle.request.user:
-            return True
-        else:
-            raise Unauthorized('Not your method')
+        return True
 
     def update_detail(self, object_list, bundle):
         """Updates not allowed"""
@@ -110,25 +107,27 @@ class DeviceMethodCallAuthorization(DjangoAuthorization):
 
 class DeviceMethodCallResource(ModelResource):
     """Resource for device method calls"""
-    method = fields.ToOneField(DeviceMethodResource, 'method')
 
     def obj_create(self, bundle, **kwargs):
         """Create call with caller"""
-        return super(DeviceMethodCallResource, self).obj_create(
-            bundle, caller=bundle.request.user, **kwargs
-        )
-
-    def authorized_create_detail(self, object_list, bundle):
-        """Do full hydrate before normal check"""
-        # TODO: rewrite that
-        bundle.hydrated = self.full_hydrate(bundle)
-        return super(DeviceMethodCallResource, self).authorized_create_detail(
-            object_list, bundle,
-        )
+        # very hackish, but greater improve performance
+        try:
+            return super(DeviceMethodCallResource, self).obj_create(
+                bundle,
+                caller=bundle.request.user,
+                method=DeviceMethod.objects.get(
+                    id=bundle.data['method_id'],
+                    device__owner=bundle.request.user,
+                ),
+                **kwargs
+            )
+        except (DeviceMethod.DoesNotExist, KeyError):
+            self.unauthorized_result('Not allowed method')
 
     def dehydrate(self, bundle):
         """Add pretty field to bundle"""
         bundle.data['text_state'] = bundle.obj.get_state()
+        bundle.data['method_id'] = bundle.obj.method.id
         if bundle.request.GET.get('with_pretty'):
             bundle.data['pretty_request'] = bundle.obj.pretty_request()
             bundle.data['pretty_response'] = bundle.obj.pretty_response()

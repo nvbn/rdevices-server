@@ -741,18 +741,13 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
 
     def test_device_method_call_create(self):
         """Test create device method"""
-        method = reverse('api_dispatch_detail', kwargs={
-            'resource_name': 'device_method',
-            'api_name': 'v1',
-            'pk': self.user1_method.pk,
-        })
         response = self.api_client.post(
             reverse('api_dispatch_list', kwargs={
                 'resource_name': 'device_method_call',
                 'api_name': 'v1',
             }),
             data={
-                'method': method,
+                'method_id': self.user1_method.id,
                 'request': {
                     'x': '1',
                     'y': '2,'
@@ -767,18 +762,13 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
 
     def test_device_method_call_create_access(self):
         """Test device method call create access"""
-        method = reverse('api_dispatch_detail', kwargs={
-            'resource_name': 'device_method',
-            'api_name': 'v1',
-            'pk': self.user2_method.pk,
-        })
         response = self.api_client.post(
             reverse('api_dispatch_list', kwargs={
                 'resource_name': 'device_method_call',
                 'api_name': 'v1',
             }),
             data={
-                'method': method,
+                'method_id': self.user2_method.id,
                 'request': {
                     'x': '1',
                     'y': '2,'

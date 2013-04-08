@@ -49,7 +49,7 @@ class window.DeviceHelper
             callback = (->@)
         call = new DeviceMethodCall
         call.save
-            method: method.resource_uri
+            method_id: method.id
             request: request
         ,
             success: =>
