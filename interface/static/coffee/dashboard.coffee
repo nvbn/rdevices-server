@@ -41,20 +41,21 @@ class window.DeviceHelper
                     callback.call @, 0
 
     callMethod: (method, request, options) ->
-        if _.isFunction options
-            callback = options
-        else if options
-            callback = options.success or (->@)
-        else
-            callback = (->@)
-        call = new DeviceMethodCall
-        call.save
-            method_id: method.id
-            request: request
-        ,
-            success: =>
-                @checkCall call, =>
-                    callback.call @, call.get('response')
+        window.dashboard.calls.push =>
+            if _.isFunction options
+                callback = options
+            else if options
+                callback = options.success or (->@)
+            else
+                callback = (->@)
+            call = new DeviceMethodCall
+            call.save
+                method_id: method.id
+                request: request
+            ,
+                success: =>
+                    @checkCall call, =>
+                        callback.call @, call.get('response')
 
     checkCall: (call, callback) ->
         window.dashboard.notifications.on 'callChanged_' + call.get('id'), =>
@@ -74,6 +75,7 @@ class window.DashboardHelper
         @called = false
         @devices = {}
         @waiters = []
+        @calls = []
 
     _ready: (callback) ->
         $ =>
@@ -83,6 +85,7 @@ class window.DashboardHelper
                     callback.call @
                     _.each @waiters, (waiter) =>
                         waiter.call @
+                    @runCalls()
 
     ready: (callback) ->
         if @called
@@ -117,6 +120,12 @@ class window.DashboardHelper
                     helper.loadMethods =>
                         @devices[deviceId] = helper
                         callback.call @, helper
+
+    runCalls: ->
+        call = @calls.shift()
+        if call
+            call.call @
+        setTimeout (=>@runCalls()), 500
 
 $ ->
     window.dashboard._ready ->
