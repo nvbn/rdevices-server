@@ -22,3 +22,10 @@ django-socialregistration
 -e git+https://github.com/pythonforfacebook/facebook-sdk#egg=FacebookSDK
 gunicorn
 selenium
+django-redis-sessions
+git+git://github.com/dcramer/django-devserver#egg=django-devserver
+line_profiler
+guppy
+werkzeug
+sqlparse
+python-memcached

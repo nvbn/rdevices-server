@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'socialregistration.contrib.github',
     'socialregistration.contrib.twitter',
     'socialregistration.contrib.google',
+    'django_extensions',
 )
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -210,3 +211,23 @@ NOTIFICATIONS_CHANNEL = 'notifications'
 
 
 COMPRESS_ROOT = STATIC_ROOT
+
+SESSION_ENGINE = 'redis_sessions.session'
+
+DEVSERVER_MODULES = (
+    'devserver.modules.sql.SQLRealTimeModule',
+    'devserver.modules.sql.SQLSummaryModule',
+    'devserver.modules.profile.ProfileSummaryModule',
+
+    # Modules not enabled by default
+    'devserver.modules.ajax.AjaxDumpModule',
+    'devserver.modules.cache.CacheSummaryModule',
+    'devserver.modules.profile.LineProfilerModule',
+)
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
