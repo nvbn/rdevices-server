@@ -3,7 +3,8 @@ from devices.models import (
 )
 from tastypie.resources import ModelResource
 from tastypie.authorization import DjangoAuthorization, Unauthorized
-from tastypie import fields
+from tastypie.utils.mime import build_content_type
+from tastypie import fields, http
 
 
 class DeviceAuthorization(DjangoAuthorization):
@@ -112,15 +113,15 @@ class DeviceMethodCallResource(ModelResource):
         """Create call with caller"""
         # very hackish, but greater improve performance
         try:
-            return super(DeviceMethodCallResource, self).obj_create(
-                bundle,
+            bundle.obj = DeviceMethodCall.objects.create(
                 caller=bundle.request.user,
                 method=DeviceMethod.objects.get(
                     id=bundle.data['method_id'],
                     device__owner=bundle.request.user,
                 ),
-                **kwargs
+                request=bundle.data['request'],
             )
+            return bundle
         except (DeviceMethod.DoesNotExist, KeyError):
             self.unauthorized_result('Not allowed method')
 
@@ -143,7 +144,7 @@ class DeviceMethodCallResource(ModelResource):
         always_return_data = True
         list_allowed_methods = ('get', 'post',)
         detailed_allowed_methods = ('get',)
-        excludes = ('caller',)
+        excludes = ('caller', 'method')
 
 
 class DashboardAuthorization(DjangoAuthorization):

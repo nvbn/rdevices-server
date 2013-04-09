@@ -179,18 +179,22 @@ class DeviceMethodCall(models.Model):
             self._get_response_cache_key(),
         ])
 
+    def send_request(self):
+        """Send call request"""
+        send_call_request(
+            action='request',
+            method=self.method.name,
+            request_id=self.id,
+            uuid=self.method.device.uuid,
+            request=self.request,
+        )
+
 
 @receiver(post_save, sender=DeviceMethodCall)
 def send_request(sender, instance, created, **kwargs):
     """Send to call request to device"""
     if created:
-        send_call_request(
-            action='request',
-            method=instance.method.name,
-            request_id=instance.id,
-            uuid=instance.method.device.uuid,
-            request=instance.request,
-        )
+        instance.send_request()
 
 
 class Dashboard(models.Model):
