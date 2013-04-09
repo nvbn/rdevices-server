@@ -3,8 +3,8 @@ from devices.models import (
 )
 from tastypie.resources import ModelResource
 from tastypie.authorization import DjangoAuthorization, Unauthorized
-from tastypie.utils.mime import build_content_type
-from tastypie import fields, http
+from tastypie.exceptions import BadRequest
+from tastypie import fields
 
 
 class DeviceAuthorization(DjangoAuthorization):
@@ -109,6 +109,45 @@ class DeviceMethodCallAuthorization(DjangoAuthorization):
 class DeviceMethodCallResource(ModelResource):
     """Resource for device method calls"""
 
+    def build_filters(self, filters=None, request=None):
+        applicable_filters = super(
+            DeviceMethodCallResource, self,
+        ).build_filters(filters)
+        if filters.get('method_id') and\
+                DeviceMethod.objects.filter(
+                    id=filters['method_id'],
+                    device__owner=request.user,
+                ).count():
+            applicable_filters['method__id'] = filters['method_id']
+        return applicable_filters
+
+    def obj_get_list(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_get_list``.
+
+        Takes an optional ``request`` object, whose ``GET`` dictionary can be
+        used to narrow the query.
+        """
+        filters = {}
+
+        if hasattr(bundle.request, 'GET'):
+            # Grab a mutable copy.
+            filters = bundle.request.GET.copy()
+
+        # Update with the provided kwargs.
+        filters.update(kwargs)
+        applicable_filters = self.build_filters(
+            filters=filters, request=bundle.request,
+        )
+
+        try:
+            objects = self.apply_filters(bundle.request, applicable_filters)
+            return self.authorized_read_list(objects, bundle)
+        except ValueError:
+            raise BadRequest(
+                "Invalid resource lookup data provided (mismatched type).",
+            )
+
     def obj_create(self, bundle, **kwargs):
         """Create call with caller"""
         # very hackish, but greater improve performance
@@ -138,9 +177,6 @@ class DeviceMethodCallResource(ModelResource):
         queryset = DeviceMethodCall.objects.all()
         resource_name = 'device_method_call'
         authorization = DeviceMethodCallAuthorization()
-        filtering = {
-            'method': ['exact'],
-        }
         always_return_data = True
         list_allowed_methods = ('get', 'post',)
         detailed_allowed_methods = ('get',)

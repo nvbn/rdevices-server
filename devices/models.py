@@ -227,3 +227,34 @@ class Dashboard(models.Model):
             'slug': self.slug,
         }
         return 'devices_dashboard', [], kwargs
+
+
+class Notifications(object):
+    def __init__(self, qs):
+        self._qs = qs.order_by('created')
+        self._pool = []
+
+    def _iterate_from_qs(self):
+        for item in self._qs:
+            yield item
+
+            if self._pool:
+                for pool_item in self._pool:
+                    yield pool_item
+                self._pool = []
+
+    def _iterate_notifies(self, iterator, day):
+        for item in iterator:
+            if item.created.day == day:
+                yield item
+            else:
+                self._pool.append(item)
+                break
+
+    def iterate_days(self):
+        iterator = self._iterate_from_qs()
+        for notify in iterator:
+            current_day = notify.created.day
+            day_iterator = self._iterate_notifies(iterator, current_day)
+            day_iterator.date = current_day.date()
+            yield day_iterator

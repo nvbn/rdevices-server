@@ -92,7 +92,7 @@ class window.MethodCallsView extends LazyTemplatedView
         collection = new DeviceMethodCallCollection
         collection.fetch
             data:
-                method: @methodId
+                method_id: @methodId
                 limit: @limit
                 offset: @offset
                 with_pretty: true
