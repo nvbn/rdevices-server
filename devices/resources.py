@@ -134,7 +134,7 @@ class DeviceMethodCallResource(ModelResource):
         return bundle
 
     class Meta:
-        queryset = DeviceMethodCall.objects.select_related('method')
+        queryset = DeviceMethodCall.objects.all()
         resource_name = 'device_method_call'
         authorization = DeviceMethodCallAuthorization()
         filtering = {
