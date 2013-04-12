@@ -45,6 +45,7 @@ class ApiKeyDelete(LoginRequiredMixin, ApiKeyMixin, DeleteView):
     """Delete api key"""
     template_name = 'accounts/apikeys_delete.html'
     slug_field = 'key'
+    context_object_name = 'key'
 
     def get_success_url(self):
         """Get redirect url"""

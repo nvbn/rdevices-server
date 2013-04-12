@@ -1,9 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% load bootstrap %}
+
+{% block content %}
+    <div class='span12 well'>
+        <h2>Are you sure want to delete: {{ key.key }}</h2>
+        <form method='post'>
+            {% csrf_token %}
+            <a href="{% url 'accounts_keys_list' user.username %}" class='btn back'>No, return me to keys list</a>
+            <button type="submit" class='btn btn-danger'>Yes, delete it!</button>
+        </form>
+    </div>
+{% endblock %}
