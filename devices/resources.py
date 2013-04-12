@@ -3,6 +3,9 @@ from devices.models import (
 )
 from tastypie.resources import ModelResource
 from tastypie.authorization import DjangoAuthorization, Unauthorized
+from tastypie.authentication import (
+    ApiKeyAuthentication, MultiAuthentication, SessionAuthentication,
+)
 from tastypie.exceptions import BadRequest
 from tastypie import fields
 
@@ -38,6 +41,9 @@ class DeviceResource(ModelResource):
         resource_name = 'device'
         allowed_methods = ('get',)
         authorization = DeviceAuthorization()
+        authentication = MultiAuthentication(
+            SessionAuthentication(), ApiKeyAuthentication()
+        )
         excludes = ('owner',)
 
 
@@ -68,6 +74,9 @@ class DeviceMethodResource(ModelResource):
         queryset = DeviceMethod.objects.select_related('device')
         resource_name = 'device_method'
         authorization = DeviceMethodAuthorization()
+        authentication = MultiAuthentication(
+            SessionAuthentication(), ApiKeyAuthentication()
+        )
         allowed_methods = ('get',)
 
 
@@ -174,6 +183,9 @@ class DeviceMethodCallResource(ModelResource):
         queryset = DeviceMethodCall.objects.all()
         resource_name = 'device_method_call'
         authorization = DeviceMethodCallAuthorization()
+        authentication = MultiAuthentication(
+            SessionAuthentication(), ApiKeyAuthentication()
+        )
         always_return_data = True
         list_allowed_methods = ('get', 'post',)
         detailed_allowed_methods = ('get',)
@@ -230,5 +242,8 @@ class DashboardResource(ModelResource):
         queryset = Dashboard.objects.all()
         resource_name = 'dashboard'
         authorization = DashboardAuthorization()
+        authentication = MultiAuthentication(
+            SessionAuthentication(), ApiKeyAuthentication()
+        )
         allowed_methods = ('get', 'post', 'put', 'delete', 'patch')
         excludes = ('slug', 'owner', 'image')
