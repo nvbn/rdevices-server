@@ -162,6 +162,7 @@
                         </div>
                         <div class='tab-pane' id="dashboard-{{ pair.method.slug }}">
 <p><strong>Simple usage:</strong></p>
+<p>In JavaScript <code>&lt;script type='text/javascript'&gt;</code>:</p>
 <pre class='prettyprint linenums'>
 device.{{ pair.method }}({{% for arg in pair.method.get_spec_args %}
     {{ arg }}: "{{ arg }}Value"{% if forloop.last %}
@@ -169,21 +170,23 @@ device.{{ pair.method }}({{% for arg in pair.method.get_spec_args %}
     console.log(result);
 });
 </pre>
-<p><strong>Advanced usage:</strong></p>
-<pre class='prettyprint linenums'>
-device.{{ pair.method }}({{% for arg in pair.method.get_spec_args %}
+<p>In CoffeeScript <code>&lt;script type='text/coffeescript'&gt;</code>:</p>
+<pre class='prettyprint linenums example-coffee'>
+device.{{ pair.method }} {% for arg in pair.method.get_spec_args %}
     {{ arg }}: "{{ arg }}Value"{% if forloop.last %}
-{% else %},{% endif %}{% endfor %}}, {
-    success: function(result){
-        console.log('Method call success, ', result);
-    },
-    error: function(error){
-        console.log('Method call failed with', error);
-    }
-});
+{% endif %}{% empty %}{}{% endfor %}, (result) ->
+    console.log result
+</pre>
+<p>In IcedCoffeeScript <code>&lt;script type='text/iced-coffeescript'&gt;</code>:</p>
+<pre class='prettyprint linenums example-iced'>
+await device.{{ pair.method }} {% for arg in pair.method.get_spec_args %}
+    {{ arg }}: "{{ arg }}Value"{% if forloop.last %}
+{% endif %}{% empty %}{}{% endfor %}, defer result
+console.log result
 </pre>
 <p><strong>Full example</strong></p>
-<pre class='prettyprint linenums'>
+<p>In JavaScript <code>&lt;script type='text/javascript'&gt;</code>:</p>
+<pre class='prettyprint linenums example-js'>
 dashboard.ready(function(){
     dashboard.getDevice({{ device.id }}, function(device){
         device.{{ pair.method }}({{% for arg in pair.method.get_spec_args %}
@@ -193,6 +196,24 @@ dashboard.ready(function(){
         });
     });
 });
+</pre>
+<p>In CoffeeScript <code>&lt;script type='text/coffeescript'&gt;</code>:</p>
+<pre class='prettyprint linenums example-coffee'>
+dashboard.ready ->
+    dashboard.getDevice {{ device.id }}, (device) ->
+        device.{{ pair.method }} {% for arg in pair.method.get_spec_args %}
+            {{ arg }}: "{{ arg }}Value"{% if forloop.last %}
+        {% endif %}{% empty %}{}{% endfor %}, (result) ->
+            console.log result
+</pre>
+<p>In IcedCoffeeScript <code>&lt;script type='text/iced-coffeescript'&gt;</code>:</p>
+<pre class='prettyprint linenums example-iced'>
+await dashboard.ready
+await dashboard.getDevice {{ device.id }}, defer device
+await device.{{ pair.method }} {% for arg in pair.method.get_spec_args %}
+    {{ arg }}: "{{ arg }}Value"{% if forloop.last %}
+{% endif %}{% empty %}{}{% endfor %}, defer result
+console.log result
 </pre>
                         </div>
                         <div class='tab-pane' id="api-{{ pair.method.slug }}">
