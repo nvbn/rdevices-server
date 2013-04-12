@@ -13,19 +13,22 @@
         <div class="white-box">
 
             {% block profile_navigation %}
-                {% if user.username == profile.user.username and not profile.is_social %}
+                {% if user.username == profile.user.username %}
                     <ul class="nav nav-pills" id="box-nav">
                         {% block profile_navigation_items %}
                             <li class='active'><a
                                 href="{% url 'userena_profile_detail' user.username %}">{% trans "View profile" %}</a>
                             </li>
-                            <li><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit details" %}</a>
-                            </li>
-                            <li><a
-                                href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a>
-                            </li>
-                            <li><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a>
-                            </li>
+                            {% if not profile.is_social %}
+                                <li><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit details" %}</a>
+                                </li>
+                                <li><a
+                                    href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a>
+                                </li>
+                                <li><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a>
+                                </li>
+                            {% endif %}
+                            <li><a href="{% url 'accounts_keys_list' user.username %}">{% trans "Manage api keys" %}</a></li>
                         {% endblock %}
                     </ul>
                 {% endif %}
