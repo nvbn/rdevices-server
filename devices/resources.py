@@ -41,7 +41,7 @@ class DeviceResource(ModelResource):
         allowed_methods = ('get',)
         authorization = DeviceAuthorization()
         authentication = MultiAuthentication(
-            Authentication(), ManyApiKeyAuthentication(),
+            ManyApiKeyAuthentication(), Authentication(),
         )
         excludes = ('owner',)
 
@@ -74,7 +74,7 @@ class DeviceMethodResource(ModelResource):
         resource_name = 'device_method'
         authorization = DeviceMethodAuthorization()
         authentication = MultiAuthentication(
-            Authentication(), ManyApiKeyAuthentication(),
+            ManyApiKeyAuthentication(), Authentication(),
         )
         allowed_methods = ('get',)
 
@@ -183,7 +183,7 @@ class DeviceMethodCallResource(ModelResource):
         resource_name = 'device_method_call'
         authorization = DeviceMethodCallAuthorization()
         authentication = MultiAuthentication(
-            Authentication(), ManyApiKeyAuthentication(),
+            ManyApiKeyAuthentication(), Authentication(),
         )
         always_return_data = True
         list_allowed_methods = ('get', 'post',)
@@ -242,7 +242,7 @@ class DashboardResource(ModelResource):
         resource_name = 'dashboard'
         authorization = DashboardAuthorization()
         authentication = MultiAuthentication(
-            Authentication(), ManyApiKeyAuthentication(),
+            ManyApiKeyAuthentication(), Authentication(),
         )
         allowed_methods = ('get', 'post', 'put', 'delete', 'patch')
         excludes = ('slug', 'owner', 'image')
