@@ -63,13 +63,9 @@ class DeviceMethodAuthorization(DjangoAuthorization):
 class DeviceMethodResource(ModelResource):
     """Resource for device methods"""
     device = fields.ToOneField(DeviceResource, 'device')
-    calls = fields.ToManyField(
-        'devices.resources.DeviceMethodCallResource', 'calls',
-        blank=True, full=False,
-    )
 
     class Meta:
-        queryset = DeviceMethod.objects.select_related('device', 'calls')
+        queryset = DeviceMethod.objects.select_related('device')
         resource_name = 'device_method'
         authorization = DeviceMethodAuthorization()
         allowed_methods = ('get',)
