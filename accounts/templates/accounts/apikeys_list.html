@@ -1,9 +1,42 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
 
-</body>
-</html>
+
+
+{% block content %}
+<div class='span12 well'>
+    <ul class="nav nav-pills" id="box-nav">
+        {% block profile_navigation_items %}
+            <li><a href="{% url 'userena_profile_detail' user.username %}">{% trans "View profile" %}</a></li>
+            <li><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit details" %}</a>
+            </li>
+            <li><a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a></li>
+            <li class='active'><a href="{% url 'accounts_keys_list' user.username %}">{% trans "Manage api keys" %}</a></li>
+        {% endblock %}
+    </ul>
+    {% if keys.count %}
+        <h2>Manage api keys</h2>
+        <ul>
+            {% for key in keys %}
+                <li>
+                    {{ key.key }}
+                    <a
+                        href="{% url 'accounts_keys_delete' user.username key.key %}"
+                        data-toggle="tooltip"
+                        title='Delete api key'
+                        class='action'
+                        >
+                    <b class="icon-trash icon-1x"></b>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>You don't have api keys</h2>
+    {% endif %}
+    <form method="post" action='{% url "accounts_keys_create" user.username %}'>
+        {% csrf_token %}
+        <button type="submit" class='btn'>Create new api key</button>
+    </form>
+</div>
+{% endblock %}
