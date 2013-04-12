@@ -232,8 +232,8 @@ dashboard.ready(function(){
                                             GET
                                         </td>
                                         <td>
-                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}&format=xml">
-                                                {% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}
+                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method_id={{ pair.method.pk }}&format=xml">
+                                                {% url "api_dispatch_list" "v1" "device_method_call" %}?method_id={{ pair.method.pk }}
                                             </a>
                                         </td>
                                     </tr>
@@ -258,7 +258,7 @@ dashboard.ready(function(){
                                             PUT, POST
                                         </td>
                                         <td>
-                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}&format=xml">
+                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method=_id{{ pair.method.pk }}&format=xml">
                                                 {% url "api_dispatch_list" "v1" "device_method_call" %}CALL_ID/
                                             </a>
                                         </td>
