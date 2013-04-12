@@ -75,7 +75,9 @@ class ViewsCase(TestCase):
             range(100),
         ) + [self.user1_key]
 
-        response = self.client.get(reverse('accounts_keys_list'))
+        response = self.client.get(reverse('accounts_keys_list', kwargs={
+            'username': self.user1.username,
+        }))
         self.assertItemsEqual(
             response.context['keys'],
             keys,
@@ -83,7 +85,9 @@ class ViewsCase(TestCase):
 
     def test_create_key(self):
         """Test create api keys"""
-        self.client.post(reverse('accounts_keys_create'))
+        self.client.post(reverse('accounts_keys_create', kwargs={
+            'username': self.user1.username,
+        }))
         self.assertEqual(
             ApiKey.objects.filter(
                 user=self.user1,
@@ -95,6 +99,7 @@ class ViewsCase(TestCase):
         self.client.post(
             reverse('accounts_keys_delete', kwargs={
                 'slug': self.user1_key.key,
+                'username': self.user1.username,
             }),
         )
         with self.assertRaises(ApiKey.DoesNotExist):
@@ -107,6 +112,7 @@ class ViewsCase(TestCase):
         response = self.client.post(
             reverse('accounts_keys_delete', kwargs={
                 'slug': self.user2_key.key,
+                'username': self.user2.username,
             }),
         )
         self.assertIsInstance(response, HttpResponseNotFound)
