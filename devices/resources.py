@@ -3,7 +3,7 @@ from devices.models import (
 )
 from tastypie.resources import ModelResource
 from tastypie.authorization import DjangoAuthorization, Unauthorized
-from tastypie.authentication import MultiAuthentication, SessionAuthentication
+from tastypie.authentication import MultiAuthentication, Authentication
 from tastypie.exceptions import BadRequest
 from tastypie import fields
 from accounts.authentication import ManyApiKeyAuthentication
@@ -41,7 +41,7 @@ class DeviceResource(ModelResource):
         allowed_methods = ('get',)
         authorization = DeviceAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ManyApiKeyAuthentication(),
+            Authentication(), ManyApiKeyAuthentication(),
         )
         excludes = ('owner',)
 
@@ -74,7 +74,7 @@ class DeviceMethodResource(ModelResource):
         resource_name = 'device_method'
         authorization = DeviceMethodAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ManyApiKeyAuthentication(),
+            Authentication(), ManyApiKeyAuthentication(),
         )
         allowed_methods = ('get',)
 
@@ -183,7 +183,7 @@ class DeviceMethodCallResource(ModelResource):
         resource_name = 'device_method_call'
         authorization = DeviceMethodCallAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ManyApiKeyAuthentication(),
+            Authentication(), ManyApiKeyAuthentication(),
         )
         always_return_data = True
         list_allowed_methods = ('get', 'post',)
@@ -242,7 +242,7 @@ class DashboardResource(ModelResource):
         resource_name = 'dashboard'
         authorization = DashboardAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ManyApiKeyAuthentication(),
+            Authentication(), ManyApiKeyAuthentication(),
         )
         allowed_methods = ('get', 'post', 'put', 'delete', 'patch')
         excludes = ('slug', 'owner', 'image')
