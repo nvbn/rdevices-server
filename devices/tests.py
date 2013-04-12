@@ -352,7 +352,7 @@ class ViewsTestCase(TestCase, BasicDataMixin):
             },
         )
         self.assertIsInstance(response, HttpResponseNotFound)
-        device = Device.objects.get(id= self.user2_device.id)
+        device = Device.objects.get(id=self.user2_device.id)
         self.assertNotEqual(device.name, name)
 
     def test_device_delete(self):

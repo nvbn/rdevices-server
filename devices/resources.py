@@ -3,11 +3,10 @@ from devices.models import (
 )
 from tastypie.resources import ModelResource
 from tastypie.authorization import DjangoAuthorization, Unauthorized
-from tastypie.authentication import (
-    ApiKeyAuthentication, MultiAuthentication, SessionAuthentication,
-)
+from tastypie.authentication import MultiAuthentication, SessionAuthentication
 from tastypie.exceptions import BadRequest
 from tastypie import fields
+from accounts.authentication import ManyApiKeyAuthentication
 
 
 class DeviceAuthorization(DjangoAuthorization):
@@ -42,7 +41,7 @@ class DeviceResource(ModelResource):
         allowed_methods = ('get',)
         authorization = DeviceAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ApiKeyAuthentication()
+            SessionAuthentication(), ManyApiKeyAuthentication(),
         )
         excludes = ('owner',)
 
@@ -75,7 +74,7 @@ class DeviceMethodResource(ModelResource):
         resource_name = 'device_method'
         authorization = DeviceMethodAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ApiKeyAuthentication()
+            SessionAuthentication(), ManyApiKeyAuthentication(),
         )
         allowed_methods = ('get',)
 
@@ -184,7 +183,7 @@ class DeviceMethodCallResource(ModelResource):
         resource_name = 'device_method_call'
         authorization = DeviceMethodCallAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ApiKeyAuthentication()
+            SessionAuthentication(), ManyApiKeyAuthentication(),
         )
         always_return_data = True
         list_allowed_methods = ('get', 'post',)
@@ -243,7 +242,7 @@ class DashboardResource(ModelResource):
         resource_name = 'dashboard'
         authorization = DashboardAuthorization()
         authentication = MultiAuthentication(
-            SessionAuthentication(), ApiKeyAuthentication()
+            SessionAuthentication(), ManyApiKeyAuthentication(),
         )
         allowed_methods = ('get', 'post', 'put', 'delete', 'patch')
         excludes = ('slug', 'owner', 'image')
