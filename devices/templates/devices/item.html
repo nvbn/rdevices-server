@@ -77,10 +77,12 @@
                     class='copy-it'
                     title='Use it in dashboards'
                     >{{ device.id }}</a>
-        <p>
-            <strong>description:</strong>
-            {{ device.description|linebreaksbr }}
-        </p>
+        {% if device.description %}
+            <p>
+                <strong>description:</strong>
+                {{ device.description|linebreaksbr }}
+            </p>
+        {% endif %}
         {% if device.methods.count %}
             {% for pair in methods %}
                 </div><div class='span12 well'>
@@ -184,7 +186,7 @@ await device.{{ pair.method }} {% for arg in pair.method.get_spec_args %}
 {% endif %}{% empty %}{}{% endfor %}, defer result
 console.log result
 </pre>
-<p><strong>Full example</strong></p>
+<p><strong>Full example:</strong></p>
 <p>In JavaScript <code>&lt;script type='text/javascript'&gt;</code>:</p>
 <pre class='prettyprint linenums example-js'>
 dashboard.ready(function(){
