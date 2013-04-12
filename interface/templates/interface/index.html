@@ -14,7 +14,7 @@
                             class='item'
                         {% endif %}
                     >
-                        <img src='{{ STATIC_URL }}{% thumbnail entry.image '1130x615' %}' />
+                        <img src='{% thumbnail entry.image '1130x615' %}' />
                         <div class="carousel-caption">
                             <h4>{{ entry.title }}</h4>
                             <p>
