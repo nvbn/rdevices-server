@@ -747,7 +747,8 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
                 'api_name': 'v1',
             }),
             data={
-                'method_id': self.user1_method.id,
+                'method': self.user1_method.name,
+                'device': self.user1_device.uuid,
                 'request': {
                     'x': '1',
                     'y': '2,'
@@ -768,7 +769,8 @@ class ResourcesTestCase(ResourceTestCase, BasicDataMixin):
                 'api_name': 'v1',
             }),
             data={
-                'method_id': self.user2_method.id,
+                'method': self.user2_method.name,
+                'device': self.user2_device.uuid,
                 'request': {
                     'x': '1',
                     'y': '2,'

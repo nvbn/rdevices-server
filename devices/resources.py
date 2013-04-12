@@ -155,7 +155,8 @@ class DeviceMethodCallResource(ModelResource):
             bundle.obj = DeviceMethodCall.objects.create(
                 caller=bundle.request.user,
                 method=DeviceMethod.objects.get(
-                    id=bundle.data['method_id'],
+                    name=bundle.data['method'],
+                    device__uuid=bundle.data['device'],
                     device__owner=bundle.request.user,
                 ),
                 request=bundle.data['request'],
