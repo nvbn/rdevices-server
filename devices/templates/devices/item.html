@@ -245,7 +245,7 @@ dashboard.ready(function(){
                                             PUT, POST
                                         </td>
                                         <td>
-                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}&format=xml">
+                                            <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method_id={{ pair.method.pk }}&format=xml">
                                                 {% url "api_dispatch_list" "v1" "device_method_call" %}
                                             </a>
                                         </td>
@@ -259,13 +259,25 @@ dashboard.ready(function(){
                                         </td>
                                         <td>
                                             <a target="_blank" href="{% url "api_dispatch_list" "v1" "device_method_call" %}?method={{ pair.method.pk }}&format=xml">
-                                                {% url "api_dispatch_list" "v1" "device_method_call" %}DEVICE_METHOD_CALL_ID/
+                                                {% url "api_dispatch_list" "v1" "device_method_call" %}CALL_ID/
                                             </a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <p><strong>Create call example</strong></p>
+                            <p><strong>Create call with curl:</strong></p>
+<pre class='prettyprint linenums'>
+curl "http://{{ request.META.SERVER_NAME }}/api/v1/device_method_call/?username={{ request.user.username }}&api_key=API_KEY"\
+    -H "Accept: application/json" -H "Content-type: application/json"\
+    -X POST -d "{\"method\":\"{{ pair.method.name }}\",\"device\":\"{{ device.uuid }}\",\"request\":{}}"
+</pre>
+                            <p><strong>Read call with curl:</strong></p>
+<pre class='prettyprint linenums'>
+curl "http://{{ request.META.SERVER_NAME }}/api/v1/device_method_call/CALL_ID/?username={{ request.user.username }}&api_key=API_KEY"\
+    -H "Accept: application/json" -H "Content-type: application/json"
+</pre>
+                            <p>Replace <code>CALL_ID</code> and <code>API_KEY</code> with your values.</p>
+                            <p>You can get your <code>API_KEY</code> on <a href="{% url 'accounts_keys_list' user.username %}">api keys page</a>.</p>
                         </div>
                     </div>
                 </div>
