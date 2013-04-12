@@ -41,3 +41,24 @@ $ ->
         view.setMethod $holder.data('method')
         view.setElement $holder
         view.render()
+
+    _.each $('.device-status-icon'), (icon) ->
+        device = $(icon).data 'device'
+        call = new DeviceMethodCall
+        call.save
+            device: device
+            method: 'is_online'
+            request: {}
+        ,
+            success: =>
+                calls = 0
+                checkCall = =>
+                    call.fetch
+                        success: (call) =>
+                            if call.get('state')
+                                $(icon).removeClass 'offline'
+                                $(icon).addClass 'online'
+                            else if calls < 5
+                                calls += 1
+                                setTimeout checkCall, 1000
+                checkCall()

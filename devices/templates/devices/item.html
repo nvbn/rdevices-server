@@ -46,6 +46,13 @@
             </small>
         </h2>
         <p>
+            <strong>status:</strong>
+            <i
+                class="icon-circle offline device-status-icon"
+                data-device='{{ device.uuid }}'
+            ></i>
+        </p>
+        <p>
             <strong>uuid:</strong>
             <a
                 href='#'
@@ -71,7 +78,7 @@
                     title='Use it in dashboards'
                     >{{ device.id }}</a>
         <p>
-            <strong>Description:</strong>
+            <strong>description:</strong>
             {{ device.description|linebreaksbr }}
         </p>
         {% if device.methods.count %}

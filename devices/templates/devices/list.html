@@ -38,7 +38,10 @@
                         <p>
                             <strong>
                                 {{ device }}
-                                <i class="icon-circle offline"></i>
+                                <i
+                                    class="icon-circle offline device-status-icon"
+                                    data-device='{{ device.uuid }}'
+                                ></i>
                             </strong>
                         </p>
                     </a>
