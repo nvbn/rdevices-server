@@ -25,8 +25,10 @@ def image_file_name(instance, filename):
 
 class Device(models.Model):
     """Device"""
-    uuid = ReUUIDField(verbose_name=_('uuid'))
-    slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
+    uuid = ReUUIDField(db_index=True, verbose_name=_('uuid'))
+    slug = AutoSlugField(
+        db_index=True, populate_from='name', verbose_name=_('slug'),
+    )
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     name = models.CharField(max_length=300, verbose_name=_('name'))
     description = models.TextField(
@@ -72,13 +74,15 @@ class DeviceMethod(models.Model):
     is_enabled = models.BooleanField(
         default=True, verbose_name=_('is enabled'),
     )
-    slug = AutoSlugField(populate_from='name', verbose_name=_('slug'))
+    slug = AutoSlugField(
+        db_index=True, populate_from='name', verbose_name=_('slug'),
+    )
     device = models.ForeignKey(
         Device, verbose_name=_('device'),
         related_name='methods',
     )
     name = models.CharField(
-        max_length=300, verbose_name=_('name'),
+        db_index=True, max_length=300, verbose_name=_('name'),
     )
     spec = JSONField(blank=True, verbose_name=_('spec'))
     description = models.TextField(
