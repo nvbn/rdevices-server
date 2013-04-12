@@ -50,7 +50,8 @@ class window.DeviceHelper
                 callback = (->@)
             call = new DeviceMethodCall
             call.save
-                method_id: method.id
+                method: method.name
+                device: @model.get('uuid')
                 request: request
             ,
                 success: =>
