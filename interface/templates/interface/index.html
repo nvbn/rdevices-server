@@ -3,52 +3,116 @@
 {% load thumbnail %}
 
 {% block content %}
-    <div class='span12 well' id="index-carousel-holder">
-        <div id="index-carousel">
-            <div class="carousel-inner">
-                {% for entry in carousel %}
-                    <div
-                        {% if forloop.first %}
-                            class='active item'
-                        {% else %}
-                            class='item'
-                        {% endif %}
-                    >
-                        <img src='{% thumbnail entry.image '1130x615' %}' />
-                        <div class="carousel-caption">
-                            <h4>{{ entry.title }}</h4>
-                            <p>
-                                {{ entry.text }}
-                            </p>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <a
-                class="carousel-control left"
-                href="#index-carousel"
-                data-slide="prev"
-            >&lsaquo;</a>
-            <a
-                class="carousel-control right"
-                href="#index-carousel"
-                data-slide="next"
-            >&rsaquo;</a>
-        </div>
+    <div class='span12 well'>
+        <h2>Easiest way to create dashboards and apis for your devices</h2>
+        <p>With rdevices you can create RESTful api for your local devices. Even if they are behind a NAT.</p>
+        <p>And you can create dashboards for controlling your devices and use it on smartphones, tablets or other computers.</p>
+        <p>Rdevices is open source software and you can modify it.</p>
+    </div>
+    <div class='span8 well next-cell howto-code-block'>
+<pre class='prettyprint linenums'>
+from rdclient import Device, method
+import subprocess
+
+class PC(Device):
+    @method('int', x='int', y='int')
+    def sum(self, x, y):
+        return x + y
+
+    @method('None')
+    def next_song(self):
+        subprocess.call('rhythmbox-client --next', shell=True)
+
+    class Meta:
+        uuid = ''
+</pre>
+    </div>
+    <div class='span4 well'>
+        <h3>How-to start</h3>
+        <h4>1. You need to <a href="{% url 'userena_signin' %}">sing in</a> or <a href="{% url 'userena_signup' %}">sign up</a></h4>
+        <h4>2. Create <a href="{% url "devices_dashboard_create" %}">new device</a> and copy uuid</h4>
+        <h4>3. Write simple interface to accessing your device</h4>
+        <p>Or you can use already created mixin for that.</p>
     </div>
     <div class='span4 well next-cell'>
-        <h3>Working like a charm</h3>
-        <p>In 5 minute you can start controlling your devices.</p>
-        <p>Just <a href="{% url 'userena_signin' %}">sign in</a> and <a href="{% url "devices_create" %}">create device</a>.</p>
+        <h4>4. Install <a href="{% url "django.contrib.flatpages.views.flatpage" "/download/" %}">rdclient</a> and start it with</h4>
+        <pre class="prettyprint">rdclient device.py</pre>
+        <h4>5. <a href="{% url "devices_dashboard_create" %}">Create dashboard</a> and write code</h4>
+        <p>You can use
+            <a href="#" class='show-code-block active-block'
+                    data-toggle="tooltip" data-block='js' title='Click to change language in example'>
+                JavaScript</a>,
+            <a href="#" class='show-code-block' data-block='coffee'
+                    data-toggle="tooltip" title='Click to change language in example'>
+                CoffeeScript</a> and
+            <a href="#" class='show-code-block' data-block='iced'
+                    data-toggle="tooltip" title='Click to change language in example'>
+                IcedCoffeeScript</a> for scripting and HTML for layout.
+        </p>
+        <h4>Or use devices RESTful api.</h4>
     </div>
-    <div class='span4 well next-cell'>
-        <h3>Work everywhere</h3>
-        <p>Rdevices client work on linux, mac and windows.</p>
-        <p>Go to <a href='{% url "django.contrib.flatpages.views.flatpage" "/download/" %}'>download</a> page.</p>
-    </div>
-    <div class='span4 well next-cell'>
-        <h3>Opensource</h3>
-        <p>Rdevices is a opensource project.</p>
-        <p>Look at <a target="_blank" href="https://github.com/nvbn/rdevices-client">client</a> and <a target="_blank" href="https://github.com/nvbn/rdevices-server">server</a> github.</p>
+    <div class='span8 well howto-code-block'>
+<pre class='prettyprint linenums js code-block'>
+&lt;script type='text/javascript'&gt;
+    dashboard.ready(function(){
+        dashboard.getDevice(DEVICE_ID, function(device){
+            $('#calculate').click(function(){
+                device.sum({
+                    a: $('#a').val(),
+                    b: $('#b').val()
+                }, function(result){
+                    $('#result').html(result);
+                });
+            });
+            $('#next-song').click(function(){
+                device.next_song({});
+            });
+        });
+    });
+&lt;/script&gt;
+&lt;input type='number' id='a' &gt;
+&lt;input type='number' id='b' /&gt;
+&lt;button id='calculate'&gt;Calculate&lt;/button&gt;
+&lt;p id='result'&gt;&lt;/p&gt;
+&lt;button id='next-song'&gt;Next song&lt;/button&gt;
+</pre>
+<pre class='prettyprint linenums coffee code-block'>
+&lt;script type='text/coffeescript'&gt;
+    dashboard.ready ->
+        dashboard.getDevice DEVICE_ID, (device) ->
+            $('#calculate').click =>
+                device.sum
+                    a: $('#a').val()
+                    b: $('#b').val()
+                , (result) =>
+                    $('#result').html result
+            $('#next-song').click =>
+                device.next_song {}
+&lt;/script&gt;
+&lt;input type='number' id='a' &gt;
+&lt;input type='number' id='b' /&gt;
+&lt;button id='calculate'&gt;Calculate&lt;/button&gt;
+&lt;p id='result'&gt;&lt;/p&gt;
+&lt;button id='next-song'&gt;Next song&lt;/button&gt;
+</pre>
+<pre class='prettyprint linenums iced code-block'>
+&lt;script type='text/iced-coffeescript'&gt;
+    await dashboard.ready
+    await dashboard.getDevice DEVICE_ID, defer device
+    $('#calculate').click ->
+        await device.sum
+            a: $('#a').val()
+            b: $('#b').val()
+        , defer result
+        $('#result').html result
+    $('#next-song').click =>
+        device.next_song {}
+&lt;/script&gt;
+&lt;input type='number' id='a' &gt;
+&lt;input type='number' id='b' /&gt;
+&lt;button id='calculate'&gt;Calculate&lt;/button&gt;
+&lt;p id='result'&gt;&lt;/p&gt;
+&lt;button id='next-song'&gt;Next song&lt;/button&gt;
+</pre>
     </div>
 {% endblock %}

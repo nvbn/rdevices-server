@@ -62,3 +62,11 @@ $ ->
                                 calls += 1
                                 setTimeout checkCall, 1000
                 checkCall()
+
+    $('.show-code-block').click (e) ->
+        e.preventDefault()
+        target = $(e.currentTarget)
+        $('.show-code-block').removeClass 'active-block'
+        target.addClass 'active-block'
+        $('.code-block').css 'display', 'none'
+        $('.code-block.' + target.data('block')).css 'display', 'block'
