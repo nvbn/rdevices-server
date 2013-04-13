@@ -1,6 +1,5 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from interface.models import CarouselEntry
 from django.views.generic import TemplateView
 
 
@@ -14,9 +13,3 @@ class Index(TemplateView):
             return redirect(reverse('devices_list'))
         else:
             return super(Index, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        """Get carousel and news"""
-        return {
-            'carousel': CarouselEntry.objects.enabled(),
-        }
