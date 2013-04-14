@@ -10,6 +10,7 @@ from pytils.translit import slugify
 from datetime import datetime
 from tools.shortcuts import prettify, send_call_request
 from tools.fields import ReUUIDField
+import json
 
 
 def image_file_name(instance, filename):
@@ -111,6 +112,13 @@ class DeviceMethod(models.Model):
     def pretty_spec(self):
         """Get pretty spec"""
         return prettify(self.spec)
+
+    def get_json_args_example(self):
+        """Get json args example"""
+        args = self.spec.get('args', {})
+        return json.dumps(
+            {key: '{}Value'.format(key) for key in args},
+        ).replace('"', '\\"')
 
 
 class DeviceMethodCall(models.Model):

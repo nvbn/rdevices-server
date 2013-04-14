@@ -291,8 +291,8 @@ console.log result
                             <p><strong>Create call with curl:</strong></p>
 <pre class='prettyprint linenums'>
 curl "http://{{ request.META.SERVER_NAME }}/api/v1/device_method_call/?username={{ request.user.username }}&api_key=API_KEY"\
-    -H "Accept: application/json" -H "Content-type: application/json"\
-    -X POST -d "{\"method\":\"{{ pair.method.name }}\",\"device\":\"{{ device.uuid }}\",\"request\":{}}"
+    -H "Accept: application/json" -H "Content-type: application/json" -X POST -d\
+    "{\"method\":\"{{ pair.method.name }}\",\"device\":\"{{ device.uuid }}\",\"request\":{{ pair.method.get_json_args_example }}}"
 </pre>
                             <p><strong>Read call with curl:</strong></p>
 <pre class='prettyprint linenums'>
