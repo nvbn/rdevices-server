@@ -36,7 +36,7 @@ class window.ChangeDashboardView extends LazyTemplatedView
     tagName: 'div'
     templateId: '#editor-tmpl'
     events:
-        'click .save': 'save'
+        'click .saveBtn': 'save'
 
     render: ->
         @$el.html @template @model.attributes
@@ -55,9 +55,12 @@ class window.ChangeDashboardView extends LazyTemplatedView
             if tab.attr('id') == 'preview-tab'
                 @showPreview()
             true
+
         $('button.save').tooltip
             trigger: 'manual'
             placement: 'right'
+
+        $(window).keydown (e) => @saveHotkey e
 
     showPreview: ->
         @model.save
@@ -67,15 +70,26 @@ class window.ChangeDashboardView extends LazyTemplatedView
                 preview = @$el.find('#editor-preview')[0]
                 preview.contentWindow.location.reload()
 
-    save: (e) ->
+    saveBtn: (e) ->
         e.preventDefault()
+        @save()
+        false
+
+    save: ->
         @model.save
             code: @editor.getSession().getValue()
         ,
             patch: true
-        $(e.currentTarget).tooltip('show')
-        setTimeout (=>$(e.currentTarget).tooltip('hide')), 3000
-        false
+        $('.save').tooltip('show')
+        setTimeout (=>$('.save').tooltip('hide')), 3000
+
+    saveHotkey: (e) ->
+        if (e.which == 115 or e.which == 83) and (e.ctrlKey or e.metaKey)
+            e.preventDefault()
+            @save()
+            false
+        else
+            true
 
 
 class window.MethodCallsView extends LazyTemplatedView
