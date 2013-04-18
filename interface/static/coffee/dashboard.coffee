@@ -18,7 +18,7 @@ class window.NotificationsHelper
                 action: 'subscribe'
                 user_id: window.userId
         @sock.onclose = =>
-            setTimeout (=>@openConnection()), 500
+            setTimeout (=>@openConnection callback), 500
 
         @sock.onmessage = (message) =>
             if message.data.action == 'call_changed'
@@ -98,6 +98,11 @@ class window.DashboardHelper
             _.each @waiters, (waiter) =>
                 waiter.call @
             @runCalls()
+            @showDashboard()
+
+    showDashboard: ->
+        $('#dashboard-holder').css 'display', 'block'
+        $('#dashboard-loader').css 'display', 'none'
 
     ready: (callback) ->
         if @called

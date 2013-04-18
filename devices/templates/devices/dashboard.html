@@ -50,7 +50,12 @@
 </div>
 <div class='span12 well'>
     {% if dashboard.code %}
-        {{ dashboard.code|safe }}
+        <div id="dashboard-holder">
+            {{ dashboard.code|safe }}
+        </div>
+        <div id="dashboard-loader">
+            <img src='{% static "img/loader.gif" %}'
+        </div>
     {% else %}
         <h3>This dashboard is blank!</h3>
     {% endif %}
