@@ -4,22 +4,23 @@ STATE_FINISHED = 1
 class window.NotificationsHelper
     constructor: (callback) ->
         _.extend @, Backbone.Events
-
+        @alreadyOpened = false
         @openConnection callback
-        @initEvents()
 
     openConnection: (callback) ->
-        alreadyOpened = false
-        window.sock.onopen = =>
-            if not alreadyOpened
-                alreadyOpened = true
+        @sock = new SockJS window.sockBind
+
+        @sock.onopen = =>
+            if not @alreadyOpened
+                @alreadyOpened = true
                 callback.call @
-            window.sock.send JSON.stringify
+            @sock.send JSON.stringify
                 action: 'subscribe'
                 user_id: window.userId
+        @sock.onclose = =>
+            setTimeout (=>@openConnection()), 500
 
-    initEvents: ->
-        window.sock.onmessage = (message) =>
+        @sock.onmessage = (message) =>
             if message.data.action == 'call_changed'
                 @trigger 'callChanged_' + message.data.call_id
 
