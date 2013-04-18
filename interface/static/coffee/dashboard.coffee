@@ -79,15 +79,25 @@ class window.DashboardHelper
         @waiters = []
         @calls = []
 
+        @pushReady = false
+        @dashboardReady = false
+
     _ready: (callback) ->
-        $ =>
-            @initPush =>
-                @loadDashboard =>
-                    @called = true
-                    callback.call @
-                    _.each @waiters, (waiter) =>
-                        waiter.call @
-                    @runCalls()
+        @initPush =>
+            @pushReady = true
+            @checkAllReady callback
+
+        @loadDashboard =>
+            @dashboardReady = true
+            @checkAllReady callback
+
+    checkAllReady: (callback) ->
+        if @pushReady and @dashboardReady
+            @called = true
+            callback.call @
+            _.each @waiters, (waiter) =>
+                waiter.call @
+            @runCalls()
 
     ready: (callback) ->
         if @called
