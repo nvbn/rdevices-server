@@ -36,7 +36,7 @@ class window.ChangeDashboardView extends LazyTemplatedView
     tagName: 'div'
     templateId: '#editor-tmpl'
     events:
-        'click .saveBtn': 'saveBtn'
+        'click .save': 'saveBtn'
 
     render: ->
         @$el.html @template @model.attributes
